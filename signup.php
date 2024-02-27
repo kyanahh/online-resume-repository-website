@@ -65,7 +65,7 @@ url('https://cdn-bnokp.nitrocdn.com/QNoeDwCprhACHQcnEmHgXDhDpbEOlRHH/assets/imag
                 <div class="mx-auto mb-3">
                     <img src="img/logonly.png" style="height: 50px;" alt="VocoEase">
                 </div>
-                <h5 class="card-title text-center">Log in to VocoEase Resume Repository</h5>
+                <h5 class="card-title text-center">Register to VocoEase Resume Repository</h5>
                 <div class="card-body">
                     <form method="POST" action="<?php htmlspecialchars("SELF_PHP"); ?>">
                         <div class="row">
