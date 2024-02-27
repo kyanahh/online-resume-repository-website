@@ -52,7 +52,7 @@ url('https://cdn-bnokp.nitrocdn.com/QNoeDwCprhACHQcnEmHgXDhDpbEOlRHH/assets/imag
           </li>
         </ul>
 
-        <a href="signup.php" class="nav-link active fw-bold">Register<i class="bi bi-arrow-right-short"></i></a>
+        <a href="login.php" class="nav-link active fw-bold">Login<i class="bi bi-arrow-right-short"></i></a>
 
       </div>
       
@@ -60,36 +60,58 @@ url('https://cdn-bnokp.nitrocdn.com/QNoeDwCprhACHQcnEmHgXDhDpbEOlRHH/assets/imag
   </nav>
 
     <div class="container pt-5">
-        <div class="pt-5 mt-4">
-            <div class="card mt-5 mx-auto col-sm-5 p-4">
+        <div class="pt-5 mt-1">
+            <div class="card mt-5 mx-auto col-sm-7 p-4">
                 <div class="mx-auto mb-3">
                     <img src="img/logonly.png" style="height: 50px;" alt="VocoEase">
                 </div>
                 <h5 class="card-title text-center">Log in to VocoEase Resume Repository</h5>
                 <div class="card-body">
                     <form method="POST" action="<?php htmlspecialchars("SELF_PHP"); ?>">
-                        <div class="row mt-2">
-                            <div class="col input-group">
-                                <input type="email" class="form-control" id="email" name="email" placeholder="Email address" required>
+                        <div class="row">
+                            <div class="col">
+                                <input type="text" class="form-control" id="firstname" name="firstname" placeholder="First Name" required>
+                            </div>
+                            <div class="col">
+                                <input type="text" class="form-control" id="lastname" name="lastname" placeholder="Last Name" required>
                             </div>
                         </div>
                         <div class="row mt-2">
-                            <div class="col input-group">
+                            <div class="col">
+                                <input type="text" class="form-control" id="email" name="email" placeholder="Email address" required>
+                            </div>
+                            <div class="col">
+                                <input type="date" class="form-control" id="birthdate" name="birthdate" required>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col">
                                 <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
-                                <button class="btn btn-outline-secondary" type="button" id="togglePassword">
-                                    <i class="bi bi-eye"></i>
-                                </button>
+                            </div>
+                            <div class="col">
+                                <input type="password" class="form-control" id="confirmpassword" name="confirmpassword" placeholder="Confirm Password" required>
                             </div>
                         </div>
+
                         <div class="row">
                             <div class="col d-grid gap-2">
-                                <button type="submit" class="btn btn-primary text-white mt-3 fw-bold">Sign in</button>
+                            <?php
+    
+                                if (!empty($successMessage)) {
+                                    echo "
+                                    <div class='alert alert-warning alert-dismissible fade show' role='alert'>
+                                        <strong>$successMessage</strong>
+                                        <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+                                    </div>
+                                    ";
+                                }
+    
+                            ?>
+                                <button type="submit" class="btn btn-primary text-white mt-3 fw-bold">Sign Up</button>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col d-grid gap-2">
-                                <p class="text-center mt-2">Don't have an account yet?<a href="signup.php" class="text-decoration-none"> Register here.</a></p>
-                            </div>
+                        <div class="row d-grid gap-2">
+                                <p class="text-center mt-2">Already have an account?<a href="login.php" class="text-decoration-none"> Login here.</a></p>
                         </div>
                     </form>
                 </div>
