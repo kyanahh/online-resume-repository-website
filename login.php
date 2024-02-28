@@ -1,3 +1,49 @@
+<?php
+
+session_start();
+
+require("server/connection.php");
+
+$email = $password = "";
+
+if (isset($_POST["email"]) && isset($_POST["password"])) {
+    $email = $_POST["email"];
+    $password = $_POST["password"];
+
+    $result = $connection->query("SELECT users.*, usertype.usertype FROM users INNER JOIN usertype ON users.usertypeid = usertype.usertypeid WHERE email = '$email' AND password = '$password'");
+
+    if ($result->num_rows === 1) {
+        $record = $result->fetch_assoc();
+
+        // Fetch the usertypeid for the user
+        $usertypeid = $record["usertypeid"];
+
+        // Set session variables
+        $_SESSION["userid"] = $record["userid"];
+        $_SESSION["firstname"] = $record["firstname"];
+        $_SESSION["lastname"] = $record["lastname"];
+        $_SESSION["email"] = $record["email"];
+        $_SESSION["logged_in"] = true;
+
+        $userid = $record["userid"];
+        $logtime = date("Y-m-d H:i:s");
+        $connection->query("INSERT INTO userlogs (logtime, userid) VALUES ('$logtime', '$userid')");
+
+        // Redirect users based on usertypeid
+        if ($usertypeid == 3) {
+            header("Location: /online-repository-website/candidatelandingpage.php");
+        } elseif ($usertypeid == 2) {
+            header("Location: /online-repository-website/clientlandingpage.php");
+        } elseif ($usertypeid == 1) {
+            header("Location: /online-repository-website/dashboard.php");
+        }
+    } else {
+        $errorMessage = "Incorrect email or password";
+    }
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -52,7 +98,7 @@ url('https://cdn-bnokp.nitrocdn.com/QNoeDwCprhACHQcnEmHgXDhDpbEOlRHH/assets/imag
           </li>
         </ul>
 
-        <a href="signup.php" class="nav-link active fw-bold">Register<i class="bi bi-arrow-right-short"></i></a>
+        <a href="signup.php" class="nav-link active fw-bold me-5">Register<i class="bi bi-arrow-right-short"></i></a>
 
       </div>
       
@@ -66,16 +112,26 @@ url('https://cdn-bnokp.nitrocdn.com/QNoeDwCprhACHQcnEmHgXDhDpbEOlRHH/assets/imag
                     <img src="img/logonly.png" style="height: 50px;" alt="VocoEase">
                 </div>
                 <h5 class="card-title text-center">Log in to VocoEase Resume Repository</h5>
+                <?php
+                  if (!empty($errorMessage)) {
+                    echo "
+                    <div class='mt-3 mx-3 alert alert-warning alert-dismissible fade show' role='alert'>
+                      <strong>$errorMessage</strong>
+                      <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+                    </div>
+                    ";
+                  }
+                ?>
                 <div class="card-body">
                     <form method="POST" action="<?php htmlspecialchars("SELF_PHP"); ?>">
-                        <div class="row mt-2">
+                        <div class="row">
                             <div class="col input-group">
-                                <input type="email" class="form-control" id="email" name="email" placeholder="Email address" required>
+                                <input type="email" class="form-control" id="email" name="email" placeholder="Email address" value="<?php echo $email; ?>" required>
                             </div>
                         </div>
-                        <div class="row mt-2">
+                        <div class="row mt-2 mb-3">
                             <div class="col input-group">
-                                <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
+                                <input type="password" class="form-control" id="password" name="password" placeholder="Password" value="<?php echo $password; ?>" required>
                                 <button class="btn btn-outline-secondary" type="button" id="togglePassword">
                                     <i class="bi bi-eye"></i>
                                 </button>
@@ -83,7 +139,7 @@ url('https://cdn-bnokp.nitrocdn.com/QNoeDwCprhACHQcnEmHgXDhDpbEOlRHH/assets/imag
                         </div>
                         <div class="row">
                             <div class="col d-grid gap-2">
-                                <button type="submit" class="btn btn-primary text-white mt-3 fw-bold">Sign in</button>
+                                <button type="submit" class="btn btn-primary text-white fw-bold">Sign in</button>
                             </div>
                         </div>
                         <div class="row">
@@ -96,6 +152,22 @@ url('https://cdn-bnokp.nitrocdn.com/QNoeDwCprhACHQcnEmHgXDhDpbEOlRHH/assets/imag
             </div>
         </div>
     </div>
+
+    <script>
+        const passwordInput = document.getElementById("password");
+        const togglePasswordButton = document.getElementById("togglePassword");
+
+        togglePasswordButton.addEventListener("click", function () {
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                togglePasswordButton.innerHTML = '<i class="bi bi-eye-slash"></i>';
+            } else {
+                passwordInput.type = "password";
+                togglePasswordButton.innerHTML = '<i class="bi bi-eye"></i>';
+            }
+        });
+
+    </script>
 
 </body>
 </html>
