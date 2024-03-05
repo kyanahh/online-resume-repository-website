@@ -1,3 +1,44 @@
+<?php
+
+session_start();
+
+require("server/connection.php");
+
+$firstname = $lastname = $email = $phone = $city = $country = $cv = $applydate = $agreement = $errorMessage = "";
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+  $firstname =  ucwords($_POST["firstname"]);
+  $lastname =  ucwords($_POST["lastname"]);
+  $city = ucwords($_POST["city"]);
+  $country = ucwords($_POST["country"]);
+  $email = $_POST["email"];
+  $phone = $_POST["phone"];
+  $cv = $_POST["cv"];
+  $applydate = $_POST["applydate"];
+  $agreement = $_POST["agreement"];
+
+  if (isset($_POST["agreement"]) && $_POST["agreement"] == "on") {
+
+    $agreement = 1;
+    $insertQuery = "INSERT INTO applicantform (firstname, lastname, email, phone, city, country, cv, applydate, agreement) VALUES ('$firstname', '$lastname', '$email', '$phone', '$city', '$country',  '$cv', '$applydate', '$agreement')";
+    $result = $connection->query($insertQuery);
+
+    if (!$result) {
+      $errorMessage = "Invalid query " . $connection->error;
+    } else {
+      $errorMessage = "Thank you for applying with us, we will be in touch shortly.";
+      // Reset form fields
+      $firstname = $lastname = $email = $phone = $city = $country = $cv = $applydate = $agreement = "";
+    }
+    
+  }else{
+    $errorMessage = "Consent is required";
+  }
+
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -82,270 +123,135 @@
       </div>
     </nav>
 
-    <!-- Carousel / Slideshow images -->
-    <div
-      id="carouselExampleSlidesOnly"
-      class="carousel slide carousel-fade"
-      data-bs-ride="carousel"
-    >
-      <div class="carousel-inner">
-        <!-- First pic -->
-        <div class="carousel-item active">
-          <img
-            src="img/14.jpg"
-            class="d-block w-100 h-100"
-            aria-current="true"
-            aria-label="Slide 1"
-            data-bs-interval="300"
-            alt="VocoEase"
-          />
-
-          <!-- Carousel Caption -->
-          <div class="carousel-caption top-0 ms-n6 mt-9">
-            <div class="row text-start">
-              <h6 class="fw-bold mt-5">Wanna Chat?</h6>
-            </div>
+    <!-- Card Client Form -->
+    <div class="container-fluid pt-5 mt-4" style="background-color: #041c34">
+      <div class="card bg-light mt-5 px-5 py-4 col-lg-8 mx-auto">
+        <h5 class="fw-bold card-title">Applicant Form</h5>
+        <div class="card-body">
+                <?php
+                    if (!empty($errorMessage)) {
+                        echo "
+                        <div class='alert alert-warning alert-dismissible mt-2 fade show' role='alert'>
+                            <strong>$errorMessage</strong>
+                            <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+                        </div>
+                        ";
+                }
+                ?>
+          <form action="<?php htmlspecialchars("SELF_PHP"); ?>" method="POST">
+            <!-- Row 1 First Name and Last Name-->
             <div class="row">
-              <pre
-                class="fw-bold display-4 text-start"
-                style="
-                  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial,
-                    sans-serif;
-                "
-              >
-Send Us Your Feedback,
-We Love Hearing It!</pre
-              >
+              <div class="col mb-3">
+                <label for="firstname" class="form-label">First Name*</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="firstname"
+                  placeholder="E.g. John"
+                  value="<?php echo $firstname; ?>"
+                  name="firstname"
+                  required
+                />
+              </div>
+              <div class="col mb-3">
+                <label for="lastname" class="form-label">Last Name*</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="lastname"
+                  placeholder="E.g. Doe"
+                  value="<?php echo $lastname; ?>"
+                  name="lastname"
+                  required
+                />
+              </div>
             </div>
+
+            <!-- Row 2 Email Address and Phone Number -->
             <div class="row">
-              <pre
-                class="text-start"
-                style="font-family: Arial, Helvetica, sans-serif"
-              >
-Share your thoughts! Your feedback fuels our growth and shapes a better
-experience. We appreciate every insight you provide. Let the conversation
-continue!</pre
-              >
+              <div class="col mb-3">
+                <label for="email" class="form-label">Email Address*</label>
+                <input
+                  type="email"
+                  class="form-control"
+                  id="email"
+                  placeholder="E.g. john@doe.com"
+                  value="<?php echo $email; ?>"
+                  name="email"
+                  required
+                />
+              </div>
+              <div class="col mb-3">
+                <label for="phone" class="form-label">Phone Number*</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="phone"
+                  placeholder="E.g. +1 3004005000"
+                  value="<?php echo $phone; ?>"
+                  name="phone"
+                  required
+                />
+              </div>
             </div>
-          </div>
-        </div>
 
-        <!-- 2nd pic -->
-        <div class="carousel-item">
-          <img
-            src="img/13.jpg"
-            class="d-block w-100"
-            data-bs-interval="300"
-            alt="VocoEase"
-          />
-
-          <!-- Carousel Caption -->
-          <div class="carousel-caption top-0 ms-n6 mt-9">
-            <div class="row text-start">
-              <h6 class="fw-bold mt-5">Wanna Chat?</h6>
-            </div>
+            <!-- Row 3 State and Country -->
             <div class="row">
-              <pre
-                class="fw-bold display-4 text-start"
-                style="
-                  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial,
-                    sans-serif;
-                "
-              >
-Send Us Your Feedback,
-We Love Hearing It!</pre
-              >
+              <div class="col mb-3">
+                <label for="city" class="form-label">City*</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="city"
+                  placeholder="E.g. Sydney"
+                  name="city"
+                  value="<?php echo $city; ?>"
+                  required
+                />
+              </div>
+              <div class="col mb-3">
+                  <label for="country" class="form-label">Country*</label>
+                  <select class="form-select" id="country" aria-label="Default select example" required>
+                      <option selected disabled>Select a Country</option>
+                      <!-- Countries will be populated dynamically via JavaScript -->
+                  </select>
+                  <!-- Hidden input field to store the selected country value -->
+                  <input type="hidden" id="selectedCountry" name="country" required>
+              </div>
             </div>
+
+            <!-- Row 4 Resume & Date of Application-->
             <div class="row">
-              <pre
-                class="text-start"
-                style="font-family: Arial, Helvetica, sans-serif"
-              >
-Share your thoughts! Your feedback fuels our growth and shapes a better
-experience. We appreciate every insight you provide. Let the conversation
-continue!</pre
-              >
+              <div class="col mb-3">
+                <label for="cv" class="form-label">Upload CV/Resume*</label>
+                <input class="form-control" type="file" id="cv" name="cv" value="<?php echo $cv; ?>" required />
+              </div>
+
+              <div class="col mb-3">
+                <label for="applydate" class="form-label"
+                  >Date of Application*</label
+                >
+                <input type="date" class="form-control" id="applydate" name="applydate" value="<?php echo $applydate; ?>" required />
+              </div>
             </div>
-          </div>
-        </div>
 
-        <!-- 3rd pic -->
-        <div class="carousel-item">
-          <img
-            src="img/12.jpg"
-            class="d-block w-100"
-            data-bs-interval="300"
-            alt="VocoEase"
-          />
-
-          <!-- Carousel Caption -->
-          <div class="carousel-caption top-0 ms-n6 mt-9">
-            <div class="row text-start">
-              <h6 class="fw-bold mt-5">Wanna Chat?</h6>
+            <!-- Row 6 Checkbox -->            
+            <div class="row ms-1">
+              <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" id="agreement" name="agreement" required />
+                <label class="form-check-label" for="agreement"
+                  >Yes, I have read and agree with the <a role="button" data-bs-toggle="modal" 
+                  data-bs-target="#privacypolicy" style="color: blue">Privacy Policy</a> and  
+                  <a role="button" data-bs-toggle="modal" 
+                  data-bs-target="#terms1" style="color: blue">Terms
+                  & Conditions</a></label
+                >
+              </div>
             </div>
-            <div class="row">
-              <pre
-                class="fw-bold display-4 text-start"
-                style="
-                  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial,
-                    sans-serif;
-                "
-              >
-Send Us Your Feedback,
-We Love Hearing It!</pre
-              >
-            </div>
-            <div class="row">
-              <pre
-                class="text-start"
-                style="font-family: Arial, Helvetica, sans-serif"
-              >
-Share your thoughts! Your feedback fuels our growth and shapes a better
-experience. We appreciate every insight you provide. Let the conversation
-continue!</pre
-              >
-            </div>
-          </div>
-        </div>
 
-        <!-- 4th pic -->
-        <div class="carousel-item">
-          <img
-            src="img/11.jpg"
-            class="d-block w-100"
-            data-bs-interval="300"
-            alt="VocoEase"
-          />
-
-          <!-- Carousel Caption -->
-          <div class="carousel-caption top-0 ms-n6 mt-9">
-            <div class="row text-start">
-              <h6 class="fw-bold mt-5">Wanna Chat?</h6>
-            </div>
-            <div class="row">
-              <pre
-                class="fw-bold display-4 text-start"
-                style="
-                  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial,
-                    sans-serif;
-                "
-              >
-Send Us Your Feedback,
-We Love Hearing It!</pre
-              >
-            </div>
-            <div class="row">
-              <pre
-                class="text-start"
-                style="font-family: Arial, Helvetica, sans-serif"
-              >
-Share your thoughts! Your feedback fuels our growth and shapes a better
-experience. We appreciate every insight you provide. Let the conversation
-continue!</pre
-              >
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="container-fluid text-center pb-5 bg-light">
-      <h1 class="fw-bold py-5">COMPANY INFORMATION</h1>
-
-      <div class="row px-5 gap-3 d-flex justify-content-center">
-        <!-- Card 1-->
-        <div class="card col-sm-3 p-3">
-          <i
-            class="bi bi-map-fill pb-3"
-            style="font-size: xx-large; color: #146c84"
-          ></i>
-          <h5 class="card-title">Physical Address</h5>
-          <div class="card-body">
-            <p>8 The Green, STE A Dover DE 19901 USA</p>
-          </div>
-        </div>
-
-        <!-- Card 2-->
-        <div class="card col-sm-3 p-3">
-          <i
-            class="bi bi-clock-fill pb-3"
-            style="font-size: xx-large; color: #146c84"
-          ></i>
-          <h5 class="card-title">Work Hours</h5>
-          <div class="card-body">
-            <p>24/7</p>
-          </div>
-        </div>
-
-        <!-- Card 3-->
-        <div class="card col-sm-3 p-3">
-          <i
-            class="bi bi-envelope-fill pb-3"
-            style="font-size: xx-large; color: #146c84"
-          ></i>
-          <h5 class="card-title">Email Address</h5>
-          <div class="card-body">
-            <p>info@vocoease.ph</p>
-          </div>
-        </div>
-
-        <!-- Card 4-->
-        <div class="card col-sm-3 p-3">
-          <i
-            class="bi bi-phone-fill pb-3"
-            style="font-size: xx-large; color: #146c84"
-          ></i>
-          <h5 class="card-title">Phone Numbers</h5>
-          <div class="card-body">
-            <p>+1 (302) 608-6263</p>
-          </div>
-        </div>
-
-        <h1
-          class="fw-bold pt-5"
-          style="
-            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial,
-              sans-serif;
-          "
-        >
-          CONTACT US
-        </h1>
-        <pre class="pb-5" style="font-family: Arial, Helvetica, sans-serif">
-Reach out to us for unparalleled service and assistance. Your satisfaction is our priority,
-and we’re here to ensure every interaction is a positive and helpful experience.</pre
-        >
-
-        <div class="row d-flex justify-content-center gap-5">
-          <!-- Applicant -->
-          <div
-            class="card text-white col-sm-4 p-5"
-            style="background-color: #001c31"
-          >
-            <p class="fw-bold">Ready to join us?</p>
-            <p>Click below to start your journey with our application form!</p>
-            <a
-              href="applicantform.php"
-              class="btn btn-light px-4 py-2 mx-auto mt-3"
-              >APPLICANT</a
-            >
-          </div>
-
-          <!-- Client -->
-          <div
-            class="card text-white col-sm-4 p-5"
-            style="background-color: #001c31"
-          >
-            <p class="fw-bold">Elevate your experience.</p>
-            <p>
-              Click below to access our client form and let’s embark on a
-              journey of success!
-            </p>
-            <a
-              href="clientform.php"
-              class="btn btn-light px-5 py-2 mx-auto mt-3"
-              >CLIENT</a
-            >
-          </div>
+            <!-- Submit button -->
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </form>
         </div>
       </div>
     </div>
@@ -360,8 +266,8 @@ and we’re here to ensure every interaction is a positive and helpful experienc
               <div class="d-flex">
                 <i class="bi bi-geo-alt me-3" style="font-size: x-large"></i>
                 <pre style="font-family: Arial, Helvetica, sans-serif">
-  8 The Green, STE A Dover DE 19901
-  United States of America</pre
+8 The Green, STE A Dover DE 19901
+United States of America</pre
                 >
               </div>
             </li>
@@ -843,6 +749,35 @@ and we’re here to ensure every interaction is a positive and helpful experienc
       myModal.addEventListener("shown.bs.modal", () => {
         myInput.focus();
       });
+    </script>
+
+    <script>
+      // Fetch countries data from the REST Countries API
+      fetch('https://restcountries.com/v3.1/all')
+        .then(response => response.json())
+        .then(data => {
+            // Sort countries alphabetically
+            data.sort((a, b) => a.name.common.localeCompare(b.name.common));
+
+            const selectElement = document.getElementById('country');
+
+            // Iterate over the sorted countries data and populate the dropdown
+            data.forEach(country => {
+                const option = document.createElement('option');
+                option.value = country.name.common;
+                option.textContent = country.name.common;
+                selectElement.appendChild(option);
+            });
+
+            // Add event listener to the select element to capture the selected value
+            selectElement.addEventListener('change', function() {
+                const selectedValue = this.value;
+                document.getElementById('selectedCountry').value = selectedValue;
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching countries data:', error);
+        });
     </script>
   </body>
 </html>
