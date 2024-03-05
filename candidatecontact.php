@@ -1,89 +1,92 @@
+<?php
+
+session_start();
+
+require("server/connection.php");
+
+if(isset($_SESSION["logged_in"])){
+    if(isset($_SESSION["firstname"])){
+        $textaccount = $_SESSION["firstname"];
+        $email = $_SESSION["email"];
+    }else{
+        $textaccount = "Account";
+    }
+}else{
+    $textaccount = "Account";
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"
-    />
-    <link rel="stylesheet" type="text/css" href="style.css" />
-    <link
-      rel="stylesheet"
-      href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
-    />
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css"
-    />
-    <title>VocoEase</title>
-  </head>
+<head>
+  <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
+  <title>VocoEase</title>
+</head>
 
-  <body>
-    <!-- Navbar-->
-    <nav class="px-5 py-2 mx-auto bg-white navbar navbar-expand-lg fixed-top">
-      <div class="container-fluid">
-        <!-- Logo -->
-        <div class="d-flex justify-content-start">
-          <a class="navbar-brand" href="index.html">
-            <img style="height: 70px" src="img/logoname.png" alt="VocoEase" />
-          </a>
-        </div>
+<body style="background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+url('https://cdn-bnokp.nitrocdn.com/QNoeDwCprhACHQcnEmHgXDhDpbEOlRHH/assets/images/optimized/rev-c8a072e/www.decorilla.com/online-decorating/wp-content/uploads/2022/03/Modern-Office-Interior-with-Open-Floor-Plan-1536x1024.jpeg');
+    height: 100vh; background-repeat: no-repeat; background-position: center; background-size: cover;">
 
-        <!-- Toggle button-->
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNav"
-          aria-controls="navbarNav"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
+  <!-- Navbar-->
+  <nav class="px-5 py-2 mx-auto bg-white navbar navbar-expand-lg fixed-top">
+    <div class="container-fluid">
 
-        <!-- Navbar directory -->
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav mx-auto">
-            <li class="nav-item">
-              <a
-                class="nav-link active fw-bold me-4"
-                aria-current="page"
-                href="index.html"
-                >HOME</a
-              >
-            </li>
-            <li class="nav-item">
-              <a class="nav-link active fw-bold me-4" href="about.html"
-                >ABOUT</a
-              >
-            </li>
-            <li class="nav-item">
-              <a class="nav-link active fw-bold me-4" href="services.html"
-                >SERVICES</a
-              >
-            </li>
-            <li class="nav-item">
-              <a class="nav-link active fw-bold" href="contact.html">CONTACT</a>
-            </li>
-          </ul>
+      <!-- Logo -->
+      <div class="d-flex justify-content-start">
+        <a class="navbar-brand" href="candidatelandingpage.php">
+          <img style="height: 70px;" src="img/logoname.png" alt="VocoEase">
+        </a>
+      </div>
 
-          <a href="login.php" class="nav-link active fw-bold me-5"
-            >Login<i class="bi bi-arrow-right-short"></i
-          ></a>
+      <!-- Toggle button-->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- Navbar directory -->
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav mx-auto">
+          <li class="nav-item">
+            <a class="nav-link active fw-bold me-4" aria-current="page" href="candidatelandingpage.php">HOME</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active fw-bold me-4" href="candidateabout.php">ABOUT</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active fw-bold me-4" href="candidateservices.php">SERVICES</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active fw-bold" href="candidatecontact.php">CONTACT</a>
+          </li>
+        </ul>
+
+        <!-- Dropdown / Account-->
+        <div class="nav-item dropdown me-5">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Account</a>
+            <ul class="dropdown-menu dropdown-menu-dark">
+                <li><a class="dropdown-item" href="resume.php">Resume</a></li>
+                <li><a class="dropdown-item" href="profile.php">Profile</a></li>
+                <li><a class="dropdown-item" href="settings.php">Settings</a></li>
+                <li><a class="dropdown-item" href="logout.php">Logout</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item">Hi, <?php echo $textaccount; ?></a></li>            
+            </ul>
         </div>
       </div>
-    </nav>
+      
+    </div>
+  </nav>
 
-    <!-- Carousel / Slideshow images -->
-    <div
+<!-- Carousel / Slideshow images -->
+<div
       id="carouselExampleSlidesOnly"
       class="carousel slide carousel-fade"
       data-bs-ride="carousel"
@@ -324,7 +327,7 @@ and we’re here to ensure every interaction is a positive and helpful experienc
             <p class="fw-bold">Ready to join us?</p>
             <p>Click below to start your journey with our application form!</p>
             <a
-              href="applicantform.php"
+              href="applicantapplicantform.php"
               class="btn btn-light px-4 py-2 mx-auto mt-3"
               >APPLICANT</a
             >
@@ -341,7 +344,7 @@ and we’re here to ensure every interaction is a positive and helpful experienc
               journey of success!
             </p>
             <a
-              href="clientform.php"
+              href="candidateclientform.php"
               class="btn btn-light px-5 py-2 mx-auto mt-3"
               >CLIENT</a
             >
@@ -349,8 +352,10 @@ and we’re here to ensure every interaction is a positive and helpful experienc
         </div>
       </div>
     </div>
+  
 
-    <div class="container-fluid" style="background-color: #001c31">
+  <!-- Footer --> 
+  <div class="container-fluid" style="background-color: #001c31">
       <div class="row mx-5 p-5">
         <!-- 1st Col -->
         <div class="col-sm-5" style="color: #9fa6af">
@@ -360,8 +365,8 @@ and we’re here to ensure every interaction is a positive and helpful experienc
               <div class="d-flex">
                 <i class="bi bi-geo-alt me-3" style="font-size: x-large"></i>
                 <pre style="font-family: Arial, Helvetica, sans-serif">
-  8 The Green, STE A Dover DE 19901
-  United States of America</pre
+8 The Green, STE A Dover DE 19901
+United States of America</pre
                 >
               </div>
             </li>
@@ -385,7 +390,7 @@ and we’re here to ensure every interaction is a positive and helpful experienc
           <ul class="list-unstyled">
             <li>
               <a
-                href="index.html"
+                href="candidatelandingpage.php"
                 class="text-decoration-none ms-2 mt2"
                 style="color: #9fa6af"
                 >Introduction</a
@@ -393,7 +398,7 @@ and we’re here to ensure every interaction is a positive and helpful experienc
             </li>
             <li>
               <a
-                href="about.html"
+                href="candidateabout.php"
                 class="text-decoration-none ms-2 mt2"
                 style="color: #9fa6af"
                 >Organization Team</a
@@ -837,12 +842,14 @@ and we’re here to ensure every interaction is a positive and helpful experienc
     <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
 
     <script>
-      const myModal = document.getElementById("myModal");
-      const myInput = document.getElementById("myInput");
 
-      myModal.addEventListener("shown.bs.modal", () => {
-        myInput.focus();
-      });
+        const myModal = document.getElementById("myModal");
+        const myInput = document.getElementById("myInput");
+
+        myModal.addEventListener("shown.bs.modal", () => {
+            myInput.focus();
+        });
+
     </script>
   </body>
 </html>

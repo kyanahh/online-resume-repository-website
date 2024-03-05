@@ -1,86 +1,87 @@
+<?php
+
+session_start();
+
+require("server/connection.php");
+
+if(isset($_SESSION["logged_in"])){
+    if(isset($_SESSION["firstname"])){
+        $textaccount = $_SESSION["firstname"];
+        $email = $_SESSION["email"];
+    }else{
+        $textaccount = "Account";
+    }
+}else{
+    $textaccount = "Account";
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"
-    />
-    <link rel="stylesheet" type="text/css" href="style.css" />
-    <link
-      rel="stylesheet"
-      href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
-    />
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css"
-    />
-    <title>VocoEase</title>
-  </head>
+<head>
+  <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
+  <title>VocoEase</title>
+</head>
 
-  <body>
-    <!-- Navbar-->
-    <nav class="px-5 py-2 mx-auto bg-white navbar navbar-expand-lg fixed-top">
-      <div class="container-fluid">
-        <!-- Logo -->
-        <div class="d-flex justify-content-start">
-          <a class="navbar-brand" href="index.html">
-            <img style="height: 70px" src="img/logoname.png" alt="VocoEase" />
-          </a>
-        </div>
+<body>
 
-        <!-- Toggle button-->
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNav"
-          aria-controls="navbarNav"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
+  <!-- Navbar-->
+  <nav class="px-5 py-2 mx-auto bg-white navbar navbar-expand-lg fixed-top">
+    <div class="container-fluid">
 
-        <!-- Navbar directory -->
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav mx-auto">
-            <li class="nav-item">
-              <a
-                class="nav-link active fw-bold me-4"
-                aria-current="page"
-                href="index.html"
-                >HOME</a
-              >
-            </li>
-            <li class="nav-item">
-              <a class="nav-link active fw-bold me-4" href="about.html"
-                >ABOUT</a
-              >
-            </li>
-            <li class="nav-item">
-              <a class="nav-link active fw-bold me-4" href="services.html"
-                >SERVICES</a
-              >
-            </li>
-            <li class="nav-item">
-              <a class="nav-link active fw-bold" href="contact.html">CONTACT</a>
-            </li>
-          </ul>
+      <!-- Logo -->
+      <div class="d-flex justify-content-start">
+        <a class="navbar-brand" href="candidatelandingpage.php">
+          <img style="height: 70px;" src="img/logoname.png" alt="VocoEase">
+        </a>
+      </div>
 
-          <a href="login.php" class="nav-link active fw-bold me-5"
-            >Login<i class="bi bi-arrow-right-short"></i
-          ></a>
+      <!-- Toggle button-->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- Navbar directory -->
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav mx-auto">
+          <li class="nav-item">
+            <a class="nav-link active fw-bold me-4" aria-current="page" href="candidatelandingpage.php">HOME</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active fw-bold me-4" href="candidateabout.php">ABOUT</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active fw-bold me-4" href="candidateservices.php">SERVICES</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active fw-bold" href="candidatecontact.php">CONTACT</a>
+          </li>
+        </ul>
+
+        <!-- Dropdown / Account-->
+        <div class="nav-item dropdown me-5">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Account</a>
+            <ul class="dropdown-menu dropdown-menu-dark">
+                <li><a class="dropdown-item" href="resume.php">Resume</a></li>
+                <li><a class="dropdown-item" href="profile.php">Profile</a></li>
+                <li><a class="dropdown-item" href="settings.php">Settings</a></li>
+                <li><a class="dropdown-item" href="logout.php">Logout</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item">Hi, <?php echo $textaccount; ?></a></li>            
+            </ul>
         </div>
       </div>
-    </nav>
+      
+    </div>
+  </nav>
 
     <!-- Carousel / Slideshow images -->
     <div
@@ -92,7 +93,7 @@
         <!-- First pic -->
         <div class="carousel-item active">
           <img
-            src="img/14.jpg"
+            src="img/13.jpg"
             class="d-block w-100 h-100"
             aria-current="true"
             aria-label="Slide 1"
@@ -103,7 +104,7 @@
           <!-- Carousel Caption -->
           <div class="carousel-caption top-0 ms-n6 mt-9">
             <div class="row text-start">
-              <h6 class="fw-bold mt-5">Wanna Chat?</h6>
+              <h6 class="fw-bold mt-5">About Us</h6>
             </div>
             <div class="row">
               <pre
@@ -113,63 +114,29 @@
                     sans-serif;
                 "
               >
-Send Us Your Feedback,
-We Love Hearing It!</pre
+VocoEase</pre
               >
             </div>
             <div class="row">
-              <pre
-                class="text-start"
+              <p
+                class="text-start text-justify"
                 style="font-family: Arial, Helvetica, sans-serif"
               >
-Share your thoughts! Your feedback fuels our growth and shapes a better
-experience. We appreciate every insight you provide. Let the conversation
-continue!</pre
-              >
+                We excel in delivering top-tier candidates tailored to the
+                specific needs<br />
+                of both emerging and established small-to medium- sized
+                enterprises. Our<br />
+                mission is to facilitate your business expansion, alleviate
+                operational<br />
+                burdens, streamline processes, and enhance overall success by
+                supplying <br />
+                you with the optimal team members.
+              </p>
             </div>
           </div>
         </div>
 
         <!-- 2nd pic -->
-        <div class="carousel-item">
-          <img
-            src="img/13.jpg"
-            class="d-block w-100"
-            data-bs-interval="300"
-            alt="VocoEase"
-          />
-
-          <!-- Carousel Caption -->
-          <div class="carousel-caption top-0 ms-n6 mt-9">
-            <div class="row text-start">
-              <h6 class="fw-bold mt-5">Wanna Chat?</h6>
-            </div>
-            <div class="row">
-              <pre
-                class="fw-bold display-4 text-start"
-                style="
-                  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial,
-                    sans-serif;
-                "
-              >
-Send Us Your Feedback,
-We Love Hearing It!</pre
-              >
-            </div>
-            <div class="row">
-              <pre
-                class="text-start"
-                style="font-family: Arial, Helvetica, sans-serif"
-              >
-Share your thoughts! Your feedback fuels our growth and shapes a better
-experience. We appreciate every insight you provide. Let the conversation
-continue!</pre
-              >
-            </div>
-          </div>
-        </div>
-
-        <!-- 3rd pic -->
         <div class="carousel-item">
           <img
             src="img/12.jpg"
@@ -181,7 +148,7 @@ continue!</pre
           <!-- Carousel Caption -->
           <div class="carousel-caption top-0 ms-n6 mt-9">
             <div class="row text-start">
-              <h6 class="fw-bold mt-5">Wanna Chat?</h6>
+              <h6 class="fw-bold mt-5">About Us</h6>
             </div>
             <div class="row">
               <pre
@@ -191,19 +158,68 @@ continue!</pre
                     sans-serif;
                 "
               >
-Send Us Your Feedback,
-We Love Hearing It!</pre
+VocoEase</pre
               >
             </div>
             <div class="row">
-              <pre
-                class="text-start"
+              <p
+                class="text-start text-justify"
                 style="font-family: Arial, Helvetica, sans-serif"
               >
-Share your thoughts! Your feedback fuels our growth and shapes a better
-experience. We appreciate every insight you provide. Let the conversation
-continue!</pre
+                We excel in delivering top-tier candidates tailored to the
+                specific needs<br />
+                of both emerging and established small-to medium- sized
+                enterprises. Our<br />
+                mission is to facilitate your business expansion, alleviate
+                operational<br />
+                burdens, streamline processes, and enhance overall success by
+                supplying <br />
+                you with the optimal team members.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3rd pic -->
+        <div class="carousel-item">
+          <img
+            src="img/14.jpg"
+            class="d-block w-100"
+            data-bs-interval="300"
+            alt="VocoEase"
+          />
+
+          <!-- Carousel Caption -->
+          <div class="carousel-caption top-0 ms-n6 mt-9">
+            <div class="row text-start">
+              <h6 class="fw-bold mt-5">About Us</h6>
+            </div>
+            <div class="row">
+              <pre
+                class="fw-bold display-4 text-start"
+                style="
+                  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial,
+                    sans-serif;
+                "
               >
+VocoEase</pre
+              >
+            </div>
+            <div class="row">
+              <p
+                class="text-start text-justify"
+                style="font-family: Arial, Helvetica, sans-serif"
+              >
+                We excel in delivering top-tier candidates tailored to the
+                specific needs<br />
+                of both emerging and established small-to medium- sized
+                enterprises. Our<br />
+                mission is to facilitate your business expansion, alleviate
+                operational<br />
+                burdens, streamline processes, and enhance overall success by
+                supplying <br />
+                you with the optimal team members.
+              </p>
             </div>
           </div>
         </div>
@@ -220,7 +236,7 @@ continue!</pre
           <!-- Carousel Caption -->
           <div class="carousel-caption top-0 ms-n6 mt-9">
             <div class="row text-start">
-              <h6 class="fw-bold mt-5">Wanna Chat?</h6>
+              <h6 class="fw-bold mt-5">About Us</h6>
             </div>
             <div class="row">
               <pre
@@ -230,127 +246,201 @@ continue!</pre
                     sans-serif;
                 "
               >
-Send Us Your Feedback,
-We Love Hearing It!</pre
+VocoEase</pre
               >
             </div>
             <div class="row">
-              <pre
-                class="text-start"
+              <p
+                class="text-start text-justify"
                 style="font-family: Arial, Helvetica, sans-serif"
               >
-Share your thoughts! Your feedback fuels our growth and shapes a better
-experience. We appreciate every insight you provide. Let the conversation
-continue!</pre
-              >
+                We excel in delivering top-tier candidates tailored to the
+                specific needs<br />
+                of both emerging and established small-to medium- sized
+                enterprises. Our<br />
+                mission is to facilitate your business expansion, alleviate
+                operational<br />
+                burdens, streamline processes, and enhance overall success by
+                supplying <br />
+                you with the optimal team members.
+              </p>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="container-fluid text-center pb-5 bg-light">
-      <h1 class="fw-bold py-5">COMPANY INFORMATION</h1>
-
-      <div class="row px-5 gap-3 d-flex justify-content-center">
-        <!-- Card 1-->
-        <div class="card col-sm-3 p-3">
-          <i
-            class="bi bi-map-fill pb-3"
-            style="font-size: xx-large; color: #146c84"
-          ></i>
-          <h5 class="card-title">Physical Address</h5>
-          <div class="card-body">
-            <p>8 The Green, STE A Dover DE 19901 USA</p>
-          </div>
+    <!-- Mission and Vision -->
+    <div class="container-fluid text-center py-5">
+      <h1 class="fw-bold" style="color: #001c31">MISSION AND VISION</h1>
+      <div class="row text-white d-flex justify-content-center gap-3">
+        <!-- Mission -->
+        <div class="card col-sm-5 mt-3 p-3" style="background-color: #001c31">
+          <i class="bi bi-bullseye" style="font-size: xxx-large"></i>
+          <h2 class="fw-bold py-3">MISSION</h2>
+          <p>
+            Our mission is to assist our clients in identifying the foundational
+            needs of their businesses, thereby enhancing their chances of
+            success. We achieve this by providing personalized guidance in
+            selecting the most fitting services from our offerings and
+            collaborating closely to develop comprehensive plans that not only
+            meet but also surpass their expectations.
+          </p>
         </div>
 
-        <!-- Card 2-->
-        <div class="card col-sm-3 p-3">
-          <i
-            class="bi bi-clock-fill pb-3"
-            style="font-size: xx-large; color: #146c84"
-          ></i>
-          <h5 class="card-title">Work Hours</h5>
-          <div class="card-body">
-            <p>24/7</p>
-          </div>
+        <!-- Vision -->
+        <div class="card col-sm-5 mt-3 p-3" style="background-color: #001c31">
+          <i class="bi bi-eye" style="font-size: xxx-large"></i>
+          <h2 class="fw-bold py-3">VISION</h2>
+          <p>
+            Our aspiration is to establish a renowned virtual assistance agency
+            recognized for consistently delivering outstanding results to our
+            clients, driven by our unwavering commitment to helping them achieve
+            their objectives. Simultaneously, we strive to cultivate a workplace
+            that instills pride in our employees and fosters client loyalty,
+            resulting in ongoing recommendations and sustained relationships.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Core Values -->
+    <div
+      class="container-fluid text-center py-5"
+      style="background-color: #001c31"
+    >
+      <h1 class="fw-bold text-white mb-4">CORE VALUES</h1>
+
+      <!-- Row 1 -->
+      <div class="row d-flex gap-4 justify-content-center">
+        <!-- Purposeful -->
+        <div class="card col-sm-5 p-4">
+          <h3 class="fw-bold blue">Purposeful</h3>
+          <p>
+            Reflects our commitment to having a clear and meaningful direction
+            in everything we do, ensuring that our efforts are purpose-driven.
+          </p>
         </div>
 
-        <!-- Card 3-->
-        <div class="card col-sm-3 p-3">
-          <i
-            class="bi bi-envelope-fill pb-3"
-            style="font-size: xx-large; color: #146c84"
-          ></i>
-          <h5 class="card-title">Email Address</h5>
-          <div class="card-body">
-            <p>info@vocoease.ph</p>
-          </div>
+        <!-- Reliable  -->
+        <div class="card col-sm-5 p-4">
+          <h3 class="fw-bold blue">Reliable</h3>
+          <p>
+            Underscores the importance of trustworthiness and consistency in
+            fulfilling our obligations and maintaining strong relationships.
+          </p>
+        </div>
+      </div>
+
+      <!-- Row 2 -->
+      <div class="row mt-4 gap-4 justify-content-center">
+        <!-- Virtuous -->
+        <div class="card col-sm-5 p-4">
+          <h3 class="fw-bold blue">Virtuous</h3>
+          <p>
+            Highlights our dedication to conducting ourselves with integrity,
+            ethics, and moral principles in all our interactions and decisions.
+          </p>
         </div>
 
-        <!-- Card 4-->
-        <div class="card col-sm-3 p-3">
-          <i
-            class="bi bi-phone-fill pb-3"
-            style="font-size: xx-large; color: #146c84"
-          ></i>
-          <h5 class="card-title">Phone Numbers</h5>
-          <div class="card-body">
-            <p>+1 (302) 608-6263</p>
-          </div>
+        <!-- Accountability -->
+        <div class="card col-sm-5 p-4">
+          <h3 class="fw-bold blue">Accountability</h3>
+          <p>
+            Reminds us to take ownership, learn, and strive for excellence
+            transparently and responsibly. These values shape our identity and
+            steer us toward success.
+          </p>
         </div>
+      </div>
+    </div>
 
-        <h1
-          class="fw-bold pt-5"
-          style="
-            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial,
-              sans-serif;
-          "
-        >
-          CONTACT US
-        </h1>
-        <pre class="pb-5" style="font-family: Arial, Helvetica, sans-serif">
-Reach out to us for unparalleled service and assistance. Your satisfaction is our priority,
-and we’re here to ensure every interaction is a positive and helpful experience.</pre
-        >
-
-        <div class="row d-flex justify-content-center gap-5">
-          <!-- Applicant -->
-          <div
-            class="card text-white col-sm-4 p-5"
-            style="background-color: #001c31"
-          >
-            <p class="fw-bold">Ready to join us?</p>
-            <p>Click below to start your journey with our application form!</p>
-            <a
-              href="applicantform.php"
-              class="btn btn-light px-4 py-2 mx-auto mt-3"
-              >APPLICANT</a
-            >
-          </div>
-
-          <!-- Client -->
-          <div
-            class="card text-white col-sm-4 p-5"
-            style="background-color: #001c31"
-          >
-            <p class="fw-bold">Elevate your experience.</p>
-            <p>
-              Click below to access our client form and let’s embark on a
-              journey of success!
+    <div class="container-fluid text-center px-5">
+      <div class="card p-5 mt-5 mx-5" style="background-color: #001c31">
+        <div class="row gap-5 mt-4 d-flex justify-content-center">
+          <!-- Recruitment Team -->
+          <div class="card col-sm-5 p-3">
+            <h5 class="fw-bold blue">RECRUITMENT TEAM</h5>
+            <p class="mt-3">
+              Our recruitment team collaborates to thoroughly understand our
+              clients' needs and preferences, allowing us to consistently
+              deliver an exceptional service guided by our company's mission,
+              vision, values, and culture.
             </p>
-            <a
-              href="clientform.php"
-              class="btn btn-light px-5 py-2 mx-auto mt-3"
-              >CLIENT</a
-            >
+          </div>
+
+          <!-- Human Resources Team -->
+          <div class="card col-sm-5 p-3">
+            <h5 class="fw-bold blue">HUMAN RESOURCES TEAM</h5>
+            <p class="mt-3">
+              To ensure that we provide quality VAs, our human resources team
+              trains and develops new talent. You don't have to waste time or
+              money training virtual assistants because we make sure that they
+              are fully equipped.
+            </p>
+          </div>
+        </div>
+
+        <div class="row mt-4 pb-4 py gap-5 d-flex justify-content-center">
+          <!-- Operations Team -->
+          <div class="card col-sm-5 p-3">
+            <h5 class="fw-bold blue">OPERATIONS TEAM</h5>
+            <p class="mt-3">
+              As part of the service that we provide, we will assign an
+              Operations Manager and Account Manager who will be responsible for
+              onboarding the Cold Caller with our client' s directives, and
+              processes, and provide coaching and feedback. They are also
+              required to update the client regularly regarding the campaign.
+            </p>
+          </div>
+
+          <!-- Support Team -->
+          <div class="card col-sm-5 p-3">
+            <h5 class="fw-bold blue">SUPPORT TEAM</h5>
+            <p class="mt-3">
+              We have a System manager and System Specialist who will be
+              responsible for generating reports from your dialer and sending
+              daily/weekly productivity reports, and Quality Analyst who will
+              ensure that call handling protocol is being followed.
+            </p>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="container-fluid" style="background-color: #001c31">
+    <div
+      class="container-fluid my-5"
+      style="padding-left: 110px; padding-right: 110px"
+    >
+      <div
+        class="rounded text-center text-white pt-5"
+        style="
+          background-image: linear-gradient(
+              rgba(0, 0, 0, 0.8),
+              rgba(0, 0, 0, 0.8)
+            ),
+            url('img/meeting.jpg');
+          background-repeat: no-repeat;
+          background-position: center;
+          background-size: cover;
+          height: 70vh;
+        "
+      >
+        <div class="pt-5">
+          <h2 class="fw-bold pt-5">VocoEase is a better choice for you!</h2>
+        </div>
+        <pre class="pt-3" style="font-family: Arial, Helvetica, sans-serif">
+Partner with us and experience hassle-free and cost-effective collaboration. We ensure
+that our freelancers are motivated and driven to exceed your expectations.</pre
+        >
+        <a href="candidatecontact.php" class="btn btn-primary px-3 mt-2"
+          >Reach out now</a
+        >
+      </div>
+    </div>
+
+  <!-- Footer --> 
+  <div class="container-fluid" style="background-color: #001c31">
       <div class="row mx-5 p-5">
         <!-- 1st Col -->
         <div class="col-sm-5" style="color: #9fa6af">
@@ -360,8 +450,8 @@ and we’re here to ensure every interaction is a positive and helpful experienc
               <div class="d-flex">
                 <i class="bi bi-geo-alt me-3" style="font-size: x-large"></i>
                 <pre style="font-family: Arial, Helvetica, sans-serif">
-  8 The Green, STE A Dover DE 19901
-  United States of America</pre
+8 The Green, STE A Dover DE 19901
+United States of America</pre
                 >
               </div>
             </li>
@@ -385,7 +475,7 @@ and we’re here to ensure every interaction is a positive and helpful experienc
           <ul class="list-unstyled">
             <li>
               <a
-                href="index.html"
+                href="candidatelandingpage.php"
                 class="text-decoration-none ms-2 mt2"
                 style="color: #9fa6af"
                 >Introduction</a
@@ -393,7 +483,7 @@ and we’re here to ensure every interaction is a positive and helpful experienc
             </li>
             <li>
               <a
-                href="about.html"
+                href="candidateabout.php"
                 class="text-decoration-none ms-2 mt2"
                 style="color: #9fa6af"
                 >Organization Team</a
@@ -837,12 +927,34 @@ and we’re here to ensure every interaction is a positive and helpful experienc
     <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
 
     <script>
-      const myModal = document.getElementById("myModal");
-      const myInput = document.getElementById("myInput");
 
-      myModal.addEventListener("shown.bs.modal", () => {
-        myInput.focus();
-      });
+        // Toggle password visibility for old password
+        document.getElementById("toggleOldPassword").addEventListener("click", function () {
+            const oldPasswordInput = document.getElementById("oldpassword");
+            if (oldPasswordInput.type === "password") {
+                oldPasswordInput.type = "text";
+            } else {
+                oldPasswordInput.type = "password";
+            }
+        });
+
+        // Toggle password visibility for new password
+        document.getElementById("toggleNewPassword").addEventListener("click", function () {
+            const newPasswordInput = document.getElementById("newpassword");
+            if (newPasswordInput.type === "password") {
+                newPasswordInput.type = "text";
+            } else {
+                newPasswordInput.type = "password";
+            }
+        });
+
+        const myModal = document.getElementById("myModal");
+        const myInput = document.getElementById("myInput");
+
+        myModal.addEventListener("shown.bs.modal", () => {
+            myInput.focus();
+        });
+
     </script>
   </body>
 </html>
