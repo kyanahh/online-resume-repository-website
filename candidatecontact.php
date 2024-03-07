@@ -327,7 +327,7 @@ and we’re here to ensure every interaction is a positive and helpful experienc
             <p class="fw-bold">Ready to join us?</p>
             <p>Click below to start your journey with our application form!</p>
             <a
-              href="applicantapplicantform.php"
+              href="candidateapplicantform.php"
               class="btn btn-light px-4 py-2 mx-auto mt-3"
               >APPLICANT</a
             >

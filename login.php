@@ -25,6 +25,9 @@ if (isset($_POST["email"]) && isset($_POST["password"])) {
         $_SESSION["email"] = $record["email"];
         $_SESSION["regdate"] = $record["regdate"];
         $_SESSION["phone"] = $record["phone"];
+        $_SESSION["bday"] = $record["bday"];
+        $_SESSION["gdrive"] = $record["gdrive"];
+        $_SESSION["profilepic"] = $record["profilepic"];
         $_SESSION["logged_in"] = true;
 
         $userid = $record["userid"];

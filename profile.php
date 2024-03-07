@@ -6,8 +6,11 @@ require("server/connection.php");
 
 if(isset($_SESSION["logged_in"])){
     if(isset($_SESSION["firstname"])){
-        $textaccount = $_SESSION["firstname"];
-        $email = $_SESSION["email"];
+      $textaccount = $_SESSION["firstname"];
+      $lastname = $_SESSION["lastname"];
+      $email = $_SESSION["email"];
+      $gdrive = $_SESSION["gdrive"];
+      $profilepic = $_SESSION["profilepic"];
     }else{
         $textaccount = "Account";
     }
@@ -15,20 +18,6 @@ if(isset($_SESSION["logged_in"])){
     $textaccount = "Account";
 }
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $email = $_SESSION["email"];
-    $oldpassword = $_POST["oldpassword"];
-    $newpassword = $_POST["newpassword"];
-    $result = $connection->query("SELECT password FROM users WHERE email = '$email'");
-    $record = $result->fetch_assoc();
-    $stored_password = $record["password"];
-    if ($oldpassword == $stored_password) {
-      $connection->query("UPDATE users SET password = '$newpassword' WHERE email = '$email'");
-      $_SESSION["success_message"] = "Password changed successfully";
-    } else {
-      $_SESSION["error_message"] = "Old password does not match";
-    }
-  }
 
 ?>
 
@@ -46,9 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   <title>VocoEase</title>
 </head>
 
-<body style="background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
-url('https://cdn-bnokp.nitrocdn.com/QNoeDwCprhACHQcnEmHgXDhDpbEOlRHH/assets/images/optimized/rev-c8a072e/www.decorilla.com/online-decorating/wp-content/uploads/2022/03/Modern-Office-Interior-with-Open-Floor-Plan-1536x1024.jpeg');
-    height: 100vh; background-repeat: no-repeat; background-position: center; background-size: cover;">
+<body class="bg-light">
 
   <!-- Navbar-->
   <nav class="px-5 py-2 mx-auto bg-white navbar navbar-expand-lg fixed-top">
@@ -101,75 +88,60 @@ url('https://cdn-bnokp.nitrocdn.com/QNoeDwCprhACHQcnEmHgXDhDpbEOlRHH/assets/imag
   </nav>
 
   <div class="container-fluid my-5 py-5">
-        <div class="row">
-        <div class="card mt-5 col-md-3 ms-5 bg-light">
-            <div class="card-body text-center">                
-                <img src="" class="rounded mx-auto d-block mt-3" alt="Profile Picture" style="height: 30vh;">
-                <h5 class="pt-3 fw-bold">NAME HERE</h5>
-                <form action="<?php htmlspecialchars("SELF_PHP"); ?>" method="post" enctype="multipart/form-data">
-                    <input type="file" name="profilepic" accept="image/*" class="form-control bg-light" />
-                    <button type="submit" class="btn btn-dark px-5 mt-2 text-white">Upload profile picture</button>
-                    <?php
-                    if (!empty($errorMessage)) {
-                        echo "
-                        <div class='alert alert-warning alert-dismissible fade show mt-2' role='alert'>
-                            <strong>$errorMessage</strong>
-                            <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
-                        </div>
-                        ";
-                    }
-                ?>
-                </form>
-            </div>
-        </div>
-            <div class="card mt-5 col-md-8 ms-3 bg-light">
-            <div class="card-body">
-
-                <div class="row my-2">
-                    <div class="col-sm-2">
-                        <h6 class="fw-bold">Sex</h6>
-                    </div>
-                    <div class="col">
-                        <h6> N/A </h6>
-                    </div>
-                    <hr class="mt-3">
-                </div>
-                
-                <div class="row">
-                    <div class="col-sm-2">
-                        <h6 class="fw-bold">Email</h6>
-                    </div>
-                    <div class="col">
-                        <h6><?php  echo $email; ?></h6>
-                    </div>
-                    <hr class="mt-3">                
-                </div>
-
-                <div class="row mt-2">
-                    <div class="col-sm-2">
-                        <h6 class="fw-bold">Phone</h6>
-                    </div>
-                    <div class="col">
-                        <h6>PHONE HERE </h6>
-                    </div>
-                    <hr class="mt-3">                
-                </div>
-
-                <div class="row mt-2">
-                    <div class="col-sm-2">
-                        <h6 class="fw-bold">Address</h6>
-                    </div>
-                    <div class="col">
-                        <h6>ADDRESS HERE </h6>
-                    </div>
-                    <hr class="mt-3">                
-                </div>
-
-                <a href="editprofile.php" class="btn btn-dark px-4">Edit</a>
-
-            </div>
-        </div>
-        </div>
+    <!-- Row 1 -->
+    <div class="row mt-3">
+      <div class="card p-5 col-sm-8 mx-auto">
+        <ul class="list-unstyled">
+          <li>
+          <img src="<?php echo $profilepic; ?>"
+            class="rounded-circle img-fluid border" style="width: 150px;">
+          </li>
+          <li>
+            <h5 class="mt-3"><?php echo $textaccount; ?> <?php echo $lastname; ?></h5>
+            <h6>Student in Pamantasan ng Lungson ng Muntinlupa</h6>
+          </li>
+        </ul>    
+      </div>
+    </div>
+    <!-- Row 2 -->
+    <div class="row mt-3">
+      <div class="card p-5 col-sm-8 mx-auto">
+        <ul class="list-unstyled">
+          <li>
+            <h5>Upload Resume/CV*</h5>
+          </li>
+          <li>
+            <input class="form-control" type="file" id="cv" name="cv" value="<?php echo $cv; ?>" required />
+          </li>
+        </ul>    
+      </div>
+    </div>
+    <!-- Row 3 -->
+    <div class="row mt-3">
+      <div class="card p-5 col-sm-8 mx-auto">
+        <ul class="list-unstyled">
+          <li>
+            <h5>G-Drive</h5>
+          </li>
+          <li>
+            <a href="<?php echo $gdrive; ?>" class="text-decoration-none"><i class="bi bi-folder-fill me-2"></i>G-DRIVE LINK</a>
+          </li>
+        </ul>    
+      </div>
+    </div>
+    <!-- Row 4 -->
+    <div class="row mt-3">
+      <div class="card p-5 col-sm-8 mx-auto">
+        <ul class="list-unstyled">
+          <li>
+            <h5>Skills</h5>
+          </li>
+          <li>
+            <a href="<?php echo $gdrive; ?>" class="text-decoration-none"><i class="bi bi-folder-fill me-2"></i>G-DRIVE LINK</a>
+          </li>
+        </ul>    
+      </div>
+    </div>
   </div>
   
 

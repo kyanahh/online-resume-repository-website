@@ -27,7 +27,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $errorMessage = "User already exists";
         } else {
             // Insert the user data into the database
-            $insertQuery = "INSERT INTO users (firstname, lastname, bday, email, password, usertypeid) VALUES ('$firstname', '$lastname', '$birthdate', '$email', '$password', '$usertype')";
+            $regdate = date("Y-m-d H:i:s");
+            $insertQuery = "INSERT INTO users (firstname, lastname, bday, email, password, usertypeid, regdate) VALUES ('$firstname', '$lastname', '$birthdate', '$email', '$password', '$usertype', '$regdate')";
             $result = $connection->query($insertQuery);
 
             if (!$result) {
