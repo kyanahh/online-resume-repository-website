@@ -7,10 +7,7 @@ require("server/connection.php");
 if(isset($_SESSION["logged_in"])){
   if(isset($_SESSION["firstname"])){
       $textaccount = $_SESSION["firstname"];
-      $lastname = $_SESSION["lastname"];
-      $email = $_SESSION["email"];
-      $regdate = $_SESSION["regdate"];
-      $phone = $_SESSION["phone"];
+
   }else{
       $textaccount = "Account";
   }
@@ -18,253 +15,163 @@ if(isset($_SESSION["logged_in"])){
   $textaccount = "Account";
 }
 
-$firstname = $lastname = $email = $phone = $city = $country = $cv = $applydate = $agreement = $errorMessage = "";
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-  $firstname =  ucwords($_POST["firstname"]);
-  $lastname =  ucwords($_POST["lastname"]);
-  $city = ucwords($_POST["city"]);
-  $country = ucwords($_POST["country"]);
-  $email = $_POST["email"];
-  $phone = $_POST["phone"];
-  $cv = $_POST["cv"];
-  $applydate = $_POST["applydate"];
-  $agreement = $_POST["agreement"];
-
-  if (isset($_POST["agreement"]) && $_POST["agreement"] == "on") {
-
-    $agreement = 1;
-    $insertQuery = "INSERT INTO applicantform (firstname, lastname, email, phone, city, country, cv, applydate, agreement) VALUES ('$firstname', '$lastname', '$email', '$phone', '$city', '$country',  '$cv', '$applydate', '$agreement')";
-    $result = $connection->query($insertQuery);
-
-    if (!$result) {
-      $errorMessage = "Invalid query " . $connection->error;
-    } else {
-      $errorMessage = "Thank you for applying with us, we will be in touch shortly.";
-      // Reset form fields
-      $firstname = $lastname = $email = $phone = $city = $country = $cv = $applydate = $agreement = "";
-    }
     
-  }else{
-    $errorMessage = "Consent is required";
-  }
+  $oldpassword = $_POST["oldpassword"];
+  $newpassword = $_POST["newpassword"];
+  $confirmpassword = $_POST["confirmpassword"];
 
+  $result = $connection->query("SELECT password FROM users WHERE email = '$email'");
+  $record = $result->fetch_assoc();
+  $stored_password = $record["password"];
+  if ($oldpassword == $stored_password) {
+
+    if($newpassword !== $confirmpassword){
+      $_SESSION["error_message"] = "Passwords do not match";
+    } else {
+      $connection->query("UPDATE users SET password = '$newpassword' WHERE email = '$email'");
+      $_SESSION["success_message"] = "Password changed successfully";
+    }
+  } else {
+    $_SESSION["error_message"] = "Old password does not match";
+  }
 }
 
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
+<head>
+  <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="style.css">
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"
     />
-    <link rel="stylesheet" type="text/css" href="style.css" />
-    <link
-      rel="stylesheet"
-      href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
-    />
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css"
-    />
-    <title>VocoEase</title>
-  </head>
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
+  <title>VocoEase</title>
+</head>
 
-  <body>
-    <!-- Navbar-->
-    <nav class="px-5 py-2 mx-auto bg-white navbar navbar-expand-lg fixed-top">
-        <div class="container-fluid">
+<body>
 
-        <!-- Logo -->
-        <div class="d-flex justify-content-start">
-            <a class="navbar-brand" href="index.html">
-            <img style="height: 70px;" src="img/logoname.png" alt="VocoEase">
-            </a>
-        </div>
+  <!-- Navbar-->
+  <nav class="px-5 py-2 mx-auto bg-white navbar navbar-expand-lg fixed-top">
+    <div class="container-fluid">
 
-        <!-- Toggle button-->
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+      <!-- Logo -->
+      <div class="d-flex justify-content-start">
+        <a class="navbar-brand" href="index.html">
+          <img style="height: 70px;" src="img/logoname.png" alt="VocoEase">
+        </a>
+      </div>
 
-        <!-- Navbar directory -->
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav mx-auto">
-            <li class="nav-item">
-                <a class="nav-link active fw-bold me-4" aria-current="page" href="candidatelandingpage.php">HOME</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link active fw-bold me-4" href="candidateabout.php">ABOUT</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link active fw-bold me-4" href="candidateservices.php">SERVICES</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link active fw-bold" href="candidatecontact.php">CONTACT</a>
-            </li>
+      <!-- Toggle button-->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- Navbar directory -->
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav mx-auto">
+          <li class="nav-item">
+            <a class="nav-link active fw-bold me-4" aria-current="page" href="candidatelandingpage.php">HOME</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active fw-bold me-4" href="candidateabout.php">ABOUT</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active fw-bold me-4" href="candidateservices.php">SERVICES</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active fw-bold" href="candidatecontact.php">CONTACT</a>
+          </li>
+        </ul>
+
+        <!-- Dropdown / Account-->
+        <div class="nav-item dropdown me-5">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Account</a>
+            <ul class="dropdown-menu dropdown-menu-dark">
+                <li><a class="dropdown-item" href="resume.php">Resume</a></li>
+                <li><a class="dropdown-item" href="profile.php">Profile</a></li>
+                <li><a class="dropdown-item" href="settings.php">Settings</a></li>
+                <li><a class="dropdown-item" href="logout.php">Logout</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item">Hi, <?php echo $textaccount; ?></a></li>            
             </ul>
-
-            <!-- Dropdown / Account-->
-            <div class="nav-item dropdown me-5">
-                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Account</a>
-                <ul class="dropdown-menu dropdown-menu-dark">
-                    <li><a class="dropdown-item" href="resume.php">Resume</a></li>
-                    <li><a class="dropdown-item" href="profile.php">Profile</a></li>
-                    <li><a class="dropdown-item" href="settings.php">Settings</a></li>
-                    <li><a class="dropdown-item" href="logout.php">Logout</a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item">Hi, <?php echo $textaccount; ?></a></li>            
-                </ul>
-            </div>
-        </div>
-        
-        </div>
-    </nav>
-
-    <!-- Card Client Form -->
-    <div class="container-fluid pt-5 mt-4" style="background-color: #041c34">
-      <div class="card bg-light mt-5 px-5 py-4 col-lg-8 mx-auto">
-        <h5 class="fw-bold card-title">Applicant Form</h5>
-        <div class="card-body">
-                <?php
-                    if (!empty($errorMessage)) {
-                        echo "
-                        <div class='alert alert-warning alert-dismissible mt-2 fade show' role='alert'>
-                            <strong>$errorMessage</strong>
-                            <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
-                        </div>
-                        ";
-                }
-                ?>
-          <form action="<?php htmlspecialchars("SELF_PHP"); ?>" method="POST">
-            <!-- Row 1 First Name and Last Name-->
-            <div class="row">
-              <div class="col mb-3">
-                <label for="firstname" class="form-label">First Name*</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="firstname"
-                  placeholder="E.g. John"
-                  value="<?php echo $firstname; ?>"
-                  name="firstname"
-                  required
-                />
-              </div>
-              <div class="col mb-3">
-                <label for="lastname" class="form-label">Last Name*</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="lastname"
-                  placeholder="E.g. Doe"
-                  value="<?php echo $lastname; ?>"
-                  name="lastname"
-                  required
-                />
-              </div>
-            </div>
-
-            <!-- Row 2 Email Address and Phone Number -->
-            <div class="row">
-              <div class="col mb-3">
-                <label for="email" class="form-label">Email Address*</label>
-                <input
-                  type="email"
-                  class="form-control"
-                  id="email"
-                  placeholder="E.g. john@doe.com"
-                  value="<?php echo $email; ?>"
-                  name="email"
-                  required
-                />
-              </div>
-              <div class="col mb-3">
-                <label for="phone" class="form-label">Phone Number*</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="phone"
-                  placeholder="E.g. +1 3004005000"
-                  value="<?php echo $phone; ?>"
-                  name="phone"
-                  required
-                />
-              </div>
-            </div>
-
-            <!-- Row 3 State and Country -->
-            <div class="row">
-              <div class="col mb-3">
-                <label for="city" class="form-label">City*</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="city"
-                  placeholder="E.g. Sydney"
-                  name="city"
-                  value="<?php echo $city; ?>"
-                  required
-                />
-              </div>
-              <div class="col mb-3">
-                  <label for="country" class="form-label">Country*</label>
-                  <select class="form-select" id="country" aria-label="Default select example" required>
-                      <option selected disabled>Select a Country</option>
-                      <!-- Countries will be populated dynamically via JavaScript -->
-                  </select>
-                  <!-- Hidden input field to store the selected country value -->
-                  <input type="hidden" id="selectedCountry" name="country" required>
-              </div>
-            </div>
-
-            <!-- Row 4 Resume & Date of Application-->
-            <div class="row">
-              <div class="col mb-3">
-                <label for="cv" class="form-label">Upload CV/Resume*</label>
-                <input class="form-control" type="file" id="cv" name="cv" value="<?php echo $cv; ?>" required />
-              </div>
-
-              <div class="col mb-3">
-                <label for="applydate" class="form-label"
-                  >Date of Application*</label
-                >
-                <input type="date" class="form-control" id="applydate" name="applydate" value="<?php echo $applydate; ?>" required />
-              </div>
-            </div>
-
-            <!-- Row 6 Checkbox -->            
-            <div class="row ms-1">
-              <div class="mb-3 form-check">
-                <input type="checkbox" class="form-check-input" id="agreement" name="agreement" required />
-                <label class="form-check-label" for="agreement"
-                  >Yes, I have read and agree with the <a role="button" data-bs-toggle="modal" 
-                  data-bs-target="#privacypolicy" style="color: blue">Privacy Policy</a> and  
-                  <a role="button" data-bs-toggle="modal" 
-                  data-bs-target="#terms1" style="color: blue">Terms
-                  & Conditions</a></label
-                >
-              </div>
-            </div>
-
-            <!-- Submit button -->
-            <button type="submit" class="btn btn-primary">Submit</button>
-          </form>
         </div>
       </div>
+      
     </div>
+  </nav>
 
-    <div class="container-fluid" style="background-color: #001c31">
+  <div class="container-fluid mt-5 pt-5 pb-5">
+    <div class="row ms-5 ps-5">
+
+      <!-- Profile Settings --> 
+        <div class="col-sm-6">
+                <h4 class="fw-bold mt-1">Change Password</h4>
+                <form method="POST" action="<?php htmlspecialchars("SELF_PHP"); ?>">
+                    <div class="row mt-2">
+                        <div class="col input-group">
+                            <input type="password" class="form-control" id="oldpassword" name="oldpassword" placeholder="Old Password" required>
+                            <button class="btn btn-outline-secondary" type="button" id="toggleOldPassword">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row my-2">
+                        <div class="col input-group">
+                            <input type="password" class="form-control" id="newpassword" name="newpassword" placeholder="New Password" required>
+                            <button class="btn btn-outline-secondary" type="button" id="toggleNewPassword">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row my-2">
+                        <div class="col input-group">
+                            <input type="password" class="form-control" id="confirmpassword" name="confirmpassword" placeholder="Confirm Password" required>
+                            <button class="btn btn-outline-secondary" type="button" id="toggleConfirmPassword">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="text-danger">
+                        <?php
+                            if (isset($_SESSION["success_message"])) {
+                                echo "<label>" . $_SESSION["success_message"] . "</label>";
+                                unset($_SESSION["success_message"]);
+                            } elseif (isset($_SESSION["error_message"])) {
+                                echo "<label>" . $_SESSION["error_message"] . "</label>";
+                                unset($_SESSION["error_message"]);
+                            }
+                        ?>
+                    </div>
+                    <div class="row">
+                        <div class="col d-grid gap-2">
+                            <button type="submit" class="btn btn-primary text-white mt-3 fw-bold">Change Password</button>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col d-grid gap-2">
+                            <a class="btn btn-danger text-white fw-bold" href="settings.php">Cancel</a>
+                        </div>
+                    </div>
+                </form>
+            
+        </div>
+
+    </div>
+        
+    </div>
+  
+
+  <!-- Footer --> 
+  <div class="container-fluid" style="background-color: #001c31">
       <div class="row mx-5 p-5">
         <!-- 1st Col -->
         <div class="col-sm-5" style="color: #9fa6af">
@@ -299,7 +206,7 @@ United States of America</pre
           <ul class="list-unstyled">
             <li>
               <a
-                href="index.html"
+                href="candidatelandingpage.php"
                 class="text-decoration-none ms-2 mt2"
                 style="color: #9fa6af"
                 >Introduction</a
@@ -307,7 +214,7 @@ United States of America</pre
             </li>
             <li>
               <a
-                href="about.html"
+                href="candidateabout.php"
                 class="text-decoration-none ms-2 mt2"
                 style="color: #9fa6af"
                 >Organization Team</a
@@ -751,41 +658,44 @@ United States of America</pre
     <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
 
     <script>
-      const myModal = document.getElementById("myModal");
-      const myInput = document.getElementById("myInput");
 
-      myModal.addEventListener("shown.bs.modal", () => {
-        myInput.focus();
-      });
-    </script>
-
-    <script>
-      // Fetch countries data from the REST Countries API
-      fetch('https://restcountries.com/v3.1/all')
-        .then(response => response.json())
-        .then(data => {
-            // Sort countries alphabetically
-            data.sort((a, b) => a.name.common.localeCompare(b.name.common));
-
-            const selectElement = document.getElementById('country');
-
-            // Iterate over the sorted countries data and populate the dropdown
-            data.forEach(country => {
-                const option = document.createElement('option');
-                option.value = country.name.common;
-                option.textContent = country.name.common;
-                selectElement.appendChild(option);
-            });
-
-            // Add event listener to the select element to capture the selected value
-            selectElement.addEventListener('change', function() {
-                const selectedValue = this.value;
-                document.getElementById('selectedCountry').value = selectedValue;
-            });
-        })
-        .catch(error => {
-            console.error('Error fetching countries data:', error);
+        // Toggle password visibility for old password
+        document.getElementById("toggleOldPassword").addEventListener("click", function () {
+            const oldPasswordInput = document.getElementById("oldpassword");
+            if (oldPasswordInput.type === "password") {
+                oldPasswordInput.type = "text";
+            } else {
+                oldPasswordInput.type = "password";
+            }
         });
+
+        // Toggle password visibility for new password
+        document.getElementById("toggleNewPassword").addEventListener("click", function () {
+            const newPasswordInput = document.getElementById("newpassword");
+            if (newPasswordInput.type === "password") {
+                newPasswordInput.type = "text";
+            } else {
+                newPasswordInput.type = "password";
+            }
+        });
+
+        // Toggle password visibility for confirm password
+        document.getElementById("toggleConfirmPassword").addEventListener("click", function () {
+            const confirmPasswordInput = document.getElementById("confirmpassword");
+            if (confirmPasswordInput.type === "password") {
+                confirmPasswordInput.type = "text";
+            } else {
+                confirmPasswordInput.type = "password";
+            }
+        });
+
+        const myModal = document.getElementById("myModal");
+        const myInput = document.getElementById("myInput");
+
+        myModal.addEventListener("shown.bs.modal", () => {
+            myInput.focus();
+        });
+
     </script>
   </body>
 </html>

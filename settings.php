@@ -5,34 +5,66 @@ session_start();
 require("server/connection.php");
 
 if(isset($_SESSION["logged_in"])){
-    if(isset($_SESSION["firstname"])){
-        $textaccount = $_SESSION["firstname"];
-        $lastname = $_SESSION["lastname"];
-        $email = $_SESSION["email"];
-        $regdate = $_SESSION["regdate"];
-        $phone = $_SESSION["phone"];
-    }else{
-        $textaccount = "Account";
-    }
+  if(isset($_SESSION["firstname"])){
+      $textaccount = $_SESSION["firstname"];
+      $lastname = $_SESSION["lastname"];
+      $email = $_SESSION["email"];
+      $regdate = $_SESSION["regdate"];
+      $phone = $_SESSION["phone"];
+      $bday = $_SESSION["bday"];
+      $gdrive = $_SESSION["gdrive"];
+      $profilepic = $_SESSION["profilepic"];
+
+
+  }else{
+      $textaccount = "Account";
+  }
 }else{
-    $textaccount = "Account";
+  $textaccount = "Account";
 }
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $email = $_SESSION["email"];
-    $oldpassword = $_POST["oldpassword"];
-    $newpassword = $_POST["newpassword"];
-    $result = $connection->query("SELECT password FROM users WHERE email = '$email'");
-    $record = $result->fetch_assoc();
-    $stored_password = $record["password"];
-    if ($oldpassword == $stored_password) {
-      $connection->query("UPDATE users SET password = '$newpassword' WHERE email = '$email'");
-      $_SESSION["success_message"] = "Password changed successfully";
-    } else {
-      $_SESSION["error_message"] = "Old password does not match";
-    }
-  }
 
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+  $phone = $_POST["phone"];
+  $gdrive = $_POST["gdrive"];
+
+  // Handle file upload for profile picture
+  if(isset($_FILES["profilepic"]) && !empty($_FILES["profilepic"]["name"])) {
+      $targetDirectory = "profile_pictures/";
+      $targetFile = $targetDirectory . basename($_FILES["profilepic"]["name"]);
+
+      // Check if the uploaded file is an image
+      $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
+      if (in_array($imageFileType, ["jpg", "jpeg", "png", "gif"])) {
+          if (move_uploaded_file($_FILES["profilepic"]["tmp_name"], $targetFile)) {
+              // Update the profile picture path in the database
+              $updateQuery = "UPDATE users SET profilepic = '$targetFile', phone = '$phone', gdrive = '$gdrive' WHERE email = '$email'";
+              if($connection->query($updateQuery)) {
+                  $_SESSION["profilepic"] = $targetFile;
+                  // Redirect to the profile page or wherever you want
+                  header("Location: settings.php");
+                  exit; // Ensure that no further code is executed after redirection
+              } else {
+                  $errorMessage = "Failed to update profile. Please try again later.";
+              }
+          } else {
+              $errorMessage = "Failed to upload file.";
+          }
+      } else {
+          $errorMessage = "Invalid file format. Please upload an image (jpg, jpeg, png, or gif).";
+      }
+  } else {
+      // If no profile picture is uploaded, update only phone and gdrive
+      $updateQuery = "UPDATE users SET phone = '$phone', gdrive = '$gdrive' WHERE email = '$email'";
+      if($connection->query($updateQuery)) {
+          // Redirect to the profile page or wherever you want
+          header("Location: settings.php");
+          exit; // Ensure that no further code is executed after redirection
+      } else {
+          $errorMessage = "Failed to update profile. Please try again later.";
+      }
+  }
+}
 ?>
 
 <!DOCTYPE html>
@@ -108,17 +140,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="row ms-5 ps-5">
 
     <!-- Prof Pic --> 
-      <div class="col-sm-3 ms-5 pt-5 ps-5 d-flex justify-content-center">
+      <div class="col-sm-3 ms-5 ps-5 d-flex justify-content-center">
         <ul class="list-unstyled">
           <li class="d-flex justify-content-center">
-            <img src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/c3ed74d2-69ee-4322-aaa9-5f8c360024aa/d5x0z2c-37953b34-9cdc-42e9-977f-dc58a7fb5d37.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcL2MzZWQ3NGQyLTY5ZWUtNDMyMi1hYWE5LTVmOGMzNjAwMjRhYVwvZDV4MHoyYy0zNzk1M2IzNC05Y2RjLTQyZTktOTc3Zi1kYzU4YTdmYjVkMzcuanBnIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.vfOTrhft_8x7wttW1uQVCEjKxhupQKfyTaQv0BHDLIg" alt="avatar"
+          <form method="POST" action="<?php htmlspecialchars("SELF_PHP"); ?>" enctype="multipart/form-data">
+            <img src="<?php echo $profilepic; ?>" alt="avatar"
             class="rounded-circle img-fluid border" style="width: 150px;">
           </li>
           <li>
-            <h5 class="my-3 text-center">John Smith</h5>
+            <h5 class="my-3 text-center">Profile Picture</h5>
           </li>
           <li>
-              <input class="form-control" type="file" id="cv" name="cv" value="<?php echo $cv; ?>" required />
+              <input class="form-control" accept="image/*" type="file" id="profilepic" name="profilepic" value="<?php echo $profilepic; ?>" />
           </li>
         </ul>
 
@@ -126,7 +159,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
       <!-- Profile Settings --> 
         <div class="col-sm-6">
-
+                <h4 class="fw-bold mt-1">Profile Settings</h4>
                 <?php
                     if (!empty($errorMessage)) {
                         echo "
@@ -137,8 +170,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         ";
                     }
                 ?>
-                <h4 class="fw-bold mt-1">Profile Settings</h4>
-                <form method="POST" action="<?php htmlspecialchars("SELF_PHP"); ?>">
                 <!-- Fname and Lname  -->
                 <div class="row">
                   <div class="col mb-3">
@@ -161,57 +192,34 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <input type="text" class="form-control" id="phone" name="phone" value="<?php echo $phone; ?>">
                   </div>
                 </div>
-                <!-- Registered Date  -->
+                <!-- Birthdate & Registered Date  -->
                 <div class="row">
+                  <div class="col mb-3">
+                    <label for="bday" class="form-label">Birth Date (YYYY-MM-DD)</label>
+                    <input type="text" class="form-control" id="bday" value="<?php echo $bday; ?>" disabled>
+                  </div>
                   <div class="col mb-3">
                     <label for="regdate" class="form-label">Registered Date</label>
                     <input type="text" class="form-control" id="regdate" value="<?php echo $regdate; ?>" disabled>
                   </div>
                 </div>
+                <!-- Gdrive Link -->
+                <div class="row">
+                  <div class="col mb-3">
+                    <label for="gdrive" class="form-label">Google Drive</label>
+                    <input type="text" class="form-control" id="gdrive" name="gdrive" value="<?php echo $gdrive; ?>">
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col d-grid gap-2">
+                      <button type="submit" class="btn btn-primary text-white fw-bold">Update My Profile</button>
+                  </div>
+                </div>
                 <hr>
-                    <h5 class="h6">Change Password</h5>
-                    <div class="row mt-2">
-                        <div class="col input-group">
-                            <input type="password" class="form-control" id="oldpassword" name="oldpassword" placeholder="Old Password" required>
-                            <button class="btn btn-outline-secondary" type="button" id="toggleOldPassword">
-                                <i class="bi bi-eye"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="row my-2">
-                        <div class="col input-group">
-                            <input type="password" class="form-control" id="newpassword" name="newpassword" placeholder="New Password" required>
-                            <button class="btn btn-outline-secondary" type="button" id="toggleNewPassword">
-                                <i class="bi bi-eye"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="row my-2">
-                        <div class="col input-group">
-                            <input type="password" class="form-control" id="confirmpass" name="confirmpass" placeholder="Confirm Password" required>
-                            <button class="btn btn-outline-secondary" type="button" id="toggleConfirmPassword">
-                                <i class="bi bi-eye"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="text-danger">
-                        <?php
-                            if (isset($_SESSION["success_message"])) {
-                                echo "<label>" . $_SESSION["success_message"] . "</label>";
-                                unset($_SESSION["success_message"]);
-                            } elseif (isset($_SESSION["error_message"])) {
-                                echo "<label>" . $_SESSION["error_message"] . "</label>";
-                                unset($_SESSION["error_message"]);
-                            }
-                        ?>
-                    </div>
-                    <div class="row">
-                        <div class="col d-grid gap-2">
-                            <button type="submit" class="btn btn-primary text-white mt-3 fw-bold">Update My Profile</button>
-                        </div>
-                    </div>
-                </form>
-            
+                <div class="row px-2">
+                  <a href="changepassword.php" class="btn btn-primary fw-bold">Change Password</a>
+                </div>
+          </form>
         </div>
 
     </div>
@@ -707,36 +715,6 @@ United States of America</pre
     <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
 
     <script>
-
-        // Toggle password visibility for old password
-        document.getElementById("toggleOldPassword").addEventListener("click", function () {
-            const oldPasswordInput = document.getElementById("oldpassword");
-            if (oldPasswordInput.type === "password") {
-                oldPasswordInput.type = "text";
-            } else {
-                oldPasswordInput.type = "password";
-            }
-        });
-
-        // Toggle password visibility for new password
-        document.getElementById("toggleNewPassword").addEventListener("click", function () {
-            const newPasswordInput = document.getElementById("newpassword");
-            if (newPasswordInput.type === "password") {
-                newPasswordInput.type = "text";
-            } else {
-                newPasswordInput.type = "password";
-            }
-        });
-
-        // Toggle password visibility for confirm password
-        document.getElementById("toggleConfirmPassword").addEventListener("click", function () {
-            const confirmPasswordInput = document.getElementById("confirmpass");
-            if (confirmPasswordInput.type === "password") {
-                confirmPasswordInput.type = "text";
-            } else {
-                confirmPasswordInput.type = "password";
-            }
-        });
 
         const myModal = document.getElementById("myModal");
         const myInput = document.getElementById("myInput");
