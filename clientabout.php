@@ -39,7 +39,7 @@ if(isset($_SESSION["logged_in"])){
 
       <!-- Logo -->
       <div class="d-flex justify-content-start">
-        <a class="navbar-brand" href="candidatelandingpage.php">
+        <a class="navbar-brand" href="clientlandingpage.php">
           <img style="height: 70px;" src="img/logoname.png" alt="VocoEase">
         </a>
       </div>
@@ -53,16 +53,16 @@ if(isset($_SESSION["logged_in"])){
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav mx-auto">
           <li class="nav-item">
-            <a class="nav-link active fw-bold me-4" aria-current="page" href="candidatelandingpage.php">HOME</a>
+            <a class="nav-link active fw-bold me-4" aria-current="page" href="clientlandingpage.php">HOME</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link active fw-bold me-4" href="candidateabout.php">ABOUT</a>
+            <a class="nav-link active fw-bold me-4" href="clientabout.php">ABOUT</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link active fw-bold me-4" href="candidateservices.php">SERVICES</a>
+            <a class="nav-link active fw-bold me-4" href="clientservices.php">SERVICES</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link active fw-bold" href="candidatecontact.php">CONTACT</a>
+            <a class="nav-link active fw-bold" href="clientcontact.php">CONTACT</a>
           </li>
         </ul>
 
@@ -70,8 +70,9 @@ if(isset($_SESSION["logged_in"])){
         <div class="nav-item dropdown me-5">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Account</a>
             <ul class="dropdown-menu dropdown-menu-dark">
-                <li><a class="dropdown-item" href="profile.php">Profile</a></li>
-                <li><a class="dropdown-item" href="settings.php">Settings</a></li>
+                <li><a class="dropdown-item" href="clientprofile.php">Profile</a></li>
+                <li><a class="dropdown-item" href="clientresume.php">Candidate Resume</a></li>
+                <li><a class="dropdown-item" href="clientsettings.php">Settings</a></li>
                 <li><a class="dropdown-item" href="logout.php">Logout</a></li>
                 <li><hr class="dropdown-divider"></li>
                 <li><a class="dropdown-item">Hi, <?php echo $textaccount; ?></a></li>            
@@ -82,8 +83,8 @@ if(isset($_SESSION["logged_in"])){
     </div>
   </nav>
 
-  <!-- Carousel / Slideshow images -->
-  <div
+    <!-- Carousel / Slideshow images -->
+    <div
       id="carouselExampleSlidesOnly"
       class="carousel slide carousel-fade"
       data-bs-ride="carousel"
@@ -92,7 +93,7 @@ if(isset($_SESSION["logged_in"])){
         <!-- First pic -->
         <div class="carousel-item active">
           <img
-            src="img/11.jpg"
+            src="img/13.jpg"
             class="d-block w-100 h-100"
             aria-current="true"
             aria-label="Slide 1"
@@ -102,6 +103,9 @@ if(isset($_SESSION["logged_in"])){
 
           <!-- Carousel Caption -->
           <div class="carousel-caption top-0 ms-n6 mt-9">
+            <div class="row text-start">
+              <h6 class="fw-bold mt-5">About Us</h6>
+            </div>
             <div class="row">
               <pre
                 class="fw-bold display-4 text-start"
@@ -110,36 +114,24 @@ if(isset($_SESSION["logged_in"])){
                     sans-serif;
                 "
               >
-Choose us to
-access the finest
-talent for your team!</pre
+VocoEase</pre
               >
             </div>
             <div class="row">
-              <pre
-                class="text-start"
+              <p
+                class="text-start text-justify"
                 style="font-family: Arial, Helvetica, sans-serif"
               >
-VocoEase is a distinguished firm specializing in the provision of technical
-support and customer service staffing solutions for a diverse range of
-organizations.</pre
-              >
-              <div class="row mt-2">
-                <div class="col-sm-2 ms-n1">
-                  <a
-                    href="candidateabout.php"
-                    class="btn btn-outline-light fw-bold px-4 py-2"
-                    >Learn More</a
-                  >
-                </div>
-                <div class="col-sm-3 ms-n2">
-                  <a
-                    href="candidateservices.php"
-                    class="btn btn-outline-light px-4 py-2 fw-bold"
-                    >See Our Services</a
-                  >
-                </div>
-              </div>
+                We excel in delivering top-tier candidates tailored to the
+                specific needs<br />
+                of both emerging and established small-to medium- sized
+                enterprises. Our<br />
+                mission is to facilitate your business expansion, alleviate
+                operational<br />
+                burdens, streamline processes, and enhance overall success by
+                supplying <br />
+                you with the optimal team members.
+              </p>
             </div>
           </div>
         </div>
@@ -155,6 +147,9 @@ organizations.</pre
 
           <!-- Carousel Caption -->
           <div class="carousel-caption top-0 ms-n6 mt-9">
+            <div class="row text-start">
+              <h6 class="fw-bold mt-5">About Us</h6>
+            </div>
             <div class="row">
               <pre
                 class="fw-bold display-4 text-start"
@@ -163,94 +158,29 @@ organizations.</pre
                     sans-serif;
                 "
               >
-Choose us to
-access the finest
-talent for your team!</pre
+VocoEase</pre
               >
             </div>
             <div class="row">
-              <pre
-                class="text-start"
+              <p
+                class="text-start text-justify"
                 style="font-family: Arial, Helvetica, sans-serif"
               >
-VocoEase is a distinguished firm specializing in the provision of technical
-support and customer service staffing solutions for a diverse range of
-organizations.</pre
-              >
-              <div class="row mt-2">
-                <div class="col-sm-2 ms-n1">
-                  <a
-                    href="candidateabout.php"
-                    class="btn btn-outline-light fw-bold px-4 py-2"
-                    >Learn More</a
-                  >
-                </div>
-                <div class="col-sm-3 ms-n2">
-                  <a
-                    href="candidateservices.php"
-                    class="btn btn-outline-light px-4 py-2 fw-bold"
-                    >See Our Services</a
-                  >
-                </div>
-              </div>
+                We excel in delivering top-tier candidates tailored to the
+                specific needs<br />
+                of both emerging and established small-to medium- sized
+                enterprises. Our<br />
+                mission is to facilitate your business expansion, alleviate
+                operational<br />
+                burdens, streamline processes, and enhance overall success by
+                supplying <br />
+                you with the optimal team members.
+              </p>
             </div>
           </div>
         </div>
 
         <!-- 3rd pic -->
-        <div class="carousel-item">
-          <img
-            src="img/13.jpg"
-            class="d-block w-100"
-            data-bs-interval="300"
-            alt="VocoEase"
-          />
-
-          <!-- Carousel Caption -->
-          <div class="carousel-caption top-0 ms-n6 mt-9">
-            <div class="row">
-              <pre
-                class="fw-bold display-4 text-start"
-                style="
-                  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial,
-                    sans-serif;
-                "
-              >
-Choose us to
-access the finest
-talent for your team!</pre
-              >
-            </div>
-            <div class="row">
-              <pre
-                class="text-start"
-                style="font-family: Arial, Helvetica, sans-serif"
-              >
-VocoEase is a distinguished firm specializing in the provision of technical
-support and customer service staffing solutions for a diverse range of
-organizations.</pre
-              >
-              <div class="row mt-2">
-                <div class="col-sm-2 ms-n1">
-                  <a
-                    href="candidateabout.php"
-                    class="btn btn-outline-light fw-bold px-4 py-2"
-                    >Learn More</a
-                  >
-                </div>
-                <div class="col-sm-3 ms-n2">
-                  <a
-                    href="candidateservices.php"
-                    class="btn btn-outline-light px-4 py-2 fw-bold"
-                    >See Our Services</a
-                  >
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 4th pic -->
         <div class="carousel-item">
           <img
             src="img/14.jpg"
@@ -261,6 +191,9 @@ organizations.</pre
 
           <!-- Carousel Caption -->
           <div class="carousel-caption top-0 ms-n6 mt-9">
+            <div class="row text-start">
+              <h6 class="fw-bold mt-5">About Us</h6>
+            </div>
             <div class="row">
               <pre
                 class="fw-bold display-4 text-start"
@@ -269,313 +202,207 @@ organizations.</pre
                     sans-serif;
                 "
               >
-Choose us to
-access the finest
-talent for your team!</pre
+VocoEase</pre
               >
             </div>
             <div class="row">
-              <pre
-                class="text-start"
+              <p
+                class="text-start text-justify"
                 style="font-family: Arial, Helvetica, sans-serif"
               >
-VocoEase is a distinguished firm specializing in the provision of technical
-support and customer service staffing solutions for a diverse range of
-organizations.</pre
+                We excel in delivering top-tier candidates tailored to the
+                specific needs<br />
+                of both emerging and established small-to medium- sized
+                enterprises. Our<br />
+                mission is to facilitate your business expansion, alleviate
+                operational<br />
+                burdens, streamline processes, and enhance overall success by
+                supplying <br />
+                you with the optimal team members.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4th pic -->
+        <div class="carousel-item">
+          <img
+            src="img/11.jpg"
+            class="d-block w-100"
+            data-bs-interval="300"
+            alt="VocoEase"
+          />
+
+          <!-- Carousel Caption -->
+          <div class="carousel-caption top-0 ms-n6 mt-9">
+            <div class="row text-start">
+              <h6 class="fw-bold mt-5">About Us</h6>
+            </div>
+            <div class="row">
+              <pre
+                class="fw-bold display-4 text-start"
+                style="
+                  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial,
+                    sans-serif;
+                "
               >
-              <div class="row mt-2">
-                <div class="col-sm-2 ms-n1">
-                  <a
-                    href="candidateabout.php"
-                    class="btn btn-outline-light fw-bold px-4 py-2"
-                    >Learn More</a
-                  >
-                </div>
-                <div class="col-sm-3 ms-n2">
-                  <a
-                    href="candidateservices.php"
-                    class="btn btn-outline-light px-4 py-2 fw-bold"
-                    >See Our Services</a
-                  >
-                </div>
-              </div>
+VocoEase</pre
+              >
+            </div>
+            <div class="row">
+              <p
+                class="text-start text-justify"
+                style="font-family: Arial, Helvetica, sans-serif"
+              >
+                We excel in delivering top-tier candidates tailored to the
+                specific needs<br />
+                of both emerging and established small-to medium- sized
+                enterprises. Our<br />
+                mission is to facilitate your business expansion, alleviate
+                operational<br />
+                burdens, streamline processes, and enhance overall success by
+                supplying <br />
+                you with the optimal team members.
+              </p>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="container-fluid mb-5">
-      <!-- What we do start -->
-      <h1
-        class="fw-bold text-center pt-5"
-        style="
-          font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial,
-            sans-serif;
-        "
-      >
-        WHAT WE DO
-      </h1>
-      <pre
-        class="text-center pt-2"
-        style="font-family: Arial, Helvetica, sans-serif"
-      >
-As a well-established enterprise, we excel in providing tailored technical support and
-customer service staffing solutions, catering to diverse businesses.
-</pre
-      >
-
-      <!-- Cards Row 1 -->
-      <div class="row mx-5 mt-5">
-        <!-- Row 1 Col 1-->
-        <div class="col">
-          <div class="card text-center d-flex align-items-center p-5">
-            <img
-              src="img/worker1.png"
-              alt="Worker"
-              style="height: auto; width: 20%"
-            />
-            <h5 class="fw-bold pt-3">Client-Centric Support</h5>
-            <h5 class="fw-bold">Services (Customer Service)</h5>
-            <p class="pt-3">
-              Our Customer Service offering is dedicated to delivering
-              exceptional client support. We prioritize the satisfaction and
-              needs of your customers by providing courteous, knowledgeable, and
-              efficient service.
-            </p>
-          </div>
+    <!-- Mission and Vision -->
+    <div class="container-fluid text-center py-5">
+      <h1 class="fw-bold" style="color: #001c31">MISSION AND VISION</h1>
+      <div class="row text-white d-flex justify-content-center gap-3">
+        <!-- Mission -->
+        <div class="card col-sm-5 mt-3 p-3" style="background-color: #001c31">
+          <i class="bi bi-bullseye" style="font-size: xxx-large"></i>
+          <h2 class="fw-bold py-3">MISSION</h2>
+          <p>
+            Our mission is to assist our clients in identifying the foundational
+            needs of their businesses, thereby enhancing their chances of
+            success. We achieve this by providing personalized guidance in
+            selecting the most fitting services from our offerings and
+            collaborating closely to develop comprehensive plans that not only
+            meet but also surpass their expectations.
+          </p>
         </div>
 
-        <!-- Row 1 Col 2-->
-        <div class="col">
-          <div class="card text-center d-flex align-items-center p-5">
-            <img
-              src="img/techsupport.png"
-              alt="Worker"
-              style="height: auto; width: 20%"
-            />
-            <h5 class="fw-bold pt-3">Expert Technical Assistance</h5>
-            <h5 class="fw-bold">(Technical Support)</h5>
-            <p class="pt-3">
-              Our Technical Support services are designed to resolve technical
-              issues promptly and effectively. We offer expertise in
-              troubleshooting, resolving technical queries, and ensuring
-              seamless operations.
-            </p>
-          </div>
-        </div>
-
-        <!-- Row 1 Col 3-->
-        <div class="col">
-          <div class="card text-center d-flex align-items-center p-5">
-            <img
-              src="img/outreach.png"
-              alt="Worker"
-              style="height: auto; width: 20%"
-            />
-            <h5 class="fw-bold pt-3">Proactive Outreach Services</h5>
-            <h5 class="fw-bold">(Cold Calling)</h5>
-            <p class="pt-3">
-              Our Cold Calling services focus on expanding your outreach and
-              lead generation efforts. We engage potential clients or prospects
-              in meaningful conversations to explore new business opportunities.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Cards Row 2 -->
-      <div class="row mx-5 mt-3">
-        <!-- Row 2 Col 1-->
-        <div class="col">
-          <div class="card text-center d-flex align-items-center p-5">
-            <img
-              src="img/va.png"
-              alt="Worker"
-              style="height: auto; width: 17%"
-            />
-            <h5 class="fw-bold pt-3">
-              Administrative Efficiency Solutions (General Admin VA)
-            </h5>
-            <p class="pt-3">
-              Our General Admin Virtual Assistant (VA) services are geared
-              towards managing administrative tasks efficiently. We handle
-              various administrative functions, allowing you to focus on
-              strategic priorities.
-            </p>
-          </div>
-        </div>
-
-        <!-- Row 2 Col 1-->
-        <div class="col">
-          <div class="card text-center d-flex align-items-center p-5">
-            <img
-              src="img/graph.png"
-              alt="Worker"
-              style="height: auto; width: 17%"
-            />
-            <h5 class="fw-bold pt-3">
-              Strategic Workforce Solutions (Manpower Outsourcing - Recruitment)
-            </h5>
-            <p class="pt-3">
-              Our Manpower Outsourcing service specializes in finding and
-              deploying qualified talent for your workforce needs. We manage the
-              recruitment process, ensuring you have the right people for the
-              job.
-            </p>
-          </div>
+        <!-- Vision -->
+        <div class="card col-sm-5 mt-3 p-3" style="background-color: #001c31">
+          <i class="bi bi-eye" style="font-size: xxx-large"></i>
+          <h2 class="fw-bold py-3">VISION</h2>
+          <p>
+            Our aspiration is to establish a renowned virtual assistance agency
+            recognized for consistently delivering outstanding results to our
+            clients, driven by our unwavering commitment to helping them achieve
+            their objectives. Simultaneously, we strive to cultivate a workplace
+            that instills pride in our employees and fosters client loyalty,
+            resulting in ongoing recommendations and sustained relationships.
+          </p>
         </div>
       </div>
     </div>
 
-    <!-- info about online repository website -->
-    <div style="background-color: #001c31" class="p-5 mb-5">
-      <h5 class="text-center text-white">
-        Unlock Your Career Potential with VocoEase: Revolutionizing Resume
-        Management for Today's Professionals!
-      </h5>
-    </div>
+    <!-- Core Values -->
+    <div
+      class="container-fluid text-center py-5"
+      style="background-color: #001c31"
+    >
+      <h1 class="fw-bold text-white mb-4">CORE VALUES</h1>
 
-    <!--Empower part -->
-    <div class="container-fluid text-center mb-5">
-      <h3 class="fw-bold">Empower Your Team, Choose the</h3>
-      <h3 class="fw-bold">Talent Stream!</h3>
-      <pre class="pt-3" style="font-family: Arial, Helvetica, sans-serif">
-Dive into excellence with us! Our freelancers bring top-tier skills without the
-hassle of benefits or taxes. Imagine skilled professionals, equipped in
-organized workspaces, dedicated to exceeding your expectations. Partner for
-effortless and cost-effective collaboration. Your success starts here!</pre
-      >
-    </div>
-
-    <!--Why Choose Us Part -->
-    <div class="container-fluid p-5" style="background-color: #001c31">
-      <h2
-        class="fw-bold text-white text-center"
-        style="
-          font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial,
-            sans-serif;
-        "
-      >
-        Why choose us?
-      </h2>
-      <pre
-        class="text-white pt-3 text-center"
-        style="font-family: Arial, Helvetica, sans-serif"
-      >
-Our employees are freelancers, which means you don’t have to worry about providing
-benefits or paying taxes for them.</pre
-      >
-
-      <!-- Cards Row 1 -->
-      <div class="row mx-5 mt-5">
-        <!-- Row 1 Col 1-->
-        <div class="col-sm-4">
-          <div class="card">
-            <img
-              src="img/filipinoworkers.jpg"
-              alt="Filipino Workers"
-              class="img-fluid"
-            />
-            <div class="card-body px-3">
-              <h6 class="fw-bold pt-3 card-title">
-                Unlocking Success: Harnessing the Power of a US-Based Team and
-                Filipino Professionals for Remote Excellence
-              </h6>
-              <p class="pt-3">
-                Discover the advantage of our US-based team powered by dedicated
-                Filipino professionals. Our remote workforce offers flexibility
-                without compromising exceptional service. Experience the
-                benefits of top-tier talent working safely and conveniently from
-                their homes, elevating the success of your projects.
-              </p>
-            </div>
-          </div>
+      <!-- Row 1 -->
+      <div class="row d-flex gap-4 justify-content-center">
+        <!-- Purposeful -->
+        <div class="card col-sm-5 p-4">
+          <h3 class="fw-bold blue">Purposeful</h3>
+          <p>
+            Reflects our commitment to having a clear and meaningful direction
+            in everything we do, ensuring that our efforts are purpose-driven.
+          </p>
         </div>
 
-        <!-- Row 1 Col 2-->
-        <div class="col-sm-4">
-          <div class="card">
-            <img
-              src="img/partnership4.jpg"
-              alt="Partnership"
-              class="img-fluid"
-            />
-            <div class="card-body mb-4">
-              <h6 class="fw-bold pt-3">
-                Tailored Solutions: Commitment, Precision, and Enduring Support
-                for Your Business Success
-              </h6>
-              <p class="pt-3">
-                Opt for our committed approach to your business goals. We tailor
-                precise solutions, delivering high-caliber results consistently.
-                Trust in enduring partnerships built on transparency and open
-                communication, ensuring ongoing support as you grow.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Row 1 Col 3-->
-        <div class="col">
-          <div class="card">
-            <img src="img/teamwork1.jpg" alt="Teamwork" class="img-fluid" />
-            <div class="card-body">
-              <h6 class="fw-bold pt-3 mb-4">
-                Fostering Success: Investing in Team Well-being for Client
-                Satisfaction
-              </h6>
-              <p class="pt-3">
-                At our core is a commitment to generously compensate our team,
-                ensuring well-being and superior outcomes for satisfied clients.
-                We invest in employee welfare and growth, fostering a positive
-                workplace culture that benefits all stakeholders, including our
-                esteemed clients.
-              </p>
-            </div>
-          </div>
+        <!-- Reliable  -->
+        <div class="card col-sm-5 p-4">
+          <h3 class="fw-bold blue">Reliable</h3>
+          <p>
+            Underscores the importance of trustworthiness and consistency in
+            fulfilling our obligations and maintaining strong relationships.
+          </p>
         </div>
       </div>
 
-      <!-- Cards Row 2 -->
-      <div class="row mx-5 mt-5">
-        <!-- Row 2 Col 1-->
-        <div class="col">
-          <div class="card">
-            <img src="img/freelancer.jpg" alt="Freelancer" class="img-fluid" />
-            <div class="card-body">
-              <h6 class="fw-bold pt-3">
-                Seamless Collaboration: Unlocking Quality Work with Hassle-Free
-                Freelancers
-              </h6>
-              <p class="pt-3">
-                Experience hassle-free collaboration with skilled freelancers.
-                Enjoy quality work without the burden of benefits or taxes. Our
-                professionals, equipped with their own tools, are motivated to
-                exceed your expectations. Partner with us for a cost-effective
-                and seamless experience.
-              </p>
-            </div>
+      <!-- Row 2 -->
+      <div class="row mt-4 gap-4 justify-content-center">
+        <!-- Virtuous -->
+        <div class="card col-sm-5 p-4">
+          <h3 class="fw-bold blue">Virtuous</h3>
+          <p>
+            Highlights our dedication to conducting ourselves with integrity,
+            ethics, and moral principles in all our interactions and decisions.
+          </p>
+        </div>
+
+        <!-- Accountability -->
+        <div class="card col-sm-5 p-4">
+          <h3 class="fw-bold blue">Accountability</h3>
+          <p>
+            Reminds us to take ownership, learn, and strive for excellence
+            transparently and responsibly. These values shape our identity and
+            steer us toward success.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-fluid text-center px-5">
+      <div class="card p-5 mt-5 mx-5" style="background-color: #001c31">
+        <div class="row gap-5 mt-4 d-flex justify-content-center">
+          <!-- Recruitment Team -->
+          <div class="card col-sm-5 p-3">
+            <h5 class="fw-bold blue">RECRUITMENT TEAM</h5>
+            <p class="mt-3">
+              Our recruitment team collaborates to thoroughly understand our
+              clients' needs and preferences, allowing us to consistently
+              deliver an exceptional service guided by our company's mission,
+              vision, values, and culture.
+            </p>
+          </div>
+
+          <!-- Human Resources Team -->
+          <div class="card col-sm-5 p-3">
+            <h5 class="fw-bold blue">HUMAN RESOURCES TEAM</h5>
+            <p class="mt-3">
+              To ensure that we provide quality VAs, our human resources team
+              trains and develops new talent. You don't have to waste time or
+              money training virtual assistants because we make sure that they
+              are fully equipped.
+            </p>
           </div>
         </div>
 
-        <!-- Row 2 Col 2-->
-        <div class="col">
-          <div class="card">
-            <img src="img/client1.png" alt="Partnership" class="img-fluid" />
-            <div class="card-body">
-              <h6 class="fw-bold pt-3">
-                Talent Fusion: Elevating Excellence in Recruitment and Placement
-              </h6>
-              <p class="pt-3">
-                Clients trust us for the most qualified candidates. We
-                meticulously vet applicants, ensuring skills and experience
-                match the job. Our commitment to top-tier staffing has earned a
-                reputation for exceptional talent sourcing. We match individuals
-                with roles, showcasing unwavering dedication to recruitment
-                excellence.
-              </p>
-            </div>
+        <div class="row mt-4 pb-4 py gap-5 d-flex justify-content-center">
+          <!-- Operations Team -->
+          <div class="card col-sm-5 p-3">
+            <h5 class="fw-bold blue">OPERATIONS TEAM</h5>
+            <p class="mt-3">
+              As part of the service that we provide, we will assign an
+              Operations Manager and Account Manager who will be responsible for
+              onboarding the Cold Caller with our client' s directives, and
+              processes, and provide coaching and feedback. They are also
+              required to update the client regularly regarding the campaign.
+            </p>
+          </div>
+
+          <!-- Support Team -->
+          <div class="card col-sm-5 p-3">
+            <h5 class="fw-bold blue">SUPPORT TEAM</h5>
+            <p class="mt-3">
+              We have a System manager and System Specialist who will be
+              responsible for generating reports from your dialer and sending
+              daily/weekly productivity reports, and Quality Analyst who will
+              ensure that call handling protocol is being followed.
+            </p>
           </div>
         </div>
       </div>
@@ -606,13 +433,13 @@ benefits or paying taxes for them.</pre
 Partner with us and experience hassle-free and cost-effective collaboration. We ensure
 that our freelancers are motivated and driven to exceed your expectations.</pre
         >
-        <a href="candidatecontact.php" class="btn btn-primary px-3 mt-2"
+        <a href="clientcontact.php" class="btn btn-primary px-3 mt-2"
           >Reach out now</a
         >
       </div>
     </div>
 
-    <!-- Footer --> 
+  <!-- Footer --> 
   <div class="container-fluid" style="background-color: #001c31">
       <div class="row mx-5 p-5">
         <!-- 1st Col -->
@@ -648,7 +475,7 @@ United States of America</pre
           <ul class="list-unstyled">
             <li>
               <a
-                href="candidatelandingpage.php"
+                href="clientlandingpage.php"
                 class="text-decoration-none ms-2 mt2"
                 style="color: #9fa6af"
                 >Introduction</a
@@ -656,7 +483,7 @@ United States of America</pre
             </li>
             <li>
               <a
-                href="candidateabout.php"
+                href="clientabout.php"
                 class="text-decoration-none ms-2 mt2"
                 style="color: #9fa6af"
                 >Organization Team</a
