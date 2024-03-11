@@ -11,11 +11,16 @@ if(isset($_SESSION["logged_in"])){
       $email = $_SESSION["email"];
       $regdate = $_SESSION["regdate"];
       $phone = $_SESSION["phone"];
-      $bday = $_SESSION["bday"];
+      $bday = strftime("%B %d, %Y", strtotime($_SESSION["bday"]));
       $gdrive = $_SESSION["gdrive"];
       $profilepic = $_SESSION["profilepic"];
-
-
+      $middlename = $_SESSION["middlename"];
+      $gender = $_SESSION["gender"];
+      $civilstatus = $_SESSION["civilstatus"];
+      $street = $_SESSION["street"];
+      $brgy = $_SESSION["brgy"];
+      $city = $_SESSION["city"];
+      $province = $_SESSION["province"];
   }else{
       $textaccount = "Account";
   }
@@ -27,6 +32,14 @@ if(isset($_SESSION["logged_in"])){
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $phone = $_POST["phone"];
   $gdrive = $_POST["gdrive"];
+  $lastname = $_POST["lastname"];
+  $middlename = $_POST["middlename"];
+  $gender = $_POST["gender"];
+  $civilstatus = $_POST["civilstatus"];
+  $street = $_POST["street"];
+  $brgy = $_POST["brgy"];
+  $city = $_POST["city"];
+  $province = $_POST["province"];
 
   // Handle file upload for profile picture
   if(isset($_FILES["profilepic"]) && !empty($_FILES["profilepic"]["name"])) {
@@ -38,7 +51,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       if (in_array($imageFileType, ["jpg", "jpeg", "png", "gif"])) {
           if (move_uploaded_file($_FILES["profilepic"]["tmp_name"], $targetFile)) {
               // Update the profile picture path in the database
-              $updateQuery = "UPDATE users SET profilepic = '$targetFile', phone = '$phone', gdrive = '$gdrive' WHERE email = '$email'";
+              $updateQuery = "UPDATE users SET profilepic = '$targetFile', phone = '$phone', gdrive = '$gdrive',
+               lastname = '$lastname', gender = '$gender', middlename = '$middlename', civilstatus = '$civilstatus',
+               street = '$street', brgy = '$brgy', city = '$city', province = '$province' WHERE email = '$email'";
               if($connection->query($updateQuery)) {
                   $_SESSION["profilepic"] = $targetFile;
                   // Redirect to the profile page or wherever you want
@@ -55,10 +70,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       }
   } else {
       // If no profile picture is uploaded, update only phone and gdrive
-      $updateQuery = "UPDATE users SET phone = '$phone', gdrive = '$gdrive' WHERE email = '$email'";
+      $updateQuery = "UPDATE users SET phone = '$phone', gdrive = '$gdrive', lastname = '$lastname', gender = '$gender',
+       middlename = '$middlename', civilstatus = '$civilstatus',
+       street = '$street', brgy = '$brgy', city = '$city', province = '$province' WHERE email = '$email'";
       if($connection->query($updateQuery)) {
           // Redirect to the profile page or wherever you want
           header("Location: settings.php");
+          $errorMessage = "Saved changes.";
           exit; // Ensure that no further code is executed after redirection
       } else {
           $errorMessage = "Failed to update profile. Please try again later.";
@@ -123,7 +141,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="nav-item dropdown me-5">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Account</a>
             <ul class="dropdown-menu dropdown-menu-dark">
-                <li><a class="dropdown-item" href="resume.php">Resume</a></li>
                 <li><a class="dropdown-item" href="profile.php">Profile</a></li>
                 <li><a class="dropdown-item" href="settings.php">Settings</a></li>
                 <li><a class="dropdown-item" href="logout.php">Logout</a></li>
@@ -170,34 +187,86 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         ";
                     }
                 ?>
-                <!-- Fname and Lname  -->
+                <!-- Fname and Bday  -->
                 <div class="row">
                   <div class="col mb-3">
                     <label for="firstname" class="form-label">First Name</label>
                     <input type="text" class="form-control" id="firstname" name="firstname" value="<?php echo $textaccount; ?>" disabled>
                   </div>
                   <div class="col mb-3">
-                    <label for="lastname" class="form-label">Last Name</label>
-                    <input type="text" class="form-control" id="lastname" name="lastname" value="<?php echo $lastname; ?>" disabled>
+                    <label for="bday" class="form-label">Birth Date</label>
+                    <input type="text" class="form-control" id="bday" value="<?php echo $bday; ?>" disabled>
                   </div>
                 </div>
-                <!-- Email and Phone -->
+                <!-- MName and Email -->
                 <div class="row">
+                  <div class="col mb-3">
+                    <label for="middlename" class="form-label">Middle Name</label>
+                    <input type="text" class="form-control" id="middlename" name="middlename" value="<?php echo $middlename; ?>">
+                  </div>
                   <div class="col mb-3">
                     <label for="email" class="form-label">Email</label>
                     <input type="email" class="form-control" id="email" name="email" value="<?php echo $email; ?>" disabled>
+                  </div>
+
+                </div>
+                <!-- Lastname & Phone  -->
+                <div class="row">
+                  <div class="col mb-3">
+                    <label for="lastname" class="form-label">Last Name</label>
+                    <input type="text" class="form-control" id="lastname" name="lastname" value="<?php echo $lastname; ?>">
                   </div>
                   <div class="col mb-3">
                     <label for="phone" class="form-label">Phone</label>
                     <input type="text" class="form-control" id="phone" name="phone" value="<?php echo $phone; ?>">
                   </div>
                 </div>
-                <!-- Birthdate & Registered Date  -->
+                <!-- Gender & CS -->
                 <div class="row">
                   <div class="col mb-3">
-                    <label for="bday" class="form-label">Birth Date (YYYY-MM-DD)</label>
-                    <input type="text" class="form-control" id="bday" value="<?php echo $bday; ?>" disabled>
+                    <label for="gender" class="form-label">Gender</label>
+                    <select id="gender" name="gender" class="form-select">
+                      <option value="" disabled selected>Select Gender</option>
+                      <option value="Male" <?php echo ($gender === "Male") ? "selected" : ""; ?>>Male</option>
+                      <option value="Female" <?php echo ($gender === "Female") ? "selected" : ""; ?>>Female</option>
+                    </select>
                   </div>
+                  <div class="col mb-3">
+                    <label for="civilstatus" class="form-label">Civil Status</label>
+                    <select id="civilstatus" name="civilstatus" class="form-select">
+                      <option value="" disabled selected>Select Civil Status</option>
+                      <option value="Single" <?php echo ($civilstatus === "Single") ? "selected" : ""; ?>>Single</option>
+                      <option value="Married" <?php echo ($civilstatus === "Married") ? "selected" : ""; ?>>Married</option>
+                      <option value="Separated" <?php echo ($civilstatus === "Separated") ? "selected" : ""; ?>>Separated</option>
+                      <option value="Divorced" <?php echo ($civilstatus === "Divorced") ? "selected" : ""; ?>>Divorced</option>
+                      <option value="Widowed" <?php echo ($civilstatus === "Widowed") ? "selected" : ""; ?>>Widowed</option>
+                    </select>
+                  </div>
+                </div>
+                <!-- Street & Brgy  -->
+                <div class="row">
+                  <div class="col mb-3">
+                    <label for="street" class="form-label">House No./Street/Subdivision</label>
+                    <input type="text" class="form-control" id="street" name="street" value="<?php echo $street; ?>">
+                  </div>
+                  <div class="col mb-3">
+                    <label for="brgy" class="form-label">Barangay</label>
+                    <input type="text" class="form-control" id="brgy" name="brgy" value="<?php echo $brgy; ?>">
+                  </div>
+                </div>
+                <!-- City & Province  -->
+                <div class="row">
+                  <div class="col mb-3">
+                    <label for="city" class="form-label">City</label>
+                    <input type="text" class="form-control" id="city" name="city" value="<?php echo $city; ?>">
+                  </div>
+                  <div class="col mb-3">
+                    <label for="province" class="form-label">Province</label>
+                    <input type="text" class="form-control" id="province" name="province" value="<?php echo $province; ?>">
+                  </div>
+                </div>
+                <!-- Reg Date -->
+                <div class="row">
                   <div class="col mb-3">
                     <label for="regdate" class="form-label">Registered Date</label>
                     <input type="text" class="form-control" id="regdate" value="<?php echo $regdate; ?>" disabled>

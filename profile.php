@@ -6,11 +6,22 @@ require("server/connection.php");
 
 if(isset($_SESSION["logged_in"])){
     if(isset($_SESSION["firstname"])){
-      $textaccount = $_SESSION["firstname"];
-      $lastname = $_SESSION["lastname"];
+      $textaccount = strtoupper($_SESSION["firstname"]);
+      $lastname = strtoupper($_SESSION["lastname"]);
+      $middlename = strtoupper($_SESSION["middlename"]);
       $email = $_SESSION["email"];
+      $regdate = $_SESSION["regdate"];
+      $phone = $_SESSION["phone"];
+      $bday = strftime("%B %d, %Y", strtotime($_SESSION["bday"]));
       $gdrive = $_SESSION["gdrive"];
       $profilepic = $_SESSION["profilepic"];
+      $gender = $_SESSION["gender"];
+      $civilstatus = $_SESSION["civilstatus"];
+      $street = $_SESSION["street"];
+      $brgy = $_SESSION["brgy"];
+      $city = $_SESSION["city"];
+      $province = $_SESSION["province"];
+
     }else{
         $textaccount = "Account";
     }
@@ -18,135 +29,279 @@ if(isset($_SESSION["logged_in"])){
     $textaccount = "Account";
 }
 
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+  $cv = $_POST["cv"];
+
+  
+}
 
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
-    <link rel="stylesheet" type="text/css" href="style.css">
-    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"/>
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
-  <title>VocoEase</title>
-</head>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css"
+    />
+    <title>VocoEase</title>
+  </head>
 
-<body class="bg-light">
+  <body class="bg-light">
+    <!-- Navbar-->
+    <nav class="px-5 py-2 mx-auto bg-white navbar navbar-expand-lg fixed-top">
+      <div class="container-fluid">
+        <!-- Logo -->
+        <div class="d-flex justify-content-start">
+          <a class="navbar-brand" href="index.html">
+            <img style="height: 70px" src="img/logoname.png" alt="VocoEase" />
+          </a>
+        </div>
 
-  <!-- Navbar-->
-  <nav class="px-5 py-2 mx-auto bg-white navbar navbar-expand-lg fixed-top">
-    <div class="container-fluid">
+        <!-- Toggle button-->
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
 
-      <!-- Logo -->
-      <div class="d-flex justify-content-start">
-        <a class="navbar-brand" href="index.html">
-          <img style="height: 70px;" src="img/logoname.png" alt="VocoEase">
-        </a>
-      </div>
+        <!-- Navbar directory -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav mx-auto">
+            <li class="nav-item">
+              <a
+                class="nav-link active fw-bold me-4"
+                aria-current="page"
+                href="candidatelandingpage.php"
+                >HOME</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active fw-bold me-4" href="candidateabout.php"
+                >ABOUT</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link active fw-bold me-4"
+                href="candidateservices.php"
+                >SERVICES</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active fw-bold" href="candidatecontact.php"
+                >CONTACT</a
+              >
+            </li>
+          </ul>
 
-      <!-- Toggle button-->
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
-      <!-- Navbar directory -->
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav mx-auto">
-          <li class="nav-item">
-            <a class="nav-link active fw-bold me-4" aria-current="page" href="candidatelandingpage.php">HOME</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active fw-bold me-4" href="candidateabout.php">ABOUT</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active fw-bold me-4" href="candidateservices.php">SERVICES</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active fw-bold" href="candidatecontact.php">CONTACT</a>
-          </li>
-        </ul>
-
-        <!-- Dropdown / Account-->
-        <div class="nav-item dropdown me-5">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Account</a>
+          <!-- Dropdown / Account-->
+          <div class="nav-item dropdown me-5">
+            <a
+              class="nav-link dropdown-toggle"
+              href="#"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+              >Account</a
+            >
             <ul class="dropdown-menu dropdown-menu-dark">
-                <li><a class="dropdown-item" href="resume.php">Resume</a></li>
-                <li><a class="dropdown-item" href="profile.php">Profile</a></li>
-                <li><a class="dropdown-item" href="settings.php">Settings</a></li>
-                <li><a class="dropdown-item" href="logout.php">Logout</a></li>
-                <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item">Hi, <?php echo $textaccount; ?></a></li>            
+              <li><a class="dropdown-item" href="profile.php">Profile</a></li>
+              <li><a class="dropdown-item" href="settings.php">Settings</a></li>
+              <li><a class="dropdown-item" href="logout.php">Logout</a></li>
+              <li><hr class="dropdown-divider" /></li>
+              <li>
+                <a class="dropdown-item"
+                  >Hi,
+                  <?php echo $textaccount; ?></a
+                >
+              </li>
             </ul>
+          </div>
         </div>
       </div>
-      
-    </div>
-  </nav>
+    </nav>
 
-  <div class="container-fluid my-5 py-5">
-    <!-- Row 1 -->
-    <div class="row mt-3">
-      <div class="card p-5 col-sm-8 mx-auto">
-        <ul class="list-unstyled">
-          <li>
-          <img src="<?php echo $profilepic; ?>"
-            class="rounded-circle img-fluid border" style="width: 150px;">
-          </li>
-          <li>
-            <h5 class="mt-3"><?php echo $textaccount; ?> <?php echo $lastname; ?></h5>
-            <h6>Student in Pamantasan ng Lungson ng Muntinlupa</h6>
-          </li>
-        </ul>    
+    <div class="container-fluid my-5 pt-5">
+      <div class="row ps-5">
+        <!-- Col 1 -->
+        <div
+          class="card p-5 mt-4 col-sm-3 d-flex justify-content-center text-center align-self-start"
+        >
+          <ul class="list-unstyled">
+            <li>
+              <img
+                src="<?php echo $profilepic; ?>"
+                class="rounded-circle img-fluid border"
+                style="width: 200px"
+              />
+            </li>
+            <li>
+              <h5 class="mt-3">
+                <?php echo $textaccount; ?>
+                <?php echo $lastname; ?>
+              </h5>
+              <h6 class="mb-4" style="color: gray">Candidate</h6>
+              <hr />
+            </li>
+            <!-- G-Drive -->
+            <li>
+              <h6 class="fw-bold">G-Drive</h6>
+            </li>
+            <li>
+              <a href="<?php echo $gdrive; ?>" class="text-decoration-none"
+                >G-DRIVE LINK</a
+              >
+              <hr />
+            </li>
+            <!-- Resume -->
+            <li>
+              <h6 class="fw-bold">Resume</h6>
+            </li>
+            <li>
+              <form method="POST" action="<?php htmlspecialchars("SELF_PHP"); ?>" enctype="multipart/form-data">
+                <input
+                  class="form-control"
+                  type="file"
+                  id="cv"
+                  name="cv"
+                  value="<?php echo $cv; ?>"
+                  required
+                />
+              </form>
+            </li>
+          </ul>
+        </div>
+        <!-- Col 2 -->
+        <div class="card col-sm-8 p-5 ms-3 mt-4">
+          <ul class="col list-unstyled">
+            <!-- Name -->
+            <li>
+              <h6 class="fw-bold">Name</h6>
+            </li>
+            <li>
+              <h6>
+                <?php echo $textaccount; ?>
+                <?php echo $middlename; ?>
+                <?php echo $lastname; ?>
+              </h6>
+              <hr />
+            </li>
+            <!-- Birthdate -->
+            <li>
+              <h6 class="fw-bold">Birthdate</h6>
+            </li>
+            <li>
+              <h6><?php echo $bday; ?></h6>
+              <hr />
+            </li>
+            <!-- Gender -->
+            <li>
+              <h6 class="fw-bold">Gender</h6>
+            </li>
+            <li>
+              <h6><?php echo $gender; ?></h6>
+              <hr />
+            </li>
+            <!-- Civil Status -->
+            <li>
+              <h6 class="fw-bold">Civil Status</h6>
+            </li>
+            <li>
+              <h6><?php echo $civilstatus; ?></h6>
+              <hr />
+            </li>
+            <!-- Email -->
+            <li>
+              <h6 class="fw-bold">Email</h6>
+            </li>
+            <li>
+              <h6><?php echo $email; ?></h6>
+              <hr />
+            </li>
+            <!-- Phone -->
+            <li>
+              <h6 class="fw-bold">Contact Number</h6>
+            </li>
+            <li>
+              <h6><?php echo $phone; ?></h6>
+              <hr />
+            </li>
+            <!-- Street -->
+            <li>
+              <h6 class="fw-bold">Street</h6>
+            </li>
+            <li>
+              <h6><?php echo $street; ?></h6>
+              <hr />
+            </li>
+            <!-- Brgy -->
+            <li>
+              <h6 class="fw-bold">Barangay</h6>
+            </li>
+            <li>
+              <h6><?php echo $brgy; ?></h6>
+              <hr />
+            </li>
+            <!-- City -->
+            <li>
+              <h6 class="fw-bold">City</h6>
+            </li>
+            <li>
+              <h6><?php echo $city; ?></h6>
+              <hr />
+            </li>
+            <!-- Province -->
+            <li>
+              <h6 class="fw-bold">Province</h6>
+            </li>
+            <li>
+              <h6><?php echo $province; ?></h6>
+              <hr />
+            </li>
+            <!-- Buttons -->
+            <li class="d-flex justify-content-center mt-4">
+              <a href="settings.php" class="btn btn-primary fw-bold col-sm-5"
+                >EDIT PROFILE</a
+              >
+            </li>
+            <li class="d-flex justify-content-center mt-2">
+              <a
+                href="changepassword.php"
+                class="btn btn-primary fw-bold col-sm-5"
+                >CHANGE PASSWORD</a
+              >
+            </li>
+            <!-- End -->
+          </ul>
+        </div>
       </div>
     </div>
-    <!-- Row 2 -->
-    <div class="row mt-3">
-      <div class="card p-5 col-sm-8 mx-auto">
-        <ul class="list-unstyled">
-          <li>
-            <h5>Upload Resume/CV*</h5>
-          </li>
-          <li>
-            <input class="form-control" type="file" id="cv" name="cv" value="<?php echo $cv; ?>" required />
-          </li>
-        </ul>    
-      </div>
-    </div>
-    <!-- Row 3 -->
-    <div class="row mt-3">
-      <div class="card p-5 col-sm-8 mx-auto">
-        <ul class="list-unstyled">
-          <li>
-            <h5>G-Drive</h5>
-          </li>
-          <li>
-            <a href="<?php echo $gdrive; ?>" class="text-decoration-none"><i class="bi bi-folder-fill me-2"></i>G-DRIVE LINK</a>
-          </li>
-        </ul>    
-      </div>
-    </div>
-    <!-- Row 4 -->
-    <div class="row mt-3">
-      <div class="card p-5 col-sm-8 mx-auto">
-        <ul class="list-unstyled">
-          <li>
-            <h5>Skills</h5>
-          </li>
-          <li>
-            <a href="<?php echo $gdrive; ?>" class="text-decoration-none"><i class="bi bi-folder-fill me-2"></i>G-DRIVE LINK</a>
-          </li>
-        </ul>    
-      </div>
-    </div>
-  </div>
-  
 
-  <!-- Footer --> 
-  <div class="container-fluid" style="background-color: #001c31">
+    <!-- Footer -->
+    <div class="container-fluid" style="background-color: #001c31">
       <div class="row mx-5 p-5">
         <!-- 1st Col -->
         <div class="col-sm-5" style="color: #9fa6af">
@@ -633,34 +788,12 @@ United States of America</pre
     <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
 
     <script>
+      const myModal = document.getElementById("myModal");
+      const myInput = document.getElementById("myInput");
 
-        // Toggle password visibility for old password
-        document.getElementById("toggleOldPassword").addEventListener("click", function () {
-            const oldPasswordInput = document.getElementById("oldpassword");
-            if (oldPasswordInput.type === "password") {
-                oldPasswordInput.type = "text";
-            } else {
-                oldPasswordInput.type = "password";
-            }
-        });
-
-        // Toggle password visibility for new password
-        document.getElementById("toggleNewPassword").addEventListener("click", function () {
-            const newPasswordInput = document.getElementById("newpassword");
-            if (newPasswordInput.type === "password") {
-                newPasswordInput.type = "text";
-            } else {
-                newPasswordInput.type = "password";
-            }
-        });
-
-        const myModal = document.getElementById("myModal");
-        const myInput = document.getElementById("myInput");
-
-        myModal.addEventListener("shown.bs.modal", () => {
-            myInput.focus();
-        });
-
+      myModal.addEventListener("shown.bs.modal", () => {
+        myInput.focus();
+      });
     </script>
   </body>
 </html>
