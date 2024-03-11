@@ -88,7 +88,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         <!-- Logo -->
         <div class="d-flex justify-content-start">
-            <a class="navbar-brand" href="index.html">
+            <a class="navbar-brand" href="candidatelandingpage.php">
             <img style="height: 70px;" src="img/logoname.png" alt="VocoEase">
             </a>
         </div>
@@ -308,7 +308,7 @@ United States of America</pre
           <ul class="list-unstyled">
             <li>
               <a
-                href="index.html"
+                href="candidatelandingpage.php"
                 class="text-decoration-none ms-2 mt2"
                 style="color: #9fa6af"
                 >Introduction</a
@@ -316,7 +316,7 @@ United States of America</pre
             </li>
             <li>
               <a
-                href="about.html"
+                href="candidateabout.php"
                 class="text-decoration-none ms-2 mt2"
                 style="color: #9fa6af"
                 >Organization Team</a
