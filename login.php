@@ -28,6 +28,13 @@ if (isset($_POST["email"]) && isset($_POST["password"])) {
         $_SESSION["bday"] = $record["bday"];
         $_SESSION["gdrive"] = $record["gdrive"];
         $_SESSION["profilepic"] = $record["profilepic"];
+        $_SESSION["middlename"] = $record["middlename"];
+        $_SESSION["gender"] = $record["gender"];
+        $_SESSION["civilstatus"] = $record["civilstatus"];
+        $_SESSION["street"] = $record["street"];
+        $_SESSION["brgy"] = $record["brgy"];
+        $_SESSION["city"] = $record["city"];
+        $_SESSION["province"] = $record["province"];
         $_SESSION["logged_in"] = true;
 
         $userid = $record["userid"];

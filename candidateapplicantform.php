@@ -118,7 +118,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="nav-item dropdown me-5">
                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Account</a>
                 <ul class="dropdown-menu dropdown-menu-dark">
-                    <li><a class="dropdown-item" href="resume.php">Resume</a></li>
                     <li><a class="dropdown-item" href="profile.php">Profile</a></li>
                     <li><a class="dropdown-item" href="settings.php">Settings</a></li>
                     <li><a class="dropdown-item" href="logout.php">Logout</a></li>
