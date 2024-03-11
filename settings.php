@@ -110,7 +110,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
       <!-- Logo -->
       <div class="d-flex justify-content-start">
-        <a class="navbar-brand" href="index.html">
+        <a class="navbar-brand" href="candidatelandingpage.php">
           <img style="height: 70px;" src="img/logoname.png" alt="VocoEase">
         </a>
       </div>
