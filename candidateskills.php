@@ -7,20 +7,7 @@ require("server/connection.php");
 if(isset($_SESSION["logged_in"])){
     if(isset($_SESSION["firstname"])){
       $textaccount = strtoupper($_SESSION["firstname"]);
-      $lastname = strtoupper($_SESSION["lastname"]);
-      $middlename = strtoupper($_SESSION["middlename"]);
-      $email = $_SESSION["email"];
-      $regdate = $_SESSION["regdate"];
-      $phone = $_SESSION["phone"];
-      $bday = strftime("%B %d, %Y", strtotime($_SESSION["bday"]));
-      $gdrive = $_SESSION["gdrive"];
-      $profilepic = $_SESSION["profilepic"];
-      $gender = $_SESSION["gender"];
-      $civilstatus = $_SESSION["civilstatus"];
-      $street = $_SESSION["street"];
-      $brgy = $_SESSION["brgy"];
-      $city = $_SESSION["city"];
-      $province = $_SESSION["province"];
+      $skills = $_SESSION["skills"];
 
     }else{
         $textaccount = "Account";
@@ -159,146 +146,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       </div>
     </nav>
 
-    <div class="container-fluid my-5 pt-5">
-      <div class="row ps-5">
-        <!-- Col 1 -->
-        <div
-          class="card pt-5 pb-3 px-5 mt-4 col-sm-3 d-flex justify-content-center text-center align-self-start"
-        >
-          <ul class="list-unstyled">
-            <li>
-              <img
-                src="<?php echo $profilepic; ?>"
-                class="rounded-circle img-fluid border"
-                style="width: 200px"
-              />
-            </li>
-            <li>
-              <h5 class="mt-3">
-                <?php echo $textaccount; ?>
-                <?php echo $lastname; ?>
-              </h5>
-              <h6 class="mb-4" style="color: gray">Candidate</h6>
-              <hr />
-            </li>
-            <!-- G-Drive -->
-            <li>
-              <a href="<?php echo $gdrive; ?>" class="text-decoration-none btn btn-primary mt-3"
-                ><i class="bi bi-folder-fill me-2"></i>Google Drive</a
-              >
-            </li>
-          </ul>
+    <div class="container-fluid my-5 pt-5 d-flex justify-content-center">
+        <div class="card col-sm-8 p-4 ms-3 mt-4">
+            <div class="card-title h3 d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center">
+                    <a href="profile.php" class="text-decoration-none text-dark pe-3">
+                    <i class="bi bi-arrow-left-circle fs-2"></i></a>Skills
+                </div>
+                <a class="text-decoration-none text-secondary" href="" role="button" data-bs-toggle="modal"
+                data-bs-target="#addskill"><i class="bi bi-plus fs-1"></i></a>
+            </div>
+            <div class="card-body">
+                <ul id="skillsList" class="list-unstyled">
+                    
+                </ul>
+            </div>
         </div>
-        <!-- Col 2 -->
-        <div class="card col-sm-8 p-5 ms-3 mt-4">
-          <ul class="col list-unstyled">
-            <!-- Name -->
-            <li>
-              <h6 class="fw-bold">Name</h6>
-            </li>
-            <li>
-              <h6>
-                <?php echo $textaccount; ?>
-                <?php echo $middlename; ?>
-                <?php echo $lastname; ?>
-              </h6>
-              <hr />
-            </li>
-            <!-- Birthdate -->
-            <li>
-              <h6 class="fw-bold">Birthdate</h6>
-            </li>
-            <li>
-              <h6><?php echo $bday; ?></h6>
-              <hr />
-            </li>
-            <!-- Gender -->
-            <li>
-              <h6 class="fw-bold">Gender</h6>
-            </li>
-            <li>
-              <h6><?php echo $gender; ?></h6>
-              <hr />
-            </li>
-            <!-- Civil Status -->
-            <li>
-              <h6 class="fw-bold">Civil Status</h6>
-            </li>
-            <li>
-              <h6><?php echo $civilstatus; ?></h6>
-              <hr />
-            </li>
-            <!-- Email -->
-            <li>
-              <h6 class="fw-bold">Email</h6>
-            </li>
-            <li>
-              <h6><?php echo $email; ?></h6>
-              <hr />
-            </li>
-            <!-- Phone -->
-            <li>
-              <h6 class="fw-bold">Contact Number</h6>
-            </li>
-            <li>
-              <h6><?php echo $phone; ?></h6>
-              <hr />
-            </li>
-            <!-- Street -->
-            <li>
-              <h6 class="fw-bold">Street</h6>
-            </li>
-            <li>
-              <h6><?php echo $street; ?></h6>
-              <hr />
-            </li>
-            <!-- Brgy -->
-            <li>
-              <h6 class="fw-bold">Barangay</h6>
-            </li>
-            <li>
-              <h6><?php echo $brgy; ?></h6>
-              <hr />
-            </li>
-            <!-- City -->
-            <li>
-              <h6 class="fw-bold">City</h6>
-            </li>
-            <li>
-              <h6><?php echo $city; ?></h6>
-              <hr />
-            </li>
-            <!-- Province -->
-            <li>
-              <h6 class="fw-bold">Province</h6>
-            </li>
-            <li>
-              <h6><?php echo $province; ?></h6>
-              <hr />
-            </li>
-            <!-- Buttons -->
-            <li class="d-flex justify-content-center mt-4">
-              <a href="candidateskills.php" class="btn btn-primary fw-bold col-sm-5"
-                >VIEW SKILLS</a
-              >
-            </li>
-            <li class="d-flex justify-content-center mt-2">
-              <a href="settings.php" class="btn btn-primary fw-bold col-sm-5"
-                >EDIT PROFILE</a
-              >
-            </li>
-            <li class="d-flex justify-content-center mt-2">
-              <a
-                href="changepassword.php"
-                class="btn btn-primary fw-bold col-sm-5"
-                >CHANGE PASSWORD</a
-              >
-            </li>
-            <!-- End -->
-          </ul>
-        </div>
-      </div>
-
     </div>
 
     <!-- Footer -->
@@ -386,6 +249,51 @@ United States of America</pre
               </a>
             </li>
           </ul>
+
+          <!-- Add Skill Modal -->
+          <div
+            class="modal fade"
+            id="addskill"
+            tabindex="-1"
+            aria-labelledby="addskill1"
+            aria-hidden="true"
+          >
+            <div class="modal-dialog modal-dialog-scrollable">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-4 fw-bold" id="addskill1">
+                    Add Skill
+                  </h1>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div class="modal-body">
+                  <form id="addSkillForm" method="POST" action="<?php htmlspecialchars("SELF_PHP"); ?>" enctype="multipart/form-data">
+                  <div class="row px-3">
+                    <input type="text" class="form-control" name="skills"  id="skills" placeholder="Enter skill name" required>
+                    <p id="addSkillMessage" class="text-danger pt-2"></p>
+                  </div>
+                  <div class="row px-3">
+                    <button class="btn btn-primary mb-3" type="submit">Add</button>
+                  </div>
+                </form>
+                </div>
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal"
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
 
           <!-- Modal 1 -->
           <div
@@ -797,5 +705,78 @@ United States of America</pre
       });
     </script>
 
+    <script>
+        // JavaScript to handle form submission and dynamic skill addition/deletion
+        document.getElementById("addSkillForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            var skills = document.getElementById("skills").value;
+
+            fetch("add_skill.php", {
+                method: "POST",
+                body: new URLSearchParams({
+                    skill_name: skills
+                }),
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                }
+            })
+            .then(response => response.text())
+            .then(data => {
+                // Update the paragraph element with the response message
+                document.getElementById("addSkillMessage").textContent = data;
+
+                // If the skill was added successfully, reload the skills list
+                if (data.trim() === "Skill added successfully.") {
+                    loadSkills(); // Reload skills list
+                }
+            });
+        });
+
+        // Function to load skills from the database
+        function loadSkills() {
+            fetch("load_skills.php") // PHP script to load skills
+            .then(response => response.json())
+            .then(skills => {
+                var skillsList = document.getElementById("skillsList");
+                skillsList.innerHTML = ""; // Clear existing skills
+                skills.forEach(skill => {
+                    var listItem = document.createElement("li");
+                    listItem.innerHTML = `
+                        <div class='d-flex align-items-center justify-content-between'>
+                            ${skill.skill_name}<button onclick="deleteSkill(${skill.id})" class="btn px-2"><i class="bi bi-x-lg" ></i></button>
+                        </div>
+                        <hr>
+                    `;
+                    skillsList.appendChild(listItem);
+                });
+
+                // Clear skills input field
+                document.getElementById("skills").value = "";
+            });
+        }
+
+        // Function to delete a skill
+        function deleteSkill(skillId) {
+            if (confirm("Are you sure you want to delete this skill?")) {
+                fetch("delete_skill.php", {
+                    method: "POST",
+                    body: new URLSearchParams({
+                        skill_id: skillId
+                    }),
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    }
+                })
+                .then(response => response.text())
+                .then(data => {
+                    alert(data); // Show response message
+                    loadSkills(); // Reload skills list
+                });
+            }
+        }
+
+        // Initial load of skills when the page loads
+        loadSkills();
+    </script>
   </body>
 </html>
