@@ -35,6 +35,8 @@ if (isset($_POST["email"]) && isset($_POST["password"])) {
         $_SESSION["brgy"] = $record["brgy"];
         $_SESSION["city"] = $record["city"];
         $_SESSION["province"] = $record["province"];
+        $_SESSION["resume"] = $record["resume"];
+        $_SESSION["skills"] = $record["skills"];
         $_SESSION["logged_in"] = true;
 
         $userid = $record["userid"];

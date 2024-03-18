@@ -21,6 +21,8 @@ if(isset($_SESSION["logged_in"])){
       $brgy = $_SESSION["brgy"];
       $city = $_SESSION["city"];
       $province = $_SESSION["province"];
+      $resume = $_SESSION["resume"];
+
   }else{
       $textaccount = "Account";
   }
@@ -40,9 +42,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $brgy = $_POST["brgy"];
   $city = $_POST["city"];
   $province = $_POST["province"];
+  $resume = $_POST["resume"];
 
   // Handle file upload for profile picture
-  if(isset($_FILES["profilepic"]) && !empty($_FILES["profilepic"]["name"])) {
+  if(isset($_FILES["profilepic"]) && !empty($_FILES["profilepic"]["name"]) && empty($_FILESz["resume"]["name"])) {
       $targetDirectory = "profile_pictures/";
       $targetFile = $targetDirectory . basename($_FILES["profilepic"]["name"]);
 
@@ -68,6 +71,80 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       } else {
           $errorMessage = "Invalid file format. Please upload an image (jpg, jpeg, png, or gif).";
       }
+    }elseif (isset($_FILES["resume"]["name"]) && empty($_FILES["profilepic"]["name"]) && !empty($_FILES["resume"]["name"])) {
+      $targetDirectory1 = "resume/";
+      $targetFile1 = $targetDirectory1 . basename($_FILES["resume"]["name"]);
+
+      if (move_uploaded_file($_FILES["resume"]["tmp_name"], $targetFile1)) {
+
+        $updateQuery = "UPDATE users SET 
+          resume = '$targetFile1', 
+          phone = '$phone', 
+          gdrive = '$gdrive',
+          lastname = '$lastname', 
+          gender = '$gender', 
+          middlename = '$middlename', 
+          civilstatus = '$civilstatus',
+          street = '$street', 
+          brgy = '$brgy', 
+          city = '$city', 
+          province = '$province' 
+        WHERE email = '$email'";
+
+        if ($connection->query($updateQuery)) {
+          header("Location: settings.php");
+          exit;
+        } else {
+          $errorMessage = "Failed to upload resume.";
+        }
+      }
+  
+    } elseif (isset($_FILES["profilepic"]) && isset($_FILES["resume"]["name"]) && !empty($_FILES["profilepic"]["name"]) && !empty($_FILES["resume"]["name"])) {
+      $targetDirectory = "profile_pictures/";
+      $targetFile = $targetDirectory . basename($_FILES["profilepic"]["name"]);
+    
+      // Check if the uploaded file is an image
+      $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
+      if (in_array($imageFileType, ["jpg", "jpeg", "png", "gif"])) {
+        if (move_uploaded_file($_FILES["profilepic"]["tmp_name"], $targetFile)) {
+    
+          $targetDirectory1 = "resume/";
+          $targetFile1 = $targetDirectory1 . basename($_FILES["resume"]["name"]);
+    
+          if (move_uploaded_file($_FILES["resume"]["tmp_name"], $targetFile1)) {
+    
+            $updateQuery = "UPDATE users SET 
+              profilepic = '$targetFile', 
+              resume = '$targetFile1', 
+              phone = '$phone', 
+              gdrive = '$gdrive',
+              lastname = '$lastname', 
+              gender = '$gender', 
+              middlename = '$middlename', 
+              civilstatus = '$civilstatus',
+              street = '$street', 
+              brgy = '$brgy', 
+              city = '$city', 
+              province = '$province' 
+            WHERE email = '$email'";
+    
+            if ($connection->query($updateQuery)) {
+              $_SESSION["profilepic"] = $targetFile;
+              header("Location: settings.php");
+              exit;
+            } else {
+              $errorMessage = "Failed to update profile. Please try again later.";
+            }
+          } else {
+            $errorMessage = "Failed to upload resume.";
+          }
+        } else {
+          $errorMessage = "Failed to upload profile picture.";
+        }
+      } else {
+        $errorMessage = "Invalid file format for profile picture (jpg, jpeg, png, or gif).";
+      }
+    
   } else {
       // If no profile picture is uploaded, update only phone and gdrive
       $updateQuery = "UPDATE users SET phone = '$phone', gdrive = '$gdrive', lastname = '$lastname', gender = '$gender',
@@ -169,6 +246,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           </li>
           <li>
               <input class="form-control" accept="image/*" type="file" id="profilepic" name="profilepic" value="<?php echo $profilepic; ?>" />
+          </li>
+          <li>
+              
           </li>
         </ul>
 
@@ -279,6 +359,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <input type="text" class="form-control" id="gdrive" name="gdrive" value="<?php echo $gdrive; ?>">
                   </div>
                 </div>
+                <!-- Resume -->
+                <div class="row">
+                  <div class="col mb-3">
+                    <label for="resume" class="form-label">Resume</label>
+                    <input
+                      class="form-control"
+                      type="file"
+                      id="resume"
+                      name="resume"
+                      value="<?php echo $resume; ?>"
+                    />
+                  </div>
+              </div>
                 <div class="row">
                   <div class="col d-grid gap-2">
                       <button type="submit" class="btn btn-primary text-white fw-bold">Update My Profile</button>
