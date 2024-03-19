@@ -93,42 +93,42 @@ $result = $connection->query($query);
 
   <div class="container-fluid mt-5 pt-5">
     <div class="card mx-5 my-5 p-5">
-      <?php 
-      while ($row = $fRes->fetch_assoc()) {
-        echo $row["firstname"];
-        $query = "SELECT * FROM users INNER JOIN user_skills ON users.userid = user_skills.userid  
-        WHERE users.userid = " . $row["userid"];
-        $result = $connection->query($query);
-        while ($rows = $result->fetch_assoc()) {
-          echo $rows["skills"];
-        }
-      }
-      ?>
-        <h5>Client Resume</h5>
-        <div class="table-responsive" style="height: 320px;">
-            <table class="table">
+      <table class="table table-responsive overflow-auto" style="height: 100px;">
+        <h5>Client Resume</h5>  
+        <div class="">
                 <thead class="bg-light" style="position: sticky; top: 0;">
                     <tr>
                         <th>Last Name</th>
                         <th>First Name</th>
-                        <th>Skills</th>
+                        <th class="col-sm-5">Skills</th>
                     </tr>
                 </thead>
                 <tbody class="table-group-divider">
-                    <?php
-                    while ($row = $result->fetch_assoc()) {
-                        echo "<tr>";
-                        echo "<td>" . $row['lastname'] . "</td>";
-                        echo "<td>" . $row['firstname'] . "</td>";
-                        echo "<td>" . $row['skills'] . "</td>";
-                        echo "</tr>";
+                <?php
+                  while ($row = $fRes->fetch_assoc()) {
+                    $query = "SELECT * FROM users INNER JOIN user_skills ON users.userid = user_skills.userid  
+                    WHERE users.userid = " . $row["userid"];
+                    $result = $connection->query($query);
+                    echo "<tr>";
+                    echo "<td>" . $row['lastname'] . "</td>";
+                    echo "<td>" . $row['firstname'] . "</td>";
+
+                    // Improved skill display logic
+                    $skillz = "";
+                    while ($rows = $result->fetch_assoc()) {
+                      $skillz .= ucwords($rows["skills"]) . ", ";
                     }
-                    ?>
+                    $skillz = rtrim($skillz, ", "); // Remove trailing comma
+                    echo "<td>" . $skillz . "</td>";
+
+                    echo "</tr>";
+                  }
+                ?>
                 </tbody>
+            </div>
             </table>
         </div>
     </div>
-  </div>
 
     <!-- Footer --> 
   <div class="container-fluid" style="background-color: #001c31">
