@@ -45,7 +45,7 @@
       >
         <a
           href="#"
-          class="navbar-brand rounded d-flex justify-content-center py-3"
+          class="navbar-brand rounded d-flex justify-content-center bg-light py-3"
           ><img src="img/logoname.png" alt="VocoEase" style="height: 50px"
         /></a>
         <ul class="mynav nav nav-pills flex-column mb-auto mt-3">

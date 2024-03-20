@@ -277,12 +277,9 @@ United States of America</pre
                     <input type="text" class="form-control" name="skills"  id="skills" placeholder="Enter skill name" required>
                     <p id="addSkillMessage" class="text-danger pt-2"></p>
                   </div>
-                  <div class="row px-3">
-                    <button class="btn btn-primary mb-3" type="submit">Add</button>
-                  </div>
-                </form>
                 </div>
                 <div class="modal-footer">
+                <button class="btn btn-primary" type="submit">Add Skill</button>
                   <button
                     type="button"
                     class="btn btn-secondary"
@@ -291,6 +288,48 @@ United States of America</pre
                     Close
                   </button>
                 </div>
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <!-- Delete Skill Modal -->
+          <div
+            class="modal fade"
+            id="delskill"
+            tabindex="-1"
+            aria-labelledby="delskill1"
+            aria-hidden="true"
+          >
+            <div class="modal-dialog modal-dialog-scrollable">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-4 fw-bold" id="delskill1">
+                    Delete Skill
+                  </h1>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div class="modal-body">
+                <form id="deleteSkillForm" method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" enctype="multipart/form-data">
+                    <input type="hidden" id="deleteSkillId" name="skill_id">
+                    <p class="pt-2">Are you sure you want to delete this skill?</p>
+                </div>
+                <div class="modal-footer">
+                <button class="btn btn-danger" type="submit">Delete</button>
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal"
+                  >
+                    Close
+                  </button>
+                </div>
+                </form>
               </div>
             </div>
           </div>
@@ -706,6 +745,13 @@ United States of America</pre
     </script>
 
     <script>
+        function displayDeleteModal(skillId) {
+            document.getElementById('deleteSkillId').value = skillId;
+            $('#delskill').modal('show'); // Show the delete skill modal
+        }
+    </script>
+
+    <script>
         // JavaScript to handle form submission and dynamic skill addition/deletion
         document.getElementById("addSkillForm").addEventListener("submit", function(event) {
             event.preventDefault();
@@ -743,7 +789,7 @@ United States of America</pre
                     var listItem = document.createElement("li");
                     listItem.innerHTML = `
                         <div class='d-flex align-items-center justify-content-between'>
-                            ${skill.skill_name}<button onclick="deleteSkill(${skill.id})" class="btn px-2"><i class="bi bi-x-lg" ></i></button>
+                            ${skill.skill_name}<button onclick="displayDeleteModal(1)" class="btn px-2"><i class="bi bi-x-lg" ></i></button>
                         </div>
                         <hr>
                     `;
@@ -755,28 +801,36 @@ United States of America</pre
             });
         }
 
-        // Function to delete a skill
-        function deleteSkill(skillId) {
-            if (confirm("Are you sure you want to delete this skill?")) {
-                fetch("delete_skill.php", {
-                    method: "POST",
-                    body: new URLSearchParams({
-                        skill_id: skillId
-                    }),
-                    headers: {
-                        "Content-Type": "application/x-www-form-urlencoded"
-                    }
-                })
-                .then(response => response.text())
-                .then(data => {
-                    alert(data); // Show response message
-                    loadSkills(); // Reload skills list
-                });
-            }
-        }
+      // JavaScript to handle form submission and dynamic skill addition/deletion
+      document.getElementById("deleteSkillForm").addEventListener("submit", function(event) {
+          event.preventDefault(); // Prevent default form submission
+          var skillId = document.getElementById("deleteSkillId").value; // Get the skill id
+          deleteSkill(skillId); // Call deleteSkill function with the skill id
+      });
+
+      // Function to delete a skill
+      function deleteSkill(skillId) {
+          if (confirm("Are you sure you want to delete this skill?")) {
+              fetch("delete_skill.php", {
+                  method: "POST",
+                  body: new URLSearchParams({
+                      skill_id: skillId
+                  }),
+                  headers: {
+                      "Content-Type": "application/x-www-form-urlencoded"
+                  }
+              })
+              .then(response => response.text())
+              .then(data => {
+                  alert(data); // Show response message
+                  loadSkills(); // Reload skills list
+              });
+          }
+      }
 
         // Initial load of skills when the page loads
         loadSkills();
     </script>
+    
   </body>
 </html>
