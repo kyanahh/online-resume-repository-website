@@ -8,6 +8,7 @@ if(isset($_SESSION["logged_in"])){
     if(isset($_SESSION["firstname"])){
       $textaccount = strtoupper($_SESSION["firstname"]);
       $skills = $_SESSION["skills"];
+      $userid = $_SESSION["userid"];
 
     }else{
         $textaccount = "Account";
@@ -745,10 +746,17 @@ United States of America</pre
     </script>
 
     <script>
+        // Function to display the delete modal with the correct skill ID
         function displayDeleteModal(skillId) {
-            document.getElementById('deleteSkillId').value = skillId;
-            $('#delskill').modal('show'); // Show the delete skill modal
+          document.getElementById('deleteSkillId').value = skillId;
+          $('#delskill').modal('show');
         }
+
+        // Handle form submission for deleting a skill
+        document.getElementById("deleteSkillForm").addEventListener("submit", function(event) {
+          event.preventDefault(); // Prevent default form submission
+          // Modal will handle deletion using JavaScript
+        });
     </script>
 
     <script>
@@ -789,7 +797,7 @@ United States of America</pre
                     var listItem = document.createElement("li");
                     listItem.innerHTML = `
                         <div class='d-flex align-items-center justify-content-between'>
-                            ${skill.skill_name}<button onclick="displayDeleteModal(1)" class="btn px-2"><i class="bi bi-x-lg" ></i></button>
+                            ${skill.skill_name}<button onclick="displayDeleteModal(${skill.id})" class="btn px-2"><i class="bi bi-x-lg" ></i></button>
                         </div>
                         <hr>
                     `;
@@ -801,33 +809,34 @@ United States of America</pre
             });
         }
 
-      // JavaScript to handle form submission and dynamic skill addition/deletion
-      document.getElementById("deleteSkillForm").addEventListener("submit", function(event) {
-          event.preventDefault(); // Prevent default form submission
-          var skillId = document.getElementById("deleteSkillId").value; // Get the skill id
-          deleteSkill(skillId); // Call deleteSkill function with the skill id
-      });
+        // Submit the delete form when the modal's "Delete" button is clicked
+        $('#delskill').on('click', '#deleteSkillForm .btn-danger', function() {
+          var skillId = document.getElementById("deleteSkillId").value;
+          deleteSkill(skillId);
+        });
 
-      // Function to delete a skill
-      function deleteSkill(skillId) {
-          if (confirm("Are you sure you want to delete this skill?")) {
-              fetch("delete_skill.php", {
-                  method: "POST",
-                  body: new URLSearchParams({
-                      skill_id: skillId
-                  }),
-                  headers: {
-                      "Content-Type": "application/x-www-form-urlencoded"
-                  }
-              })
-              .then(response => response.text())
-              .then(data => {
-                  alert(data); // Show response message
-                  loadSkills(); // Reload skills list
-              });
+        document.getElementById("deleteSkillForm").addEventListener("submit", function(event) {
+        event.preventDefault(); // Prevent default form submission
+
+        // Get the skill ID from the hidden input field
+        var skillId = document.getElementById("deleteSkillId").value;
+
+        fetch("delete_skill.php", {
+          method: "POST",
+          body: new URLSearchParams({
+            skill_id: skillId
+          }),
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
           }
-      }
-
+        })
+        .then(response => response.text())
+        .then(data => {
+          // Close the modal after successful deletion
+          $('#delskill').modal('hide');
+          loadSkills();
+        });
+      });
         // Initial load of skills when the page loads
         loadSkills();
     </script>
