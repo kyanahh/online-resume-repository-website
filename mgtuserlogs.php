@@ -157,15 +157,59 @@ if(isset($_SESSION["logged_in"])){
         </div>
         <div class="p-4">
           <nav style="--bs-breadcrumb-divider: '>'; font-size: 14px">
-            <h5>Dashboard</h5>
+            <h5>User Logs</h5>
           </nav>
 
           <hr />
-          <div class="row">
-            <div class="col">
-              <p>Page content goes here</p>
+          <!-- List of User Logs -->
+          <div class="px-3">
+                <div class="row">
+                    <div class="col input-group mb-3">
+                        <input type="text" class="form-control" id="searchUserInput" placeholder="Search" aria-describedby="button-addon2">
+                        <button class="btn btn-dark" type="button" id="button-addon2" onclick="searchUsers()"><i class="bi bi-search me-2"></i>Search</button>
+                    </div>
+                </div>
+                
+                <div class="card" style="height: 450px;">
+                    <div class="card-body">
+                        <div class="table-responsive" style="height: 420px;">
+                            <table id="user-table" class="table table-bordered table-hover">
+                                <thead class="table-light" style="position: sticky; top: 0;">
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">User ID</th>
+                                        <th scope="col">Log Time</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="table-group-divider">
+                                <?php
+                                    // Query the database to fetch user data
+                                    $result = $connection->query("SELECT * FROM userlogs ORDER BY logid DESC");
+
+                                    if ($result->num_rows > 0) {
+                                        $count = 1; 
+
+                                        while ($row = $result->fetch_assoc()) {
+                                            echo '<tr>';
+                                            echo '<td>' . $count . '</td>';
+                                            echo '<td>' . $row['userid'] . '</td>';
+                                            echo '<td>' . $row['logtime'] . '</td>';
+                                            echo '</tr>';
+                                            $count++; 
+                                        }
+                                    } else {
+                                        echo '<tr><td colspan="5">No user logs found.</td></tr>';
+                                    }
+                                ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!-- Search results will be displayed here -->
+                <div id="search-results"></div>
             </div>
-          </div>
+            <!-- End of List of Users -->
         </div>
       </div>
 
@@ -175,5 +219,24 @@ if(isset($_SESSION["logged_in"])){
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+
+            <script>
+
+                //---------------------------Search Users Results---------------------------//
+                function searchUsers() {
+                    const query = document.getElementById("searchUserInput").value;
+                    // Make an AJAX request to fetch search results
+                    $.ajax({
+                        url: 'search_userlogs.php', // Replace with the actual URL to your search script
+                        method: 'POST',
+                        data: { query: query },
+                        success: function(data) {
+                            // Update the user-table with the search results
+                            $('#user-table tbody').html(data);
+                        }
+                    });
+                }
+
+            </script>
   </body>
 </html>

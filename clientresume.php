@@ -91,13 +91,21 @@ $result = $connection->query($query);
     </div>
   </nav>
 
-  <div class="container-fluid mt-5 pt-5">
-    <div class="card mx-5 my-5 p-5">
-      <table class="table table-responsive overflow-auto" style="height: 100px;">
-        <h5>Client Resume</h5>  
-        <div class="">
+  <div class="container-fluid mt-5 pt-3">
+    <div class="card mx-5 my-5 p-5" style="height: 450px;">
+      <h5 class="card-title">Client Resume</h5>  
+        <div class="row">
+          <div class="col input-group">
+            <input type="text" class="form-control" id="searchResumeInput" placeholder="Search" aria-describedby="button-addon2">
+            <button class="btn btn-dark" type="button" id="button-addon2" onclick="searchResumes()"><i class="bi bi-search me-2"></i>Search</button>
+        </div>
+      <div class="card-body">
+      <div class="table-responsive" style="height: 300px;">
+        <table class="table overflow-auto" id="resume-table">
+                <div class="">
                 <thead class="bg-light" style="position: sticky; top: 0;">
                     <tr>
+                        <th class="col-sm-1">#</th>
                         <th>Last Name</th>
                         <th>First Name</th>
                         <th class="col-sm-5">Skills</th>
@@ -110,13 +118,14 @@ $result = $connection->query($query);
                     WHERE users.userid = " . $row["userid"];
                     $result = $connection->query($query);
                     echo "<tr>";
+                    echo "<td>" . $row['userid'] . "</td>";
                     echo "<td>" . $row['lastname'] . "</td>";
                     echo "<td>" . $row['firstname'] . "</td>";
 
                     // Improved skill display logic
                     $skillz = "";
                     while ($rows = $result->fetch_assoc()) {
-                      $skillz .= ucwords($rows["skills"]) . ", ";
+                      $skillz .= ucwords($rows["skill_name"]) . ", ";
                     }
                     $skillz = rtrim($skillz, ", "); // Remove trailing comma
                     echo "<td>" . $skillz . "</td>";
@@ -126,8 +135,13 @@ $result = $connection->query($query);
                 ?>
                 </tbody>
             </div>
-            </table>
-        </div>
+          </table>
+      </div>
+      </div>
+      <!-- Search results will be displayed here -->
+        <div id="search-results"></div>
+      </div>
+    </div>
     </div>
 
     <!-- Footer --> 
@@ -625,6 +639,25 @@ United States of America</pre
         myModal.addEventListener("shown.bs.modal", () => {
             myInput.focus();
         });
+
+    </script>
+
+    <script>
+
+    //---------------------------Search Users Results---------------------------//
+    function searchResumes() {
+        const query = document.getElementById("searchResumeInput").value;
+        // Make an AJAX request to fetch search results
+        $.ajax({
+            url: 'search_resumesclient.php', // Replace with the actual URL to your search script
+            method: 'POST',
+            data: { query: query },
+            success: function(data) {
+                // Update the user-table with the search results
+                $('#resume-table tbody').html(data);
+            }
+        });
+    }
 
     </script>
   </body>
