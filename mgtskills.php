@@ -164,11 +164,61 @@ if(isset($_SESSION["logged_in"])){
           </nav>
 
           <hr />
-          <div class="row">
-            <div class="col">
-              <p>Page content goes here</p>
+          <!-- List of User Logs -->
+          <div class="px-3">
+                <div class="row">
+                    <div class="col input-group mb-3">
+                        <input type="text" class="form-control" id="searchSkillsInput" onchange="searchSkills()" placeholder="Search" aria-describedby="button-addon2">
+                    </div>
+                </div>
+                
+                <div class="card" style="height: 450px;">
+                    <div class="card-body">
+                        <div class="table-responsive" style="height: 420px;">
+                            <table id="skills-table" class="table table-bordered table-hover">
+                                <thead class="table-light" style="position: sticky; top: 0;">
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Last Name</th>
+                                        <th scope="col">First Name</th>
+                                        <th scope="col">Skills</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="table-group-divider">
+                                <?php
+                                    // Query the database to fetch user data
+                                    $result = $connection->query("SELECT users.userid, users.lastname, 
+                                    users.firstname, GROUP_CONCAT(user_skills.skill_name SEPARATOR ', ') 
+                                    AS Skills FROM users 
+                                    LEFT JOIN user_skills ON users.userid = user_skills.userid 
+                                    WHERE users.usertypeid = 3  
+                                    GROUP BY users.userid");
+
+                                    if ($result->num_rows > 0) {
+                                        $count = 1; 
+
+                                        while ($row = $result->fetch_assoc()) {
+                                            echo '<tr>';
+                                            echo '<td>' . $count . '</td>';
+                                            echo '<td>' . $row['lastname'] . '</td>';
+                                            echo '<td>' . $row['firstname'] . '</td>';
+                                            echo '<td>' . ucwords($row['Skills']) . '</td>';
+                                            echo '</tr>';
+                                            $count++; 
+                                        }
+                                    } else {
+                                        echo '<tr><td colspan="5">No user logs found.</td></tr>';
+                                    }
+                                ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!-- Search results will be displayed here -->
+                <div id="search-results"></div>
             </div>
-          </div>
+            <!-- End of List of Users -->
         </div>
       </div>
 
@@ -178,5 +228,24 @@ if(isset($_SESSION["logged_in"])){
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+
+    <script>
+
+                //---------------------------Search Skills Results---------------------------//
+                function searchSkills() {
+                    const query = document.getElementById("searchSkillsInput").value;
+                    // Make an AJAX request to fetch search results
+                    $.ajax({
+                        url: 'search_mgtskills.php', // Replace with the actual URL to your search script
+                        method: 'POST',
+                        data: { query: query },
+                        success: function(data) {
+                            // Update the user-table with the search results
+                            $('#skills-table tbody').html(data);
+                        }
+                    });
+                }
+
+            </script>
   </body>
 </html>
