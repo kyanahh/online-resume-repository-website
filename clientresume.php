@@ -19,8 +19,9 @@ $firstquery = "SELECT userid, lastname, firstname FROM users";
 
 $fRes = $connection->query($firstquery);
 
-$query = "SELECT * FROM users INNER JOIN user_skills ON users.userid = user_skills.userid 
-WHERE users.userid = '$userid'";
+$query = "SELECT users.userid, users.lastname, users.firstname, user_skills.skill_name 
+FROM users INNER JOIN user_skills ON users.userid = user_skills.userid 
+WHERE users.userid = '$userid' AND users.usertypeid = 3";
 $result = $connection->query($query);
 
 ?>
@@ -96,8 +97,7 @@ $result = $connection->query($query);
       <h5 class="card-title">Client Resume</h5>  
         <div class="row">
           <div class="col input-group">
-            <input type="text" class="form-control" id="searchResumeInput" placeholder="Search" aria-describedby="button-addon2">
-            <button class="btn btn-dark" type="button" id="button-addon2" onclick="searchResumes()"><i class="bi bi-search me-2"></i>Search</button>
+            <input type="text" class="form-control" id="searchResumeInput" onchange="searchResumes()" placeholder="Search" aria-describedby="button-addon2">
         </div>
       <div class="card-body">
       <div class="table-responsive" style="height: 300px;">
@@ -114,8 +114,9 @@ $result = $connection->query($query);
                 <tbody class="table-group-divider">
                 <?php
                   while ($row = $fRes->fetch_assoc()) {
-                    $query = "SELECT * FROM users INNER JOIN user_skills ON users.userid = user_skills.userid  
-                    WHERE users.userid = " . $row["userid"];
+                    $query = "SELECT users.userid, users.lastname, users.firstname, user_skills.skill_name 
+                    FROM users INNER JOIN user_skills ON users.userid = user_skills.userid  
+                    WHERE users.userid = " . $row["userid"] . " AND users.usertypeid = 3";
                     $result = $connection->query($query);
                     echo "<tr>";
                     echo "<td>" . $row['userid'] . "</td>";
