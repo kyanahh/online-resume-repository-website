@@ -145,7 +145,7 @@ if(isset($_SESSION["logged_in"])){
                 <?php echo $textaccount; ?>
                 <?php echo $lastname; ?>
               </h5>
-              <h6 class="mb-4" style="color: gray">Candidate</h6>
+              <h6 class="mb-4" style="color: gray">Client</h6>
               <hr />
             </li>
           </ul>

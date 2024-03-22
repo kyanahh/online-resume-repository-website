@@ -126,14 +126,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           <li class="sidebar-item nav-item mb-1">
             <a
               href="#"
-              class="sidebar-link collapsed"
+              class="sidebar-link collapsed d-flex justify-content-between"
               data-bs-toggle="collapse"
               data-bs-target="#settings"
               aria-expanded="false"
               aria-controls="settings"
             >
+            <div class="d-flex align-items-center">
               <i class="fas fa-cog pe-2"></i>
               <span class="topic">Settings </span>
+            </div>
+              <i class="bi bi-chevron-down"></i>
             </a>
             <ul
               id="settings"
@@ -230,7 +233,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <hr>
                         <div class="row">
                             <div class="col d-grid gap-2">
-                                <a class="btn btn-danger text-white fw-bold" href="mtgprofile.php">Cancel</a>
+                                <a class="btn btn-danger text-white fw-bold" href="mgtprofile.php">Cancel</a>
                             </div>
                         </div>
                     </form>

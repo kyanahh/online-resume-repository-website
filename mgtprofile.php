@@ -6,8 +6,20 @@ require("server/connection.php");
 
 if(isset($_SESSION["logged_in"])){
     if(isset($_SESSION["firstname"])){
-        $textaccount = $_SESSION["firstname"];
-        $email = $_SESSION["email"];
+      $textaccount = strtoupper($_SESSION["firstname"]);
+      $lastname = strtoupper($_SESSION["lastname"]);
+      $middlename = strtoupper($_SESSION["middlename"]); 
+      $email = $_SESSION["email"];
+      $regdate = $_SESSION["regdate"];
+      $phone = $_SESSION["phone"];
+      $bday = strftime("%B %d, %Y", strtotime($_SESSION["bday"]));
+      $profilepic = $_SESSION["profilepic"];
+      $gender = $_SESSION["gender"];
+      $civilstatus = $_SESSION["civilstatus"];
+      $street = $_SESSION["street"];
+      $brgy = $_SESSION["brgy"];
+      $city = $_SESSION["city"];
+      $province = $_SESSION["province"];
         
     }else{
         $textaccount = "Account";
@@ -104,14 +116,17 @@ if(isset($_SESSION["logged_in"])){
           <li class="sidebar-item nav-item mb-1">
             <a
               href="#"
-              class="sidebar-link collapsed"
+              class="sidebar-link collapsed d-flex justify-content-between"
               data-bs-toggle="collapse"
               data-bs-target="#settings"
               aria-expanded="false"
               aria-controls="settings"
             >
+            <div class="d-flex align-items-center">
               <i class="fas fa-cog pe-2"></i>
               <span class="topic">Settings </span>
+            </div>
+              <i class="bi bi-chevron-down"></i>
             </a>
             <ul
               id="settings"
@@ -161,9 +176,131 @@ if(isset($_SESSION["logged_in"])){
           </nav>
 
           <hr />
-          <div class="row">
-            <div class="col">
-              <p>Page content goes here</p>
+          <div class="row ps-5">
+            <!-- Col 1 -->
+            <div
+              class="card p-5 mt-2 col-sm-3 d-flex justify-content-center text-center align-self-start"
+            >
+              <ul class="list-unstyled">
+                <li>
+                  <img
+                    src="<?php echo $profilepic; ?>"
+                    class="rounded-circle img-fluid border"
+                    style="width: 200px"
+                  />
+                </li>
+                <li>
+                  <h5 class="mt-3">
+                    <?php echo $textaccount; ?>
+                    <?php echo $lastname; ?>
+                  </h5>
+                  <h6 class="mb-4" style="color: gray">Management</h6>
+                  <hr />
+                </li>
+              </ul>
+            </div>
+            <!-- Col 2 -->
+            <div class="card col-sm-8 p-4 ms-3 mt-2" style="height: 480px;">
+              <ul class="col list-unstyled overflow-auto">
+                <!-- Name -->
+                <li>
+                  <h6 class="fw-bold">Name</h6>
+                </li>
+                <li>
+                  <h6>
+                    <?php echo $textaccount; ?>
+                    <?php echo $middlename; ?>
+                    <?php echo $lastname; ?>
+                  </h6>
+                  <hr />
+                </li>
+                <!-- Birthdate -->
+                <li>
+                  <h6 class="fw-bold">Birthdate</h6>
+                </li>
+                <li>
+                  <h6><?php echo $bday; ?></h6>
+                  <hr />
+                </li>
+                <!-- Gender -->
+                <li>
+                  <h6 class="fw-bold">Gender</h6>
+                </li>
+                <li>
+                  <h6><?php echo $gender; ?></h6>
+                  <hr />
+                </li>
+                <!-- Civil Status -->
+                <li>
+                  <h6 class="fw-bold">Civil Status</h6>
+                </li>
+                <li>
+                  <h6><?php echo $civilstatus; ?></h6>
+                  <hr />
+                </li>
+                <!-- Email -->
+                <li>
+                  <h6 class="fw-bold">Email</h6>
+                </li>
+                <li>
+                  <h6><?php echo $email; ?></h6>
+                  <hr />
+                </li>
+                <!-- Phone -->
+                <li>
+                  <h6 class="fw-bold">Contact Number</h6>
+                </li>
+                <li>
+                  <h6><?php echo $phone; ?></h6>
+                  <hr />
+                </li>
+                <!-- Street -->
+                <li>
+                  <h6 class="fw-bold">Street</h6>
+                </li>
+                <li>
+                  <h6><?php echo $street; ?></h6>
+                  <hr />
+                </li>
+                <!-- Brgy -->
+                <li>
+                  <h6 class="fw-bold">Barangay</h6>
+                </li>
+                <li>
+                  <h6><?php echo $brgy; ?></h6>
+                  <hr />
+                </li>
+                <!-- City -->
+                <li>
+                  <h6 class="fw-bold">City</h6>
+                </li>
+                <li>
+                  <h6><?php echo $city; ?></h6>
+                  <hr />
+                </li>
+                <!-- Province -->
+                <li>
+                  <h6 class="fw-bold">Province</h6>
+                </li>
+                <li>
+                  <h6><?php echo $province; ?></h6>
+                  <hr />
+                </li>
+                <!-- Buttons -->
+                <li class="d-flex justify-content-center mt-4">
+                  <a href="mgteditprofile.php" class="btn btn-primary fw-bold col-sm-5"
+                    >EDIT PROFILE</a
+                  >
+                </li>
+                <li class="d-flex justify-content-center mt-2">
+                  <a
+                    href="mgtpassword.php"
+                    class="btn btn-primary fw-bold col-sm-5"
+                    >CHANGE PASSWORD</a
+                  >
+                </li>
+                <!-- End -->
+              </ul>
             </div>
           </div>
         </div>

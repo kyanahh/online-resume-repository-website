@@ -104,14 +104,17 @@ if(isset($_SESSION["logged_in"])){
           <li class="sidebar-item nav-item mb-1">
             <a
               href="#"
-              class="sidebar-link collapsed"
+              class="sidebar-link collapsed d-flex justify-content-between"
               data-bs-toggle="collapse"
               data-bs-target="#settings"
               aria-expanded="false"
               aria-controls="settings"
             >
+            <div class="d-flex align-items-center">
               <i class="fas fa-cog pe-2"></i>
               <span class="topic">Settings </span>
+            </div>
+              <i class="bi bi-chevron-down"></i>
             </a>
             <ul
               id="settings"
