@@ -166,10 +166,13 @@ if(isset($_SESSION["logged_in"])){
           <hr />
           <!-- List of User Logs -->
           <div class="px-3">
-                <div class="row">
+                <div class="row d-flex">
                     <div class="col input-group mb-3">
                         <input type="text" class="form-control" id="searchSkillsInput" onchange="searchSkills()" placeholder="Search" aria-describedby="button-addon2">
                     </div>
+                    <div class="col-sm-1">
+                      <a href="mgtskills.php" class="btn btn-dark px-4"><i class="bi bi-arrow-clockwise"></i></a>
+                    </div>                    
                 </div>
                 
                 <div class="card" style="height: 450px;">
@@ -182,6 +185,7 @@ if(isset($_SESSION["logged_in"])){
                                         <th scope="col">Last Name</th>
                                         <th scope="col">First Name</th>
                                         <th scope="col">Skills</th>
+                                        <th scope="col">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody class="table-group-divider">
@@ -203,6 +207,9 @@ if(isset($_SESSION["logged_in"])){
                                             echo '<td>' . $row['lastname'] . '</td>';
                                             echo '<td>' . $row['firstname'] . '</td>';
                                             echo '<td>' . ucwords($row['Skills']) . '</td>';
+                                            echo '<td class="d-flex align-items-center">
+                                            <button class="btn btn-primary me-2">Edit</button>
+                                            <button class="btn btn-danger">Delete</button></td>';
                                             echo '</tr>';
                                             $count++; 
                                         }

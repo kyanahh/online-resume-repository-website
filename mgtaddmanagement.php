@@ -160,7 +160,7 @@ if(isset($_SESSION["logged_in"])){
         </div>
         <div class="p-4">
           <nav style="--bs-breadcrumb-divider: '>'; font-size: 14px">
-            <h5>Client Accounts</h5>
+            <h5>Add Management Account</h5>
           </nav>
 
           <hr />

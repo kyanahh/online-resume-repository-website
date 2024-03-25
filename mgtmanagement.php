@@ -164,19 +164,99 @@ if(isset($_SESSION["logged_in"])){
           </nav>
 
           <hr />
-          <div class="row">
-            <div class="col">
-              <p>Page content goes here</p>
+          <!-- List of Mgt -->
+          <div class="px-3">
+                <div class="row">
+                    <div class="col input-group mb-3">
+                        <input type="text" class="form-control" id="searchMgtInput" onchange="searchMgt()" placeholder="Search" aria-describedby="button-addon2">
+                    </div>
+                    <div class="col-sm-1">
+                      <a href="mgtmanagement.php" class="btn btn-dark px-4"><i class="bi bi-arrow-clockwise"></i></a>
+                    </div>
+                    <div class="col-sm-1">
+                      <a href="mgtaddmanagement.php" class="btn btn-dark px-4"><i class="bi bi-plus-lg"></i></a>
+                    </div>  
+                </div>
+                
+                <div class="card" style="height: 450px;">
+                    <div class="card-body">
+                        <div class="table-responsive" style="height: 420px;">
+                            <table id="mgt-table" class="table table-bordered table-hover">
+                                <thead class="table-light" style="position: sticky; top: 0;">
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">User ID</th>
+                                        <th scope="col">Last Name</th>
+                                        <th scope="col">First Name</th>
+                                        <th scope="col">Email</th>
+                                        <th scope="col">Phone</th>
+                                        <th scope="col">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="table-group-divider">
+                                <?php
+                                    // Query the database to fetch user data
+                                    $result = $connection->query("SELECT * FROM users WHERE usertypeid = 1 
+                                    ORDER BY userid DESC");
+
+                                    if ($result->num_rows > 0) {
+                                        $count = 1; 
+
+                                        while ($row = $result->fetch_assoc()) {
+                                            echo '<tr>';
+                                            echo '<td>' . $count . '</td>';
+                                            echo '<td>' . $row['userid'] . '</td>';
+                                            echo '<td>' . $row['lastname'] . '</td>';
+                                            echo '<td>' . $row['firstname'] . '</td>';
+                                            echo '<td>' . $row['email'] . '</td>';
+                                            echo '<td>' . $row['phone'] . '</td>';
+                                            echo '<td class="d-flex align-items-center">
+                                            <button class="btn btn-primary me-2">Edit</button>
+                                            <button class="btn btn-danger">Delete</button></td>';
+                                            echo '</tr>';
+                                            $count++; 
+                                        }
+                                    } else {
+                                        echo '<tr><td colspan="5">No user logs found.</td></tr>';
+                                    }
+                                ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!-- Search results will be displayed here -->
+                <div id="search-results"></div>
             </div>
-          </div>
+            <!-- End of List of Mgt -->
         </div>
       </div>
 
       
     </div>
+    
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+
+    <script>
+
+                //---------------------------Search Mgt Results---------------------------//
+                function searchMgt() {
+                    const query = document.getElementById("searchMgtInput").value;
+                    // Make an AJAX request to fetch search results
+                    $.ajax({
+                        url: 'search_mgt.php', // Replace with the actual URL to your search script
+                        method: 'POST',
+                        data: { query: query },
+                        success: function(data) {
+                            // Update the user-table with the search results
+                            $('#mgt-table tbody').html(data);
+                        }
+                    });
+                }
+
+    </script>
   </body>
 </html>
