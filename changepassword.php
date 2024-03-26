@@ -7,6 +7,7 @@ require("server/connection.php");
 if(isset($_SESSION["logged_in"])){
   if(isset($_SESSION["firstname"])){
       $textaccount = $_SESSION["firstname"];
+      $email = $_SESSION["email"];
 
   }else{
       $textaccount = "Account";
