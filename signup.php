@@ -120,29 +120,29 @@ url('https://cdn-bnokp.nitrocdn.com/QNoeDwCprhACHQcnEmHgXDhDpbEOlRHH/assets/imag
                     <form method="POST" action="<?php htmlspecialchars("SELF_PHP"); ?>">
                         <div class="row">
                             <div class="col">
-                                <label for="firstname" class="form-label">First Name</label>
+                                <label for="firstname" class="form-label">First Name<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="firstname" name="firstname" placeholder="First Name" value="<?php echo $firstname; ?>" required>
                             </div>
                             <div class="col">
-                                <label for="lastname" class="form-label">Last Name</label>
+                                <label for="lastname" class="form-label">Last Name<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="lastname" name="lastname" placeholder="Last Name" value="<?php echo $lastname; ?>" required>
                             </div>
                             <div class="col">
-                              <label for="birthdate" class="form-label">Birthday</label>
+                              <label for="birthdate" class="form-label">Birthday<span class="text-danger">*</span></label>
                               <input type="date" class="form-control" id="birthdate" name="birthdate" placeholder="Birthday" value="<?php echo $birthdate; ?>" required>
                           </div>
                         </div>
                         <div class="row mt-2">
                             <div class="col">
-                               <label for="email" class="form-label">Email address</label>
+                               <label for="email" class="form-label">Email address<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="email" name="email" placeholder="Email address" value="<?php echo $email; ?>" required>
                             </div>
                             <div class="col">
-                                <label for="password" class="form-label">Password</label>
+                                <label for="password" class="form-label">Password<span class="text-danger">*</span></label>
                                 <input type="password" class="form-control" id="password" name="password" placeholder="Password" value="<?php echo $password; ?>" required>
                             </div>
                             <div class="col">
-                                <label for="confirmpassword" class="form-label">Confirm Password</label>
+                                <label for="confirmpassword" class="form-label">Confirm Password<span class="text-danger">*</span></label>
                                 <input type="password" class="form-control" id="confirmpassword" name="confirmpassword" placeholder="Confirm Password" value="<?php echo $confirmpassword; ?>" required>
                             </div>
                         </div>

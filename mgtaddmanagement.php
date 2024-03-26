@@ -16,6 +16,45 @@ if(isset($_SESSION["logged_in"])){
     $textaccount = "Account";
 }
 
+$usertype = 1;
+
+$firstname = $lastname = $middlename = $emailadd = $birthdate = $gender =  $civilstatus = $phone = 
+$password = $confirmpassword = $errorMessage = $successMessage = "";
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $firstname =  ucwords($_POST["firstname"]);
+    $lastname =  ucwords($_POST["lastname"]);
+    $lastname =  ucwords($_POST["middlename"]);
+    $birthdate = $_POST["birthdate"];
+    $gender = $_POST["gender"];
+    $civilstatus = $_POST["civilstatus"];
+    $phone = $_POST["phone"];
+    $emailadd = $_POST["emailadd"];
+    $password = $_POST["password"];
+
+        // Check if the email already exists in the database
+        $emailExistsQuery = "SELECT * FROM users WHERE email = '$emailadd'";
+        $emailExistsResult = $connection->query($emailExistsQuery);
+
+        if ($emailExistsResult->num_rows > 0) {
+            $errorMessage = "User already exists";
+        } else {
+            // Insert the user data into the database
+            $regdate = date("Y-m-d H:i:s");
+            $insertQuery = "INSERT INTO users (firstname, lastname, middlename, bday, gender, civilstatus, 
+            phone, email, password, usertypeid, regdate) 
+            VALUES ('$firstname', '$lastname', '$middlename', '$birthdate', '$gender', '$civilstatus', 
+            '$phone', '$emailadd', '$password', '$usertype', '$regdate')";
+            $result = $connection->query($insertQuery);
+
+            if (!$result) {
+                $errorMessage = "Invalid query " . $connection->error;
+            } else {
+                header("Location: mgtmanagement.php");
+            }
+        }
+    
+}
 ?>
 
 <!DOCTYPE html>
@@ -110,10 +149,10 @@ if(isset($_SESSION["logged_in"])){
               aria-expanded="false"
               aria-controls="settings"
             >
-            <div class="d-flex align-items-center">
-              <i class="fas fa-cog pe-2"></i>
-              <span class="topic">Settings </span>
-            </div>
+              <div class="d-flex align-items-center">
+                <i class="fas fa-cog pe-2"></i>
+                <span class="topic">Settings </span>
+              </div>
               <i class="bi bi-chevron-down"></i>
             </a>
             <ul
@@ -129,7 +168,7 @@ if(isset($_SESSION["logged_in"])){
               </li>
               <li class="sidebar-item">
                 <a href="mgtpassword.php" class="sidebar-link">
-                <i class="fa-solid fa-key"></i>
+                  <i class="fa-solid fa-key"></i>
                   <span class="topic"> Change Password</span>
                 </a>
               </li>
@@ -164,15 +203,90 @@ if(isset($_SESSION["logged_in"])){
           </nav>
 
           <hr />
-          <div class="row">
-            <div class="col">
-              <p>Page content goes here</p>
+          <form method="POST" action="<?php htmlspecialchars("SELF_PHP"); ?>">
+            <!-- Firstname, middlename, lastname -->
+            <div class="row">
+              <div class="col mb-3">
+                <label for="firstname" class="form-label">First Name<span class="text-danger">*</span></label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="firstname"
+                  name="firstname"
+                  value="<?php echo $firstname; ?>"
+                  required
+                />
+              </div>
+              <div class="col mb-3">
+                <label for="middlename" class="form-label">Middle Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="middlename"
+                  name="middlename"
+                  value="<?php echo $middlename; ?>"
+                />
+              </div>
+              <div class="col mb-3">
+                <label for="lastname" class="form-label">Last Name<span class="text-danger">*</span></label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="lastname"
+                  name="lastname"
+                  value="<?php echo $lastname; ?>"
+                  required
+                />
+              </div>
             </div>
-          </div>
+            <!-- bday, gender, civilstats -->
+            <div class="row">
+              <div class="col mb-3">
+                <label for="birthdate" class="form-label">Birthday<span class="text-danger">*</span></label>
+                <input type="date" class="form-control" id="birthdate" name="birthdate" placeholder="Birthday" 
+                value="<?php echo $birthdate; ?>" required>
+              </div>
+              <div class="col mb-3">
+                <label for="gender" class="form-label">Gender<span class="text-danger">*</label>
+                <select id="gender" name="gender" class="form-select" required>
+                  <option value="" disabled selected>Select Gender</option>
+                  <option value="Male" <?php echo ($gender === "Male") ? "selected" : ""; ?>>Male</option>
+                  <option value="Female" <?php echo ($gender === "Female") ? "selected" : ""; ?>>Female</option>
+                </select>
+              </div>
+              <div class="col mb-3">
+                <label for="civilstatus" class="form-label">Civil Status</label>
+                <select id="civilstatus" name="civilstatus" class="form-select">
+                  <option value="" disabled selected>Select Civil Status</option>
+                  <option value="Single" <?php echo ($civilstatus === "Single") ? "selected" : ""; ?>>Single</option>
+                  <option value="Married" <?php echo ($civilstatus === "Married") ? "selected" : ""; ?>>Married</option>
+                  <option value="Separated" <?php echo ($civilstatus === "Separated") ? "selected" : ""; ?>>Separated</option>
+                  <option value="Divorced" <?php echo ($civilstatus === "Divorced") ? "selected" : ""; ?>>Divorced</option>
+                  <option value="Widowed" <?php echo ($civilstatus === "Widowed") ? "selected" : ""; ?>>Widowed</option>
+                </select>
+              </div>
+            </div>
+            <!-- Phone, email, password -->
+            <div class="row">
+              <div class="col mb-3">
+                <label for="phone" class="form-label">Phone</label>
+                <input type="text" class="form-control" id="phone" name="phone" value="<?php echo $phone; ?>">
+              </div>
+              <div class="col mb-3">
+                <label for="emailadd" class="form-label">Email address<span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="emailadd" name="emailadd" placeholder="Email address" value="<?php echo $emailadd; ?>" required>
+              </div>
+              <div class="col mb-3">
+                <label for="password" class="form-label">Temporary Password<span class="text-danger">*</span></label>
+                <input type="password" class="form-control" id="password" name="password" placeholder="Temporary Password" value="<?php echo $password; ?>" required>
+              </div>
+            </div>
+            <div class="d-flex justify-content-end">
+              <button type="submit" class="btn btn-primary px-4">Submit</button>
+            </div>
+          </form>
         </div>
       </div>
-
-      
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>

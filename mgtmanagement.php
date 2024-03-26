@@ -184,7 +184,6 @@ if(isset($_SESSION["logged_in"])){
                             <table id="mgt-table" class="table table-bordered table-hover">
                                 <thead class="table-light" style="position: sticky; top: 0;">
                                     <tr>
-                                        <th scope="col">#</th>
                                         <th scope="col">User ID</th>
                                         <th scope="col">Last Name</th>
                                         <th scope="col">First Name</th>
@@ -193,33 +192,8 @@ if(isset($_SESSION["logged_in"])){
                                         <th scope="col">Action</th>
                                     </tr>
                                 </thead>
-                                <tbody class="table-group-divider">
-                                <?php
-                                    // Query the database to fetch user data
-                                    $result = $connection->query("SELECT * FROM users WHERE usertypeid = 1 
-                                    ORDER BY userid DESC");
+                                <tbody class="table-group-divider" id="mgtList">
 
-                                    if ($result->num_rows > 0) {
-                                        $count = 1; 
-
-                                        while ($row = $result->fetch_assoc()) {
-                                            echo '<tr>';
-                                            echo '<td>' . $count . '</td>';
-                                            echo '<td>' . $row['userid'] . '</td>';
-                                            echo '<td>' . $row['lastname'] . '</td>';
-                                            echo '<td>' . $row['firstname'] . '</td>';
-                                            echo '<td>' . $row['email'] . '</td>';
-                                            echo '<td>' . $row['phone'] . '</td>';
-                                            echo '<td class="d-flex align-items-center">
-                                            <button class="btn btn-primary me-2">Edit</button>
-                                            <button class="btn btn-danger">Delete</button></td>';
-                                            echo '</tr>';
-                                            $count++; 
-                                        }
-                                    } else {
-                                        echo '<tr><td colspan="5">No user logs found.</td></tr>';
-                                    }
-                                ?>
                                 </tbody>
                             </table>
                         </div>
@@ -234,11 +208,75 @@ if(isset($_SESSION["logged_in"])){
 
       
     </div>
+
+    <!-- Delete Mgt Modal -->
+    <div
+            class="modal fade"
+            id="delmgt"
+            tabindex="-1"
+            aria-labelledby="delmgt1"
+            aria-hidden="true"
+          >
+            <div class="modal-dialog modal-dialog-scrollable">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-4 fw-bold" id="delmgt1">
+                    Delete Account
+                  </h1>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div class="modal-body">
+                <form id="deleteMgtForm" method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" enctype="multipart/form-data">
+                    <input type="hidden" id="deleteMgtId" name="userid">
+                    <p class="pt-2">Are you sure you want to delete this account?</p>
+                </div>
+                <div class="modal-footer">
+                <button class="btn btn-danger" type="submit">Delete</button>
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal"
+                  >
+                    Close
+                  </button>
+                </div>
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <div class="toast-container position-fixed bottom-0 end-0 p-3">
+            <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+              <div class="toast-header">
+                <strong class="me-auto">Management Account</strong>
+                <small>Just now</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+              </div>
+              <div class="toast-body">
+                Account deleted.
+              </div>
+            </div>
+          </div>
+
     
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+
+    <script>
+      const myModal = document.getElementById("myModal");
+      const myInput = document.getElementById("myInput");
+
+      myModal.addEventListener("shown.bs.modal", () => {
+        myInput.focus();
+      });
+    </script>
 
     <script>
 
@@ -258,5 +296,86 @@ if(isset($_SESSION["logged_in"])){
                 }
 
     </script>
+
+    <script>
+        // Function to display the delete modal with the correct user ID
+        function displayDeleteModal(mgtId) {
+          document.getElementById('deleteMgtId').value = mgtId;
+          $('#delmgt').modal('show');
+        }
+
+        // Handle form submission for deleting a skill
+        document.getElementById("deleteMgtForm").addEventListener("submit", function(event) {
+          event.preventDefault(); // Prevent default form submission
+          // Modal will handle deletion using JavaScript
+        });
+    </script>
+
+    <script>
+      // Function to load mgt from the database
+      function loadMgt() {
+            fetch("mgtload_mgt.php") // PHP script to load skills
+            .then(response => response.json())
+            .then(mgts => {
+                var mgtList = document.getElementById("mgtList");
+                mgtList.innerHTML = ""; // Clear existing skills
+                mgts.forEach(mgt => {
+                    var listItem = document.createElement("tr");
+                    listItem.innerHTML = `
+                      <tr>
+                        <td>${mgt.userid}</td>
+                        <td>${mgt.lastname}</td>
+                        <td>${mgt.firstname}</td>
+                        <td>${mgt.email}</td>
+                        <td>${mgt.phone}</td>
+                        <td><button onclick="displayDeleteModal(${mgt.userid})" class="btn btn-danger">Delete
+                        </button></td>
+                      </tr>
+                    `;
+                    mgtList.appendChild(listItem);
+                });
+
+                // Clear mgts input field
+                document.getElementById("mgts").value = "";
+            });
+        }
+
+        // Submit the delete form when the modal's "Delete" button is clicked
+        $('#delmgt').on('click', '#deleteMgtForm .btn-danger', function() {
+          var mgtId = document.getElementById("deleteMgtId").value;
+          deleteMgt(mgtId);
+        });
+
+        document.getElementById("deleteMgtForm").addEventListener("submit", function(event) {
+        event.preventDefault(); // Prevent default form submission
+
+        // Get the user ID from the hidden input field
+        var mgtId = document.getElementById("deleteMgtId").value;
+
+        fetch("mgtdelete_mgt.php", {
+          method: "POST",
+          body: new URLSearchParams({
+            userid: mgtId
+          }),
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+          }
+        })
+        .then(response => response.text())
+        .then(data => {
+          // Close the modal after successful deletion
+          $('#delmgt').modal('hide');
+          loadMgt();
+
+          // Show success toast
+          var toastLiveExample = document.getElementById('liveToast');
+          var toast = new bootstrap.Toast(toastLiveExample);
+          toast.show();
+        });
+      });
+        // Initial load of mgt when the page loads
+        loadMgt();
+    </script>
+    
   </body>
 </html>
