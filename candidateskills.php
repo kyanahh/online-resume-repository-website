@@ -17,22 +17,6 @@ if(isset($_SESSION["logged_in"])){
     $textaccount = "Account";
 }
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-  $skills = $_POST["skills"];
-
-  $updateQuery = "UPDATE users SET skills = '$skills' WHERE email = '$email'";
-  if($connection->query($updateQuery)) {
-      // Redirect to the profile page or wherever you want
-      header("Location: settings.php");
-      $errorMessage = "Saved changes.";
-      exit; // Ensure that no further code is executed after redirection
-  } else {
-      $errorMessage = "Failed to upload skills. Please try again later.";
-  }
- 
-
-}
-
 ?>
 
 <!DOCTYPE html>

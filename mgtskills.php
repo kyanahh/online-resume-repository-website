@@ -16,6 +16,8 @@ if(isset($_SESSION["logged_in"])){
     $textaccount = "Account";
 }
 
+
+
 ?>
 
 <!DOCTYPE html>
@@ -182,42 +184,16 @@ if(isset($_SESSION["logged_in"])){
                                 <thead class="table-light" style="position: sticky; top: 0;">
                                     <tr>
                                         <th scope="col">#</th>
+                                        <th scope="col">User ID</th>
                                         <th scope="col">Last Name</th>
                                         <th scope="col">First Name</th>
                                         <th scope="col">Skills</th>
                                         <th scope="col">Action</th>
                                     </tr>
                                 </thead>
-                                <tbody class="table-group-divider">
-                                <?php
-                                    // Query the database to fetch user data
-                                    $result = $connection->query("SELECT users.userid, users.lastname, 
-                                    users.firstname, GROUP_CONCAT(user_skills.skill_name SEPARATOR ', ') 
-                                    AS Skills FROM users 
-                                    LEFT JOIN user_skills ON users.userid = user_skills.userid 
-                                    WHERE users.usertypeid = 3  
-                                    GROUP BY users.userid");
+                                <tbody class="table-group-divider" id="skillsList">
 
-                                    if ($result->num_rows > 0) {
-                                        $count = 1; 
-
-                                        while ($row = $result->fetch_assoc()) {
-                                            echo '<tr>';
-                                            echo '<td>' . $count . '</td>';
-                                            echo '<td>' . $row['lastname'] . '</td>';
-                                            echo '<td>' . $row['firstname'] . '</td>';
-                                            echo '<td>' . ucwords($row['Skills']) . '</td>';
-                                            echo '<td class="d-flex align-items-center">
-                                            <button class="btn btn-primary me-2">Edit</button>
-                                            <button class="btn btn-danger">Delete</button></td>';
-                                            echo '</tr>';
-                                            $count++; 
-                                        }
-                                    } else {
-                                        echo '<tr><td colspan="5">No user logs found.</td></tr>';
-                                    }
-                                ?>
-                                </tbody>
+                                </tbody>                                
                             </table>
                         </div>
                     </div>
@@ -225,16 +201,119 @@ if(isset($_SESSION["logged_in"])){
                 <!-- Search results will be displayed here -->
                 <div id="search-results"></div>
             </div>
-            <!-- End of List of Users -->
+            <!-- End of List of Skills -->
         </div>
       </div>
 
       
     </div>
 
+          <div class="toast-container position-fixed bottom-0 end-0 p-3">
+            <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+              <div class="toast-header">
+                <strong class="me-auto">Notification</strong>
+                <small>Just now</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+              </div>
+              <div class="toast-body">
+                Skill deleted.
+              </div>
+            </div>
+          </div>
+
+          <!-- Delete Skills Modal -->
+          <div
+            class="modal fade"
+            id="delskill"
+            tabindex="-1"
+            aria-labelledby="delskill1"
+            aria-hidden="true"
+          >
+            <div class="modal-dialog modal-dialog-scrollable">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-4 fw-bold" id="delskill1">
+                    Delete Skill
+                  </h1>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div class="modal-body">
+                <form id="deleteSkillForm" method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" enctype="multipart/form-data">
+                    <input type="hidden" id="deleteSkillId" name="skill_id">
+                    <p class="pt-2">Are you sure you want to delete this skill?</p>
+                </div>
+                <div class="modal-footer">
+                <button class="btn btn-danger" type="submit">Delete</button>
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal"
+                  >
+                    Close
+                  </button>
+                </div>
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <!-- Edit Skills Modal -->
+          <div
+            class="modal fade"
+            id="editskill"
+            tabindex="-1"
+            aria-labelledby="editskill1"
+            aria-hidden="true"
+          >
+            <div class="modal-dialog modal-dialog-scrollable">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-4 fw-bold" id="editskill1">
+                    Edit Skill
+                  </h1>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div class="modal-body">
+                <form id="editSkillForm" method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" enctype="multipart/form-data">
+                    <input type="text" id="editSkillId" name="skill_id" value="<?php echo $skill_id; ?>">
+                </div>
+                <div class="modal-footer">
+                <button class="btn btn-danger" type="submit">Delete</button>
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal"
+                  >
+                    Close
+                  </button>
+                </div>
+                </form>
+              </div>
+            </div>
+          </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+
+    <script>
+      const myModal = document.getElementById("myModal");
+      const myInput = document.getElementById("myInput");
+
+      myModal.addEventListener("shown.bs.modal", () => {
+        myInput.focus();
+      });
+    </script>
 
     <script>
 
@@ -254,5 +333,137 @@ if(isset($_SESSION["logged_in"])){
                 }
 
             </script>
+
+    <script>
+        // Function to display the delete modal with the correct skill ID
+        function displayDeleteModal(skillId) {
+          document.getElementById('deleteSkillId').value = skillId;
+          $('#delskill').modal('show');
+        }
+
+        // Handle form submission for deleting a skill
+        document.getElementById("deleteSkillForm").addEventListener("submit", function(event) {
+          event.preventDefault(); // Prevent default form submission
+          // Modal will handle deletion using JavaScript
+        });
+
+
+        // Function to display the edit modal with the correct skill ID
+        function displayEditModal(skillId) {
+        fetch(`mgtget_skill.php?skill_id=${skillId}`)
+          .then(response => response.json())
+          .then(skill => {
+            document.getElementById('editSkillId').value = skill.id;
+            document.getElementById('editSkillName').value = skill.skill_name;
+            $('#editskill').modal('show');
+          });
+      }
+        
+        // Submit the edit form when the modal's "Save" button is clicked
+        $('#editskill').on('submit', '#editSkillForm', function(event) {
+          event.preventDefault(); // Prevent default form submission
+          editSkill();
+        });
+    </script>
+
+    <script>
+      // Function to load mgt from the database
+      function loadSkills() {
+            fetch("mgtload_skills.php") // PHP script to load skills
+            .then(response => response.json())
+            .then(skills => {
+                var skillsList = document.getElementById("skillsList");
+                skillsList.innerHTML = ""; // Clear existing skills
+                skills.forEach(skill => {
+                    var listItem = document.createElement("tr");
+                    listItem.innerHTML = `
+                      <tr>
+                        <td>${skill.id}</td>
+                        <td>${skill.userid}</td>
+                        <td>${skill.lastname}</td>
+                        <td>${skill.firstname}</td>
+                        <td>${skill.skill_name}</td>
+                        <td class='d-flex align-items-center'>
+                        <button onclick="displayEditModal(${skill.id})" class="btn btn-primary me-2">Edit
+                        </button>
+                        <button onclick="displayDeleteModal(${skill.id})" class="btn btn-danger">Delete
+                        </button></td>
+                      </tr>
+                    `;
+                    skillsList.appendChild(listItem);
+                });
+
+                // Clear skills input field
+                document.getElementById("skills").value = "";
+            });
+        }
+
+        // Submit the delete form when the modal's "Delete" button is clicked
+        $('#delskill').on('click', '#deleteSkillForm .btn-danger', function() {
+          var skillId = document.getElementById("deleteSkillId").value;
+          deleteSkill(skillId);
+        });
+
+        document.getElementById("deleteSkillForm").addEventListener("submit", function(event) {
+        event.preventDefault(); // Prevent default form submission
+
+        // Get the user ID from the hidden input field
+        var skillId = document.getElementById("deleteSkillId").value;
+
+        fetch("mgtdelete_skills.php", {
+          method: "POST",
+          body: new URLSearchParams({
+            skill_id: skillId
+          }),
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+          }
+        })
+        .then(response => response.text())
+        .then(data => {
+          // Close the modal after successful deletion
+          $('#delskill').modal('hide');
+          loadSkills();
+
+          // Show success toast
+          var toastLiveExample = document.getElementById('liveToast');
+          var toast = new bootstrap.Toast(toastLiveExample);
+          toast.show();
+        });
+      });
+
+      // EDIT SKILL 
+      function editSkill() {
+        var skillId = document.getElementById("editSkillId").value;
+        var skillName = document.getElementById("editSkillName").value;
+
+        fetch("mgtedit_skills.php", {
+          method: "POST",
+          body: new URLSearchParams({
+            skill_id: skillId,
+            skill_name: skillName
+          }),
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+          }
+        })
+        .then(response => response.text())
+        .then(data => {
+          // Close the modal after successful edit
+          $('#editskill').modal('hide');
+          loadSkills();
+
+          // Show success toast
+          var toastLiveExample = document.getElementById('liveToast');
+          var toast = new bootstrap.Toast(toastLiveExample);
+          toast.show();
+          toast.text = "Changes saved.";
+        });
+      }
+
+        // Initial load of skills when the page loads
+        loadSkills();
+    </script>
+
   </body>
 </html>

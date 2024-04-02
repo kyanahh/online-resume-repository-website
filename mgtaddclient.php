@@ -16,7 +16,7 @@ if(isset($_SESSION["logged_in"])){
     $textaccount = "Account";
 }
 
-$usertype = 1;
+$usertype = 2;
 
 $firstname = $lastname = $middlename = $emailadd = $birthdate = $gender =  $civilstatus = $phone = 
 $password = $confirmpassword = $errorMessage = $successMessage = "";
@@ -50,11 +50,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if (!$result) {
                 $errorMessage = "Invalid query " . $connection->error;
             } else {
-                header("Location: mgtmanagement.php");
+                header("Location: mgtclients.php");
             }
         }
     
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -149,10 +150,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
               aria-expanded="false"
               aria-controls="settings"
             >
-              <div class="d-flex align-items-center">
-                <i class="fas fa-cog pe-2"></i>
-                <span class="topic">Settings </span>
-              </div>
+            <div class="d-flex align-items-center">
+              <i class="fas fa-cog pe-2"></i>
+              <span class="topic">Settings </span>
+            </div>
               <i class="bi bi-chevron-down"></i>
             </a>
             <ul
@@ -168,7 +169,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
               </li>
               <li class="sidebar-item">
                 <a href="mgtpassword.php" class="sidebar-link">
-                  <i class="fa-solid fa-key"></i>
+                <i class="fa-solid fa-key"></i>
                   <span class="topic"> Change Password</span>
                 </a>
               </li>
@@ -199,7 +200,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
         <div class="p-4">
           <nav style="--bs-breadcrumb-divider: '>'; font-size: 14px">
-            <h5>Add Management Account</h5>
+            <h5>Add Client Account</h5>
           </nav>
 
           <hr />
@@ -282,12 +283,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
               </div>
             </div>
             <div class="d-flex justify-content-end">
-              <a class="btn btn-danger px-4 me-2" href="mgtmanagement.php">Cancel</a>
+              <a class="btn btn-danger px-4 me-2" href="mgtclients.php">Cancel</a>
               <button type="submit" class="btn btn-primary px-4">Submit</button>
             </div>
           </form>
         </div>
       </div>
+
+      
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
