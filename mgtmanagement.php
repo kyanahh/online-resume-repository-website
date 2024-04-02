@@ -253,7 +253,7 @@ if(isset($_SESSION["logged_in"])){
           <div class="toast-container position-fixed bottom-0 end-0 p-3">
             <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
               <div class="toast-header">
-                <strong class="me-auto">Management Account</strong>
+                <strong class="me-auto">Notification</strong>
                 <small>Just now</small>
                 <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
               </div>
@@ -314,11 +314,11 @@ if(isset($_SESSION["logged_in"])){
     <script>
       // Function to load mgt from the database
       function loadMgt() {
-            fetch("mgtload_mgt.php") // PHP script to load skills
+            fetch("mgtload_mgt.php") // PHP script to load mgt
             .then(response => response.json())
             .then(mgts => {
                 var mgtList = document.getElementById("mgtList");
-                mgtList.innerHTML = ""; // Clear existing skills
+                mgtList.innerHTML = ""; // Clear existing mgt
                 mgts.forEach(mgt => {
                     var listItem = document.createElement("tr");
                     listItem.innerHTML = `
@@ -328,7 +328,8 @@ if(isset($_SESSION["logged_in"])){
                         <td>${mgt.firstname}</td>
                         <td>${mgt.email}</td>
                         <td>${mgt.phone}</td>
-                        <td><button onclick="displayDeleteModal(${mgt.userid})" class="btn btn-danger">Delete
+                        <td><button onclick="viewMgt(${mgt.userid})" class="btn btn-dark">View</button>
+                        <button onclick="displayDeleteModal(${mgt.userid})" class="btn btn-danger">Delete
                         </button></td>
                       </tr>
                     `;
@@ -338,6 +339,11 @@ if(isset($_SESSION["logged_in"])){
                 // Clear mgts input field
                 document.getElementById("mgts").value = "";
             });
+        }
+
+        // view mgt 
+        function viewMgt(mgtId) {
+          window.location.href = "mgtviewmgt.php?userid=" + mgtId; // Redirect to mgtviewmgt.php with userid
         }
 
         // Submit the delete form when the modal's "Delete" button is clicked

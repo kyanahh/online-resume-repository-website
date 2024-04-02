@@ -164,19 +164,203 @@ if(isset($_SESSION["logged_in"])){
           </nav>
 
           <hr />
-          <div class="row">
-            <div class="col">
-              <p>Page content goes here</p>
+          <!-- List of Mgt -->
+          <div class="px-3">
+                <div class="row">
+                    <div class="col input-group mb-3">
+                        <input type="text" class="form-control" id="searchClientInput" onchange="searchClient()" placeholder="Search" aria-describedby="button-addon2">
+                    </div>
+                    <div class="col-sm-1">
+                      <a href="mgtclients.php" class="btn btn-dark px-4"><i class="bi bi-arrow-clockwise"></i></a>
+                    </div>
+                    <div class="col-sm-1">
+                      <a href="mgtaddclient.php" class="btn btn-dark px-4"><i class="bi bi-plus-lg"></i></a>
+                    </div>  
+                </div>
+                
+                <div class="card" style="height: 450px;">
+                    <div class="card-body">
+                        <div class="table-responsive" style="height: 420px;">
+                            <table id="client-table" class="table table-bordered table-hover">
+                                <thead class="table-light" style="position: sticky; top: 0;">
+                                    <tr>
+                                        <th scope="col">User ID</th>
+                                        <th scope="col">Last Name</th>
+                                        <th scope="col">First Name</th>
+                                        <th scope="col">Email</th>
+                                        <th scope="col">Phone</th>
+                                        <th scope="col">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="table-group-divider" id="clientList">
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!-- Search results will be displayed here -->
+                <div id="search-results"></div>
             </div>
-          </div>
+            <!-- End of List of Mgt -->
         </div>
       </div>
 
       
     </div>
 
+    <!-- Delete Mgt Modal -->
+          <div
+            class="modal fade"
+            id="delclient"
+            tabindex="-1"
+            aria-labelledby="delclient1"
+            aria-hidden="true"
+          >
+            <div class="modal-dialog modal-dialog-scrollable">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-4 fw-bold" id="delclient1">
+                    Delete Account
+                  </h1>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div class="modal-body">
+                <form id="deleteClientForm" method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" enctype="multipart/form-data">
+                    <input type="hidden" id="deleteClientId" name="userid">
+                    <p class="pt-2">Are you sure you want to delete this account?</p>
+                </div>
+                <div class="modal-footer">
+                <button class="btn btn-danger" type="submit">Delete</button>
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal"
+                  >
+                    Close
+                  </button>
+                </div>
+                </form>
+              </div>
+            </div>
+          </div>
+
+        <div class="toast-container position-fixed bottom-0 end-0 p-3">
+            <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+              <div class="toast-header">
+                <strong class="me-auto">Notification</strong>
+                <small>Just now</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+              </div>
+              <div class="toast-body">
+                Account deleted.
+              </div>
+            </div>
+          </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+
+    <script>
+      const myModal = document.getElementById("myModal");
+      const myInput = document.getElementById("myInput");
+
+      myModal.addEventListener("shown.bs.modal", () => {
+        myInput.focus();
+      });
+    </script>
+
+    <script>
+        // Function to display the delete modal with the correct user ID
+        function displayDeleteModal(clientId) {
+          document.getElementById('deleteClientId').value = clientId;
+          $('#delclient').modal('show');
+        }
+
+        // Handle form submission for deleting a client
+        document.getElementById("deleteClientForm").addEventListener("submit", function(event) {
+          event.preventDefault(); // Prevent default form submission
+          // Modal will handle deletion using JavaScript
+        });
+    </script>
+
+<script>
+      // Function to load mgt from the database
+      function loadClient() {
+            fetch("mgtload_client.php") // PHP script to load client
+            .then(response => response.json())
+            .then(clients => {
+                var clientList = document.getElementById("clientList");
+                clientList.innerHTML = ""; // Clear existing clients
+                clients.forEach(client => {
+                    var listItem = document.createElement("tr");
+                    listItem.innerHTML = `
+                      <tr>
+                        <td>${client.userid}</td>
+                        <td>${client.lastname}</td>
+                        <td>${client.firstname}</td>
+                        <td>${client.email}</td>
+                        <td>${client.phone}</td>
+                        <td><button onclick="viewClient(${client.userid})" class="btn btn-dark">View</button>
+                        <button onclick="displayDeleteModal(${client.userid})" class="btn btn-danger">Delete</button>
+                        </td>
+                      </tr>
+                    `;
+                    clientList.appendChild(listItem);
+                });
+
+                // Clear clients input field
+                document.getElementById("clients").value = "";
+            });
+        }
+
+        // view client 
+        function viewClient(clientId) {
+          window.location.href = "mgtviewclient.php?userid=" + clientId; // Redirect to mgtviewclient.php with userid
+        }
+
+        // Submit the delete form when the modal's "Delete" button is clicked
+        $('#delclient').on('click', '#deleteClientForm .btn-danger', function() {
+          var clientId = document.getElementById("deleteClientId").value;
+          deleteClient(clientId);
+        });
+
+        document.getElementById("deleteClientForm").addEventListener("submit", function(event) {
+        event.preventDefault(); // Prevent default form submission
+
+        // Get the user ID from the hidden input field
+        var clientId = document.getElementById("deleteClientId").value;
+
+        fetch("mgtdelete_client.php", {
+          method: "POST",
+          body: new URLSearchParams({
+            userid: clientId
+          }),
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+          }
+        })
+        .then(response => response.text())
+        .then(data => {
+          // Close the modal after successful deletion
+          $('#delclient').modal('hide');
+          loadClient();
+
+          // Show success toast
+          var toastLiveExample = document.getElementById('liveToast');
+          var toast = new bootstrap.Toast(toastLiveExample);
+          toast.show();
+        });
+      });
+
+        // Initial load of clients when the page loads
+        loadClient();
+      </script>
   </body>
 </html>
