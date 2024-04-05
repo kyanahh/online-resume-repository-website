@@ -204,6 +204,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
           <hr />
           <form method="POST" action="<?php htmlspecialchars("SELF_PHP"); ?>">
+                <?php
+                    if (!empty($errorMessage)) {
+                        echo "
+                        <div class='alert alert-warning alert-dismissible mt-2 fade show' role='alert'>
+                            <strong>$errorMessage</strong>
+                            <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+                        </div>
+                        ";
+                    }
+                ?>
             <!-- Firstname, middlename, lastname -->
             <div class="row">
               <div class="col mb-3">

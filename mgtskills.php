@@ -174,7 +174,10 @@ if(isset($_SESSION["logged_in"])){
                     </div>
                     <div class="col-sm-1">
                       <a href="mgtskills.php" class="btn btn-dark px-4"><i class="bi bi-arrow-clockwise"></i></a>
-                    </div>                    
+                    </div>
+                    <div class="col-sm-1">
+                      <a href="mgtaddskills.php" class="btn btn-dark px-4"><i class="bi bi-plus-lg"></i></a>
+                    </div>                     
                 </div>
                 
                 <div class="card" style="height: 450px;">
