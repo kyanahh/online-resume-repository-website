@@ -16,44 +16,37 @@ if(isset($_SESSION["logged_in"])){
     $textaccount = "Account";
 }
 
-$usertype = 2;
+if (isset($_GET["userid"])) {
+    $userid = $_GET["userid"];
 
-$firstname = $lastname = $middlename = $emailadd = $birthdate = $gender =  $civilstatus = $phone = 
-$password = $confirmpassword = $errorMessage = $successMessage = "";
+    $query = "SELECT * FROM users WHERE userid = '$userid'";
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $firstname =  ucwords($_POST["firstname"]);
-    $lastname =  ucwords($_POST["lastname"]);
-    $lastname =  ucwords($_POST["middlename"]);
-    $birthdate = $_POST["birthdate"];
-    $gender = $_POST["gender"];
-    $civilstatus = $_POST["civilstatus"];
-    $phone = $_POST["phone"];
-    $emailadd = $_POST["emailadd"];
-    $password = $_POST["password"];
+    $res = $connection->query($query);
 
-        // Check if the email already exists in the database
-        $emailExistsQuery = "SELECT * FROM users WHERE email = '$emailadd'";
-        $emailExistsResult = $connection->query($emailExistsQuery);
+    if ($res && $res->num_rows > 0) {
+        $row = $res->fetch_assoc();
 
-        if ($emailExistsResult->num_rows > 0) {
-            $errorMessage = "User already exists";
-        } else {
-            // Insert the user data into the database
-            $regdate = date("Y-m-d H:i:s");
-            $insertQuery = "INSERT INTO users (firstname, lastname, middlename, bday, gender, civilstatus, 
-            phone, email, password, usertypeid, regdate) 
-            VALUES ('$firstname', '$lastname', '$middlename', '$birthdate', '$gender', '$civilstatus', 
-            '$phone', '$emailadd', '$password', '$usertype', '$regdate')";
-            $result = $connection->query($insertQuery);
+        $userid1 = $row["userid"];
+        $firstname = $row["firstname"];
+        $middlename = $row["middlename"];
+        $lastname = $row["lastname"];
+        $birthdate = strftime("%B %d, %Y", strtotime($row["bday"]));
+        $gender = $row["gender"];
+        $civilstatus = $row["civilstatus"];
+        $phone = $row["phone"];
+        $emailadd = $row["email"];
+        $regdate = $row["regdate"];
+        $gdrive = $row["gdrive"];
+        $street = $row["street"];
+        $brgy = $row["brgy"];
+        $city = $row["city"];
+        $province = $row["province"];
 
-            if (!$result) {
-                $errorMessage = "Invalid query " . $connection->error;
-            } else {
-                header("Location: mgtclients.php");
-            }
-        }
-    
+    } else {
+        $errorMessage1 = "User not found.";
+    }
+} else {
+    $errorMessage1 = "User ID is missing.";
 }
 
 ?>
@@ -200,34 +193,48 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
         <div class="p-4">
           <nav style="--bs-breadcrumb-divider: '>'; font-size: 14px">
-            <h5>Add Client Account</h5>
+            <h5>Candidate Account (User)</h5>
           </nav>
 
           <hr />
-          <form method="POST" action="<?php htmlspecialchars("SELF_PHP"); ?>">
-                <?php
-                    if (!empty($errorMessage)) {
-                        echo "
-                        <div class='alert alert-warning alert-dismissible mt-2 fade show' role='alert'>
-                            <strong>$errorMessage</strong>
-                            <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
-                        </div>
-                        ";
-                    }
-                ?>
-            <!-- Firstname, middlename, lastname -->
+            <!-- userid Firstname, lastname -->
             <div class="row">
-              <div class="col mb-3">
-                <label for="firstname" class="form-label">First Name<span class="text-danger">*</span></label>
+                <div class="col-sm-4 mb-3">
+                <label for="firstname" class="form-label">UserID</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="userid"
+                  name="userid"
+                  value="<?php echo $userid; ?>"
+                  disabled
+                />
+                </div>
+                <div class="col mb-3">
+                <label for="firstname" class="form-label">First Name</label>
                 <input
                   type="text"
                   class="form-control"
                   id="firstname"
                   name="firstname"
                   value="<?php echo $firstname; ?>"
-                  required
+                  disabled
                 />
               </div>
+              <div class="col mb-3">
+                <label for="lastname" class="form-label">Last Name</span></label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="lastname"
+                  name="lastname"
+                  value="<?php echo $lastname; ?>"
+                  disabled
+                />
+              </div>
+            </div>
+            <!-- middlename, bday, gender -->
+            <div class="row">
               <div class="col mb-3">
                 <label for="middlename" class="form-label">Middle Name</label>
                 <input
@@ -236,67 +243,69 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                   id="middlename"
                   name="middlename"
                   value="<?php echo $middlename; ?>"
+                  disabled
                 />
               </div>
               <div class="col mb-3">
-                <label for="lastname" class="form-label">Last Name<span class="text-danger">*</span></label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="lastname"
-                  name="lastname"
-                  value="<?php echo $lastname; ?>"
-                  required
-                />
+                <label for="birthdate" class="form-label">Birthday</label>
+                <input type="text" class="form-control" id="birthdate" name="birthdate"
+                value="<?php echo $birthdate; ?>" disabled>
+              </div>
+              <div class="col mb-3">
+                <label for="gender" class="form-label">Gender</label>
+                <input type="text" class="form-control" id="gender" name="gender" 
+                value="<?php echo $gender; ?>" disabled>
               </div>
             </div>
-            <!-- bday, gender, civilstats -->
+            <!-- civilstats, email, phone -->
             <div class="row">
-              <div class="col mb-3">
-                <label for="birthdate" class="form-label">Birthday<span class="text-danger">*</span></label>
-                <input type="date" class="form-control" id="birthdate" name="birthdate" placeholder="Birthday" 
-                value="<?php echo $birthdate; ?>" required>
-              </div>
-              <div class="col mb-3">
-                <label for="gender" class="form-label">Gender<span class="text-danger">*</label>
-                <select id="gender" name="gender" class="form-select" required>
-                  <option value="" disabled selected>Select Gender</option>
-                  <option value="Male" <?php echo ($gender === "Male") ? "selected" : ""; ?>>Male</option>
-                  <option value="Female" <?php echo ($gender === "Female") ? "selected" : ""; ?>>Female</option>
-                </select>
-              </div>
               <div class="col mb-3">
                 <label for="civilstatus" class="form-label">Civil Status</label>
-                <select id="civilstatus" name="civilstatus" class="form-select">
-                  <option value="" disabled selected>Select Civil Status</option>
-                  <option value="Single" <?php echo ($civilstatus === "Single") ? "selected" : ""; ?>>Single</option>
-                  <option value="Married" <?php echo ($civilstatus === "Married") ? "selected" : ""; ?>>Married</option>
-                  <option value="Separated" <?php echo ($civilstatus === "Separated") ? "selected" : ""; ?>>Separated</option>
-                  <option value="Divorced" <?php echo ($civilstatus === "Divorced") ? "selected" : ""; ?>>Divorced</option>
-                  <option value="Widowed" <?php echo ($civilstatus === "Widowed") ? "selected" : ""; ?>>Widowed</option>
-                </select>
+                <input type="text" class="form-control" id="civilstatus" name="civilstatus" 
+                value="<?php echo $civilstatus; ?>" disabled>
               </div>
-            </div>
-            <!-- Phone, email, password -->
-            <div class="row">
+              <div class="col mb-3">
+                <label for="emailadd" class="form-label">Email address</label>
+                <input type="text" class="form-control" id="emailadd" name="emailadd" value="<?php echo $emailadd; ?>" disabled>
+              </div>
               <div class="col mb-3">
                 <label for="phone" class="form-label">Phone</label>
-                <input type="text" class="form-control" id="phone" name="phone" value="<?php echo $phone; ?>">
+                <input type="text" class="form-control" id="phone" name="phone" value="<?php echo $phone; ?>" disabled>
+              </div>
+            </div>
+            <!-- street, brgy, city -->
+            <div class="row">
+              <div class="col mb-3">
+                <label for="street" class="form-label">Street</label>
+                <input type="text" class="form-control" id="street" name="street" value="<?php echo $street; ?>" disabled>
               </div>
               <div class="col mb-3">
-                <label for="emailadd" class="form-label">Email address<span class="text-danger">*</span></label>
-                <input type="text" class="form-control" id="emailadd" name="emailadd" placeholder="Email address" value="<?php echo $emailadd; ?>" required>
+                <label for="brgy" class="form-label">Barangay</label>
+                <input type="text" class="form-control" id="brgy" name="brgy" value="<?php echo $brgy; ?>" disabled>
               </div>
               <div class="col mb-3">
-                <label for="password" class="form-label">Temporary Password<span class="text-danger">*</span></label>
-                <input type="password" class="form-control" id="password" name="password" placeholder="Temporary Password" value="<?php echo $password; ?>" required>
+                <label for="city" class="form-label">City</label>
+                <input type="text" class="form-control" id="city" name="city" value="<?php echo $city; ?>" disabled>
+              </div>
+            </div>
+            <!-- province, gdrive, regdate -->
+            <div class="row">
+              <div class="col mb-3">
+                <label for="province" class="form-label">Province</label>
+                <input type="text" class="form-control" id="province" name="province" value="<?php echo $province; ?>" disabled>
+              </div>
+              <div class="col mb-3">
+                <label for="gdrive" class="form-label">Google Drive</label>
+                <input type="text" class="form-control" id="gdrive" name="gdrive" value="<?php echo $gdrive; ?>" disabled>
+              </div>
+              <div class="col mb-3">
+                <label for="regdate" class="form-label">Registered Date</label>
+                <input type="text" class="form-control" id="regdate" name="regdate" value="<?php echo $regdate; ?>" disabled>
               </div>
             </div>
             <div class="d-flex justify-content-end">
-              <a class="btn btn-danger px-4 me-2" href="mgtclients.php">Cancel</a>
-              <button type="submit" class="btn btn-primary px-4">Submit</button>
+              <a class="btn btn-dark px-4 me-2" href="mgtusers.php">Back</a>
             </div>
-          </form>
         </div>
       </div>
 

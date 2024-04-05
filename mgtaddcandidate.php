@@ -16,7 +16,8 @@ if(isset($_SESSION["logged_in"])){
     $textaccount = "Account";
 }
 
-$usertype = 2;
+
+$usertype = 3;
 
 $firstname = $lastname = $middlename = $emailadd = $birthdate = $gender =  $civilstatus = $phone = 
 $password = $confirmpassword = $errorMessage = $successMessage = "";
@@ -50,12 +51,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if (!$result) {
                 $errorMessage = "Invalid query " . $connection->error;
             } else {
-                header("Location: mgtclients.php");
+                header("Location: mgtusers.php");
             }
         }
     
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -200,7 +200,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
         <div class="p-4">
           <nav style="--bs-breadcrumb-divider: '>'; font-size: 14px">
-            <h5>Add Client Account</h5>
+            <h5>Add Candidate Account</h5>
           </nav>
 
           <hr />
@@ -293,7 +293,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
               </div>
             </div>
             <div class="d-flex justify-content-end">
-              <a class="btn btn-danger px-4 me-2" href="mgtclients.php">Cancel</a>
+              <a class="btn btn-danger px-4 me-2" href="mgtusers.php">Cancel</a>
               <button type="submit" class="btn btn-primary px-4">Submit</button>
             </div>
           </form>

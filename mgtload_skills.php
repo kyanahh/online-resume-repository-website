@@ -8,7 +8,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
     $selectQuery = "SELECT users.userid, users.lastname, 
     users.firstname, user_skills.id, user_skills.skill_name FROM users 
     INNER JOIN user_skills ON users.userid = user_skills.userid 
-    WHERE users.usertypeid = 3";
+    WHERE users.usertypeid = 3 ORDER BY id DESC";
 
     $result = $connection->query($selectQuery);
 

@@ -16,46 +16,33 @@ if(isset($_SESSION["logged_in"])){
     $textaccount = "Account";
 }
 
-$usertype = 2;
-
-$firstname = $lastname = $middlename = $emailadd = $birthdate = $gender =  $civilstatus = $phone = 
-$password = $confirmpassword = $errorMessage = $successMessage = "";
+$userid = $skill = $errorMessage = $successMessage = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $firstname =  ucwords($_POST["firstname"]);
-    $lastname =  ucwords($_POST["lastname"]);
-    $lastname =  ucwords($_POST["middlename"]);
-    $birthdate = $_POST["birthdate"];
-    $gender = $_POST["gender"];
-    $civilstatus = $_POST["civilstatus"];
-    $phone = $_POST["phone"];
-    $emailadd = $_POST["emailadd"];
-    $password = $_POST["password"];
+    $userid =  $_POST["userid"];
+    $skill =  ucwords($_POST["skill"]);
 
-        // Check if the email already exists in the database
-        $emailExistsQuery = "SELECT * FROM users WHERE email = '$emailadd'";
-        $emailExistsResult = $connection->query($emailExistsQuery);
+    // Check if the userid already exists in the database
+    $useridExistsQuery = "SELECT * FROM users WHERE userid = '$userid' AND usertypeid = 3";
+    $useridExistsResult = $connection->query($useridExistsQuery);
 
-        if ($emailExistsResult->num_rows > 0) {
-            $errorMessage = "User already exists";
+    if ($useridExistsResult->num_rows > 0) {
+
+        // Insert the skill data into the database
+        $insertQuery = "INSERT INTO user_skills (userid, skill_name) 
+        VALUES ('$userid', '$skill')";
+        $result = $connection->query($insertQuery);
+
+        if (!$result) {
+            $errorMessage = "Invalid query " . $connection->error;
         } else {
-            // Insert the user data into the database
-            $regdate = date("Y-m-d H:i:s");
-            $insertQuery = "INSERT INTO users (firstname, lastname, middlename, bday, gender, civilstatus, 
-            phone, email, password, usertypeid, regdate) 
-            VALUES ('$firstname', '$lastname', '$middlename', '$birthdate', '$gender', '$civilstatus', 
-            '$phone', '$emailadd', '$password', '$usertype', '$regdate')";
-            $result = $connection->query($insertQuery);
-
-            if (!$result) {
-                $errorMessage = "Invalid query " . $connection->error;
-            } else {
-                header("Location: mgtclients.php");
-            }
+            header("Location: mgtskills.php");
         }
+    } else {
+        $errorMessage = "User ID does not exist or User is not a candidate";
+    }
     
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -200,7 +187,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
         <div class="p-4">
           <nav style="--bs-breadcrumb-divider: '>'; font-size: 14px">
-            <h5>Add Client Account</h5>
+            <h5>Add Skill</h5>
           </nav>
 
           <hr />
@@ -215,85 +202,34 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         ";
                     }
                 ?>
-            <!-- Firstname, middlename, lastname -->
+            <!-- userid, skill -->
             <div class="row">
-              <div class="col mb-3">
-                <label for="firstname" class="form-label">First Name<span class="text-danger">*</span></label>
+              <div class="col-sm-4 mb-3">
+                <label for="userid" class="form-label">User ID<span class="text-danger">*</span></label>
                 <input
                   type="text"
                   class="form-control"
-                  id="firstname"
-                  name="firstname"
-                  value="<?php echo $firstname; ?>"
-                  required
-                />
-              </div>
-              <div class="col mb-3">
-                <label for="middlename" class="form-label">Middle Name</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="middlename"
-                  name="middlename"
-                  value="<?php echo $middlename; ?>"
-                />
-              </div>
-              <div class="col mb-3">
-                <label for="lastname" class="form-label">Last Name<span class="text-danger">*</span></label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="lastname"
-                  name="lastname"
-                  value="<?php echo $lastname; ?>"
+                  id="userid"
+                  name="userid"
+                  value="<?php echo $userid; ?>"
                   required
                 />
               </div>
             </div>
-            <!-- bday, gender, civilstats -->
             <div class="row">
-              <div class="col mb-3">
-                <label for="birthdate" class="form-label">Birthday<span class="text-danger">*</span></label>
-                <input type="date" class="form-control" id="birthdate" name="birthdate" placeholder="Birthday" 
-                value="<?php echo $birthdate; ?>" required>
-              </div>
-              <div class="col mb-3">
-                <label for="gender" class="form-label">Gender<span class="text-danger">*</label>
-                <select id="gender" name="gender" class="form-select" required>
-                  <option value="" disabled selected>Select Gender</option>
-                  <option value="Male" <?php echo ($gender === "Male") ? "selected" : ""; ?>>Male</option>
-                  <option value="Female" <?php echo ($gender === "Female") ? "selected" : ""; ?>>Female</option>
-                </select>
-              </div>
-              <div class="col mb-3">
-                <label for="civilstatus" class="form-label">Civil Status</label>
-                <select id="civilstatus" name="civilstatus" class="form-select">
-                  <option value="" disabled selected>Select Civil Status</option>
-                  <option value="Single" <?php echo ($civilstatus === "Single") ? "selected" : ""; ?>>Single</option>
-                  <option value="Married" <?php echo ($civilstatus === "Married") ? "selected" : ""; ?>>Married</option>
-                  <option value="Separated" <?php echo ($civilstatus === "Separated") ? "selected" : ""; ?>>Separated</option>
-                  <option value="Divorced" <?php echo ($civilstatus === "Divorced") ? "selected" : ""; ?>>Divorced</option>
-                  <option value="Widowed" <?php echo ($civilstatus === "Widowed") ? "selected" : ""; ?>>Widowed</option>
-                </select>
+              <div class="col-sm-4 mb-3">
+                <label for="skill" class="form-label">Skill</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="skill"
+                  name="skill"
+                  value="<?php echo $skill; ?>"
+                />
               </div>
             </div>
-            <!-- Phone, email, password -->
-            <div class="row">
-              <div class="col mb-3">
-                <label for="phone" class="form-label">Phone</label>
-                <input type="text" class="form-control" id="phone" name="phone" value="<?php echo $phone; ?>">
-              </div>
-              <div class="col mb-3">
-                <label for="emailadd" class="form-label">Email address<span class="text-danger">*</span></label>
-                <input type="text" class="form-control" id="emailadd" name="emailadd" placeholder="Email address" value="<?php echo $emailadd; ?>" required>
-              </div>
-              <div class="col mb-3">
-                <label for="password" class="form-label">Temporary Password<span class="text-danger">*</span></label>
-                <input type="password" class="form-control" id="password" name="password" placeholder="Temporary Password" value="<?php echo $password; ?>" required>
-              </div>
-            </div>
-            <div class="d-flex justify-content-end">
-              <a class="btn btn-danger px-4 me-2" href="mgtclients.php">Cancel</a>
+            <div class="col-sm-4 d-flex justify-content-end pe-3">
+              <a class="btn btn-danger px-4 me-2" href="mgtskills.php">Cancel</a>
               <button type="submit" class="btn btn-primary px-4">Submit</button>
             </div>
           </form>
