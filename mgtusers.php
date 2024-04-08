@@ -325,6 +325,11 @@ if(isset($_SESSION["logged_in"])){
           window.location.href = "mgtviewcandidate.php?userid=" + candidateId; // Redirect to mgtviewcandidate.php with userid
         }
 
+        // view candidates 
+        function editCandidate(candidateId) {
+          window.location.href = "mgteditcandidate.php?userid=" + candidateId; // Redirect to mgteditcandidate.php with userid
+        }
+
           // Submit the delete form when the modal's "Delete" button is clicked
           $('#delcandidate').on('click', '#deleteCandidateForm .btn-danger', function() {
           var candidateId = document.getElementById("deleteCandidateId").value;
