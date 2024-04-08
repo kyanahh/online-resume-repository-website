@@ -308,6 +308,7 @@ if(isset($_SESSION["logged_in"])){
                         <td>${client.email}</td>
                         <td>${client.phone}</td>
                         <td><button onclick="viewClient(${client.userid})" class="btn btn-dark">View</button>
+                        <button onclick="editClient(${client.userid})" class="btn btn-primary">Edit</button>
                         <button onclick="displayDeleteModal(${client.userid})" class="btn btn-danger">Delete</button>
                         </td>
                       </tr>
@@ -323,6 +324,11 @@ if(isset($_SESSION["logged_in"])){
         // view client 
         function viewClient(clientId) {
           window.location.href = "mgtviewclient.php?userid=" + clientId; // Redirect to mgtviewclient.php with userid
+        }
+
+        // edit client 
+        function editClient(clientId) {
+          window.location.href = "mgteditclient.php?userid=" + clientId; // Redirect to mgteditclient.php with userid
         }
 
         // Submit the delete form when the modal's "Delete" button is clicked
