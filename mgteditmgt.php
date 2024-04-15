@@ -83,7 +83,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($userid)) {
     $result = $connection->query($query1);
 
     if ($result) {
-        header("Location: mgtusers.php");
+        header("Location: mgtmanagement.php");
         } else {
             $errorMessage = "Error updating details";
     }
@@ -233,7 +233,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($userid)) {
         </div>
         <div class="p-4">
           <nav style="--bs-breadcrumb-divider: '>'; font-size: 14px">
-            <h5>Edit Candidate Account (User)</h5>
+            <h5>Edit Client Account (User)</h5>
           </nav>
 
           <hr />
@@ -353,7 +353,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($userid)) {
               </div>
             </div>
             <div class="d-flex justify-content-end">
-                <a class="btn btn-danger px-4 me-2" href="mgtusers.php">Cancel</a>
+                <a class="btn btn-danger px-4 me-2" href="mgtmanagement.php">Cancel</a>
                 <button type="submit" class="btn btn-primary px-4">Save</button>
             </div>
             </form>

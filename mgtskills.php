@@ -349,24 +349,6 @@ if(isset($_SESSION["logged_in"])){
           event.preventDefault(); // Prevent default form submission
           // Modal will handle deletion using JavaScript
         });
-
-
-        // Function to display the edit modal with the correct skill ID
-        function displayEditModal(skillId) {
-        fetch(`mgtget_skill.php?skill_id=${skillId}`)
-          .then(response => response.json())
-          .then(skill => {
-            document.getElementById('editSkillId').value = skill.id;
-            document.getElementById('editSkillName').value = skill.skill_name;
-            $('#editskill').modal('show');
-          });
-      }
-        
-        // Submit the edit form when the modal's "Save" button is clicked
-        $('#editskill').on('submit', '#editSkillForm', function(event) {
-          event.preventDefault(); // Prevent default form submission
-          editSkill();
-        });
     </script>
 
     <script>
@@ -387,8 +369,7 @@ if(isset($_SESSION["logged_in"])){
                         <td>${skill.firstname}</td>
                         <td>${skill.skill_name}</td>
                         <td class='d-flex align-items-center'>
-                        <button onclick="displayEditModal(${skill.id})" class="btn btn-primary me-2">Edit
-                        </button>
+                        <button onclick="editSkill(${skill.id})" class="btn btn-primary me-2">Edit</button>
                         <button onclick="displayDeleteModal(${skill.id})" class="btn btn-danger">Delete
                         </button></td>
                       </tr>
@@ -399,6 +380,11 @@ if(isset($_SESSION["logged_in"])){
                 // Clear skills input field
                 document.getElementById("skills").value = "";
             });
+        }
+
+        // edit skill 
+        function editSkill(skillId) {
+          window.location.href = "mgteditskill.php?id=" + skillId; // Redirect to mgteditskill.php with userid
         }
 
         // Submit the delete form when the modal's "Delete" button is clicked
@@ -434,35 +420,6 @@ if(isset($_SESSION["logged_in"])){
           toast.show();
         });
       });
-
-      // EDIT SKILL 
-      function editSkill() {
-        var skillId = document.getElementById("editSkillId").value;
-        var skillName = document.getElementById("editSkillName").value;
-
-        fetch("mgtedit_skills.php", {
-          method: "POST",
-          body: new URLSearchParams({
-            skill_id: skillId,
-            skill_name: skillName
-          }),
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
-          }
-        })
-        .then(response => response.text())
-        .then(data => {
-          // Close the modal after successful edit
-          $('#editskill').modal('hide');
-          loadSkills();
-
-          // Show success toast
-          var toastLiveExample = document.getElementById('liveToast');
-          var toast = new bootstrap.Toast(toastLiveExample);
-          toast.show();
-          toast.text = "Changes saved.";
-        });
-      }
 
         // Initial load of skills when the page loads
         loadSkills();

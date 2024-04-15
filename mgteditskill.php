@@ -16,76 +16,43 @@ if(isset($_SESSION["logged_in"])){
     $textaccount = "Account";
 }
 
-$lastname = $middlename = $civilstatus = $phone = $emailadd = $gdrive = $street = $brgy = $city = $province = 
-$errorMessage = "";
+$skill = $errorMessage = "";
 
-if (isset($_GET["userid"])) {
-    $userid = $_GET["userid"];
+if (isset($_GET["id"])) {
+    $skill_id = $_GET["id"];
 
-    $query = "SELECT * FROM users WHERE userid = '$userid'";
+    $query = "SELECT * FROM user_skills WHERE id = '$skill_id'";
 
     $res = $connection->query($query);
 
     if ($res && $res->num_rows > 0) {
         $row = $res->fetch_assoc();
 
-        $userid1 = $row["userid"];
-        $firstname = $row["firstname"];
-        $middlename = $row["middlename"];
-        $lastname = $row["lastname"];
-        $birthdate = strftime("%B %d, %Y", strtotime($row["bday"]));
-        $gender = $row["gender"];
-        $civilstatus = $row["civilstatus"];
-        $phone = $row["phone"];
-        $emailadd = $row["email"];
-        $password = $row["password"];
-        $gdrive = $row["gdrive"];
-        $street = $row["street"];
-        $brgy = $row["brgy"];
-        $city = $row["city"];
-        $province = $row["province"];
+        $skill_id = $row["id"];
+        $userid = $row["userid"];
+        $skill = $row["skill_name"];
 
     } else {
-        $errorMessage = "User not found.";
+        $errorMessage = "Skill not found.";
     }
 } else {
-    $errorMessage = "User ID is missing.";
+    $errorMessage = "Skill is missing.";
 }
 
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($userid)) {
-    $lastname = $_POST["lastname"];
-    $middlename = $_POST["middlename"];
-    $civilstatus = $_POST["civilstatus"];
-    $phone = $_POST["phone"];
-    $emailadd = $_POST["emailadd"];
-    $password = $_POST["password"];
-    $gdrive = $_POST["gdrive"];
-    $street = $_POST["street"];
-    $brgy = $_POST["brgy"];
-    $city = $_POST["city"];
-    $province = $_POST["province"];
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($skill_id)) {
+    $skill = $_POST["skill"];
 
-    $query1 = "UPDATE users 
+    $query1 = "UPDATE user_skills 
                SET 
-                   lastname = '$lastname',
-                   middlename = '$middlename',
-                   civilstatus = '$civilstatus', 
-                   email = '$emailadd', 
-                   phone = '$phone', 
-                   password = '$password', 
-                   gdrive = '$gdrive', 
-                   street = '$street', 
-                   brgy = '$brgy', 
-                   city = '$city', 
-                   province = '$province' 
-               WHERE userid = '$userid'";
+                   skill_name = '$skill' 
+               WHERE id = '$skill_id'";
 
     $result = $connection->query($query1);
 
     if ($result) {
-        header("Location: mgtusers.php");
+        header("Location: mgtskills.php");
         } else {
-            $errorMessage = "Error updating details";
+            $errorMessage = "Error updating skill details";
     }
 }
 
@@ -233,7 +200,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($userid)) {
         </div>
         <div class="p-4">
           <nav style="--bs-breadcrumb-divider: '>'; font-size: 14px">
-            <h5>Edit Candidate Account (User)</h5>
+            <h5>Edit Skill</h5>
           </nav>
 
           <hr />
@@ -248,10 +215,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($userid)) {
                         ";
                     }
                 ?>
-            <!-- userid Firstname, lastname -->
+            <!-- userid, skill -->
             <div class="row">
-                <div class="col-sm-4 mb-3">
-                <label for="firstname" class="form-label">UserID</label>
+              <div class="col-sm-4 mb-3">
+                <label for="id" class="form-label">Skill ID</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="id"
+                  name="id"
+                  value="<?php echo $skill_id; ?>"
+                  disabled
+                />
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-4 mb-3">
+                <label for="userid" class="form-label">User ID</label>
                 <input
                   type="text"
                   class="form-control"
@@ -260,101 +240,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($userid)) {
                   value="<?php echo $userid; ?>"
                   disabled
                 />
-                </div>
-                <div class="col mb-3">
-                <label for="firstname" class="form-label">First Name</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-4 mb-3">
+                <label for="skill" class="form-label">Skill</label>
                 <input
                   type="text"
                   class="form-control"
-                  id="firstname"
-                  name="firstname"
-                  value="<?php echo $firstname; ?>"
-                  disabled
-                />
-              </div>
-              <div class="col mb-3">
-                <label for="lastname" class="form-label">Last Name</span></label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="lastname"
-                  name="lastname"
-                  value="<?php echo $lastname; ?>"
+                  id="skill"
+                  name="skill"
+                  value="<?php echo $skill; ?>"
                 />
               </div>
             </div>
-            <!-- middlename, bday, gender -->
-            <div class="row">
-              <div class="col mb-3">
-                <label for="middlename" class="form-label">Middle Name</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="middlename"
-                  name="middlename"
-                  value="<?php echo $middlename; ?>"
-                />
-              </div>
-              <div class="col mb-3">
-                <label for="birthdate" class="form-label">Birthday</label>
-                <input type="text" class="form-control" id="birthdate" name="birthdate"
-                value="<?php echo $birthdate; ?>" disabled>
-              </div>
-              <div class="col mb-3">
-                <label for="gender" class="form-label">Gender</label>
-                <input type="text" class="form-control" id="gender" name="gender" 
-                value="<?php echo $gender; ?>" disabled>
-              </div>
-            </div>
-            <!-- civilstats, email, password -->
-            <div class="row">
-              <div class="col mb-3">
-                <label for="civilstatus" class="form-label">Civil Status</label>
-                <input type="text" class="form-control" id="civilstatus" name="civilstatus" 
-                value="<?php echo $civilstatus; ?>">
-              </div>
-              <div class="col mb-3">
-                <label for="emailadd" class="form-label">Email address</label>
-                <input type="text" class="form-control" id="emailadd" name="emailadd" value="<?php echo $emailadd; ?>">
-              </div>
-              <div class="col mb-3">
-                <label for="password" class="form-label">Password</label>
-                <input type="password" class="form-control" id="password" name="password" value="<?php echo $password; ?>">
-              </div>
-            </div>
-            <!-- phone, street, brgy -->
-            <div class="row">
-                <div class="col mb-3">
-                <label for="phone" class="form-label">Phone</label>
-                <input type="text" class="form-control" id="phone" name="phone" value="<?php echo $phone; ?>">
-              </div>
-              <div class="col mb-3">
-                <label for="street" class="form-label">Street</label>
-                <input type="text" class="form-control" id="street" name="street" value="<?php echo $street; ?>">
-              </div>
-              <div class="col mb-3">
-                <label for="brgy" class="form-label">Barangay</label>
-                <input type="text" class="form-control" id="brgy" name="brgy" value="<?php echo $brgy; ?>">
-              </div>
-            </div>
-            <!-- city, province, gdrive -->
-            <div class="row">
-                <div class="col mb-3">
-                <label for="city" class="form-label">City</label>
-                <input type="text" class="form-control" id="city" name="city" value="<?php echo $city; ?>">
-              </div>
-              <div class="col mb-3">
-                <label for="province" class="form-label">Province</label>
-                <input type="text" class="form-control" id="province" name="province" value="<?php echo $province; ?>" >
-              </div>
-              <div class="col mb-3">
-                <label for="gdrive" class="form-label">Google Drive</label>
-                <input type="text" class="form-control" id="gdrive" name="gdrive" value="<?php echo $gdrive; ?>">
-              </div>
-            </div>
-            <div class="d-flex justify-content-end">
-                <a class="btn btn-danger px-4 me-2" href="mgtusers.php">Cancel</a>
-                <button type="submit" class="btn btn-primary px-4">Save</button>
+            <div class="col-sm-4 d-flex justify-content-end pe-3">
+              <a class="btn btn-danger px-4 me-2" href="mgtskills.php">Cancel</a>
+              <button type="submit" class="btn btn-primary px-4">Submit</button>
             </div>
             </form>
         </div>
