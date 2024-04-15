@@ -83,7 +83,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($userid)) {
     $result = $connection->query($query1);
 
     if ($result) {
-        header("Location: mgtclients.php");
+        header("Location: mgtusers.php");
         } else {
             $errorMessage = "Error updating details";
     }

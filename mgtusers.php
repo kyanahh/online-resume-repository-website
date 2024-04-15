@@ -168,7 +168,7 @@ if(isset($_SESSION["logged_in"])){
           <div class="px-3">
                 <div class="row">
                     <div class="col input-group mb-3">
-                        <input type="text" class="form-control" id="searchCandidateInput" onchange="searchCandidate()" placeholder="Search" aria-describedby="button-addon2">
+                        <input type="text" class="form-control" id="searchCandidateInput" oninput="searchCandidate()" placeholder="Search" aria-describedby="button-addon2">
                     </div>
                     <div class="col-sm-1">
                       <a href="mgtusers.php" class="btn btn-dark px-4"><i class="bi bi-arrow-clockwise"></i></a>
@@ -193,7 +193,9 @@ if(isset($_SESSION["logged_in"])){
                                     </tr>
                                 </thead>
                                 <tbody class="table-group-divider" id="candidateList">
-
+                                  <tr id="noResultsRow" style="display: none;">
+                                      <td colspan="6" style="text-align: center;">No results found.</td>
+                                  </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -265,6 +267,41 @@ if(isset($_SESSION["logged_in"])){
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+
+    <script>
+      function searchCandidate() {
+          // Declare variables
+          var input, filter, table, tbody, tr, td, i, j, txtValue;
+          input = document.getElementById("searchCandidateInput");
+          filter = input.value.toUpperCase();
+          table = document.getElementById("candidate-table");
+          tbody = table.querySelector("tbody");
+          tr = tbody.getElementsByTagName("tr");
+
+          // Loop through all table rows in tbody
+          for (i = 0; i < tr.length; i++) {
+              var found = false;
+              // Loop through each column (1 to 4)
+              for (j = 0; j < tr[i].cells.length; j++) {
+                  td = tr[i].cells[j];
+                  if (td) {
+                      txtValue = td.textContent || td.innerText;
+                      // If any column matches the search query, set found to true and break the loop
+                      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                          found = true;
+                          break;
+                      }
+                  }
+              }
+              // Show or hide the row based on whether any column matched the search query
+              if (found || filter === '') {
+                  tr[i].style.display = "";
+              } else {
+                  tr[i].style.display = "none";
+              }
+          }
+      }
+    </script>
 
     <script>
       const myModal = document.getElementById("myModal");
