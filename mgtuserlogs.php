@@ -168,7 +168,7 @@ if(isset($_SESSION["logged_in"])){
           <div class="px-3">
                 <div class="row">
                     <div class="col input-group mb-3">
-                        <input type="text" class="form-control" id="searchUserInput" onchange="searchUsers()" placeholder="Search" aria-describedby="button-addon2">
+                        <input type="text" class="form-control" id="searchUserInput" oninput="searchUsers()" placeholder="Search" aria-describedby="button-addon2">
                     </div>
                     <div class="col-sm-1">
                       <a href="mgtuserlogs.php" class="btn btn-dark px-4"><i class="bi bi-arrow-clockwise"></i></a>
