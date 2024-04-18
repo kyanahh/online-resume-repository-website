@@ -170,7 +170,7 @@ if(isset($_SESSION["logged_in"])){
           <div class="px-3">
                 <div class="row d-flex">
                     <div class="col input-group mb-3">
-                        <input type="text" class="form-control" id="searchSkillsInput" onchange="searchSkills()" placeholder="Search" aria-describedby="button-addon2">
+                        <input type="text" class="form-control" id="searchSkillsInput" oninput="searchSkills()" placeholder="Search" aria-describedby="button-addon2">
                     </div>
                     <div class="col-sm-1">
                       <a href="mgtskills.php" class="btn btn-dark px-4"><i class="bi bi-arrow-clockwise"></i></a>
@@ -318,24 +318,40 @@ if(isset($_SESSION["logged_in"])){
       });
     </script>
 
-    <script>
+<script>
+      function searchSkills() {
+          // Declare variables
+          var input, filter, table, tbody, tr, td, i, j, txtValue;
+          input = document.getElementById("searchSkillsInput");
+          filter = input.value.toUpperCase();
+          table = document.getElementById("skills-table");
+          tbody = table.querySelector("tbody");
+          tr = tbody.getElementsByTagName("tr");
 
-                //---------------------------Search Skills Results---------------------------//
-                function searchSkills() {
-                    const query = document.getElementById("searchSkillsInput").value;
-                    // Make an AJAX request to fetch search results
-                    $.ajax({
-                        url: 'search_mgtskills.php', // Replace with the actual URL to your search script
-                        method: 'POST',
-                        data: { query: query },
-                        success: function(data) {
-                            // Update the user-table with the search results
-                            $('#skills-table tbody').html(data);
-                        }
-                    });
-                }
-
-            </script>
+          // Loop through all table rows in tbody
+          for (i = 0; i < tr.length; i++) {
+              var found = false;
+              // Loop through each column (1 to 4)
+              for (j = 0; j < tr[i].cells.length; j++) {
+                  td = tr[i].cells[j];
+                  if (td) {
+                      txtValue = td.textContent || td.innerText;
+                      // If any column matches the search query, set found to true and break the loop
+                      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                          found = true;
+                          break;
+                      }
+                  }
+              }
+              // Show or hide the row based on whether any column matched the search query
+              if (found || filter === '') {
+                  tr[i].style.display = "";
+              } else {
+                  tr[i].style.display = "none";
+              }
+          }
+      }
+    </script>
 
     <script>
         // Function to display the delete modal with the correct skill ID
