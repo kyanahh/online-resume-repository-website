@@ -110,6 +110,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($skill_id)) {
         /></a>
         <ul class="mynav nav nav-pills flex-column mb-auto mt-3">
           <li class="nav-item mb-1">
+            <a href="dashboard.php">
+              <i class="fa-solid fa-home"></i>
+              Dashboard
+            </a>
+          </li>
+
+          <li class="nav-item mb-1">
             <a href="mgtusers.php">
               <i class="fa-solid fa-users"></i>
               Candidates
