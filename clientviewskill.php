@@ -6,7 +6,8 @@ require("server/connection.php");
 
 if(isset($_SESSION["logged_in"])){
     if(isset($_SESSION["firstname"])){
-        $textaccount = $_SESSION["firstname"];
+      $textaccount = $_SESSION["firstname"];
+
     }else{
         $textaccount = "Account";
     }
@@ -14,69 +15,103 @@ if(isset($_SESSION["logged_in"])){
     $textaccount = "Account";
 }
 
-$query = "SELECT users.userid, users.lastname, users.firstname, GROUP_CONCAT(user_skills.skill_name SEPARATOR ', ') 
-AS Skillz 
-FROM users
-LEFT JOIN user_skills 
-ON users.userid = user_skills.userid 
-WHERE users.usertypeid = 3 
-GROUP BY user_skills.userid 
-ORDER BY users.userid DESC";
+if (isset($_GET['userid'])) {
+    $userid = $_GET['userid'];
+} else {
+    die("User ID not provided.");
+}
 
-$result = $connection->query($query);
+
 
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"/>
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      .list-unstyled li::marker {
+        content: none; /* Hide the marker (bullet) */
+      }
+    </style>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css"
+    />
+    <title>VocoEase</title>
+  </head>
 
-  <title>VocoEase</title>
-</head>
+  <body class="bg-light">
+    <!-- Navbar-->
+    <nav class="px-5 py-2 mx-auto bg-white navbar navbar-expand-lg fixed-top">
+      <div class="container-fluid">
+        <!-- Logo -->
+        <div class="d-flex justify-content-start">
+          <a class="navbar-brand" href="candidatelandingpage.php">
+            <img style="height: 70px" src="img/logoname.png" alt="VocoEase" />
+          </a>
+        </div>
 
-<body>
+        <!-- Toggle button-->
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
 
-  <!-- Navbar-->
-  <nav class="px-5 py-2 mx-auto bg-white navbar navbar-expand-lg fixed-top">
-    <div class="container-fluid">
+        <!-- Navbar directory -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav mx-auto">
+            <li class="nav-item">
+              <a
+                class="nav-link active fw-bold me-4"
+                aria-current="page"
+                href="candidatelandingpage.php"
+                >HOME</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active fw-bold me-4" href="candidateabout.php"
+                >ABOUT</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link active fw-bold me-4"
+                href="candidateservices.php"
+                >SERVICES</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active fw-bold" href="candidatecontact.php"
+                >CONTACT</a
+              >
+            </li>
+          </ul>
 
-      <!-- Logo -->
-      <div class="d-flex justify-content-start">
-        <a class="navbar-brand" href="clientlandingpage.php">
-          <img style="height: 70px;" src="img/logoname.png" alt="VocoEase">
-        </a>
-      </div>
-
-      <!-- Toggle button-->
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
-      <!-- Navbar directory -->
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav mx-auto">
-          <li class="nav-item">
-            <a class="nav-link active fw-bold me-4" aria-current="page" href="clientlandingpage.php">HOME</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active fw-bold me-4" href="clientabout.php">ABOUT</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active fw-bold me-4" href="clientservices.php">SERVICES</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active fw-bold" href="clientcontact.php">CONTACT</a>
-          </li>
-        </ul>
-
-        <!-- Dropdown / Account-->
+          <!-- Dropdown / Account-->
+          <!-- Dropdown / Account-->
         <div class="nav-item dropdown me-5">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Account</a>
             <ul class="dropdown-menu dropdown-menu-dark">
@@ -88,60 +123,29 @@ $result = $connection->query($query);
                 <li><a class="dropdown-item">Hi, <?php echo $textaccount; ?></a></li>            
             </ul>
         </div>
-      </div>
-      
-    </div>
-  </nav>
-
-  <div class="container-fluid mt-5 pt-3">
-    <div class="card mx-5 my-5 p-5" style="height: 450px;">
-      <h5 class="card-title">Candidate Skills</h5>  
-        <div class="row">
-          <div class="col input-group">
-            <input type="text" class="form-control" id="searchSkillInput" oninput="searchSkill()" placeholder="Search" aria-describedby="button-addon2">
         </div>
-      <div class="card-body">
-      <div class="table-responsive" style="height: 300px;">
-        <table class="table overflow-auto" id="skill-table">
-                <div class="">
-                <thead class="bg-light" style="position: sticky; top: 0;">
-                    <tr>
-                        <th class="col-sm-1">User ID</th>
-                        <th>Last Name</th>
-                        <th>First Name</th>
-                        <th class="col-sm-5">Skills</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody class="table-group-divider">
-                <?php
-                  if ($result && $result->num_rows > 0) {
-                    while ($row = $result->fetch_assoc()) {
-                        echo "<tr>";
-                        echo "<td>" . $row['userid'] . "</td>";
-                        echo "<td>" . $row['lastname'] . "</td>";
-                        echo "<td>" . $row['firstname'] . "</td>";
-                        echo "<td>" . ($row['Skillz'] ?? 'No skills') . "</td>";
-                        echo "<td><button onclick='viewSkill(" . $row['userid'] . ")' class='btn btn-dark'>View</button></td>";
-                        echo "</tr>";
-                    }
-                } else {
-                    echo "<tr><td colspan='4'>No data found</td></tr>";
-                }
-                ?>
-                </tbody>
+      </div>
+    </nav>
+
+    <div class="container-fluid my-5 pt-5 d-flex justify-content-center">
+        <div class="card col-sm-8 p-4 ms-3 mt-4">
+            <div class="card-title h3 d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center">
+                    <a href="clientresume.php" class="text-decoration-none text-dark pe-3">
+                    <i class="bi bi-arrow-left-circle fs-2"></i></a>Skills
+                </div>
             </div>
-          </table>
-      </div>
-      </div>
-      <!-- Search results will be displayed here -->
-        <div id="search-results"></div>
-      </div>
-    </div>
+            <div class="card-body">
+
+                <ul id="skillsList" class="list-unstyled">
+                    
+                </ul>
+            </div>
+        </div>
     </div>
 
-    <!-- Footer --> 
-  <div class="container-fluid" style="background-color: #001c31">
+    <!-- Footer -->
+    <div class="container-fluid" style="background-color: #001c31">
       <div class="row mx-5 p-5">
         <!-- 1st Col -->
         <div class="col-sm-5" style="color: #9fa6af">
@@ -176,7 +180,7 @@ United States of America</pre
           <ul class="list-unstyled">
             <li>
               <a
-                href="clientlandingpage.php"
+                href="candidatelandingpage.php"
                 class="text-decoration-none ms-2 mt2"
                 style="color: #9fa6af"
                 >Introduction</a
@@ -184,7 +188,7 @@ United States of America</pre
             </li>
             <li>
               <a
-                href="clientabout.php"
+                href="candidateabout.php"
                 class="text-decoration-none ms-2 mt2"
                 style="color: #9fa6af"
                 >Organization Team</a
@@ -628,56 +632,44 @@ United States of America</pre
     <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
 
     <script>
+      const myModal = document.getElementById("myModal");
+      const myInput = document.getElementById("myInput");
 
-        const myModal = document.getElementById("myModal");
-        const myInput = document.getElementById("myInput");
-
-        myModal.addEventListener("shown.bs.modal", () => {
-            myInput.focus();
-        });
-
+      myModal.addEventListener("shown.bs.modal", () => {
+        myInput.focus();
+      });
     </script>
 
     <script>
+        function loadSkills() {
+        const params = new URLSearchParams(window.location.search);
+        const userId = params.get("userid");
 
-        function viewSkill(userId) {
-            // Redirect to the page where you want to view details
-            window.location.href = "clientviewskill.php?userid=" + userId;
+        if (userId) {
+            fetch(`clientload_skills.php?userid=${userId}`)
+                .then((response) => response.json())
+                .then((skills) => {
+                    const skillsList = document.getElementById("skillsList");
+                    skillsList.innerHTML = ""; // Clear existing skills
+                    skills.forEach((skill) => {
+                        const listItem = document.createElement("li");
+                        listItem.innerHTML = `
+                            <div class='d-flex align-items-center'>
+                                ${skill.skill_name}
+                            </div>
+                            <hr>
+                        `;
+                        skillsList.appendChild(listItem);
+                    });
+                });
+        } else {
+            console.error("User ID not found in query string.");
         }
+    }
 
-        function searchSkill() {
-          // Declare variables
-          var input, filter, table, tbody, tr, td, i, j, txtValue;
-          input = document.getElementById("searchSkillInput");
-          filter = input.value.toUpperCase();
-          table = document.getElementById("skill-table");
-          tbody = table.querySelector("tbody");
-          tr = tbody.getElementsByTagName("tr");
-
-          // Loop through all table rows in tbody
-          for (i = 0; i < tr.length; i++) {
-              var found = false;
-              // Loop through each column (1 to 4)
-              for (j = 0; j < tr[i].cells.length; j++) {
-                  td = tr[i].cells[j];
-                  if (td) {
-                      txtValue = td.textContent || td.innerText;
-                      // If any column matches the search query, set found to true and break the loop
-                      if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                          found = true;
-                          break;
-                      }
-                  }
-              }
-              // Show or hide the row based on whether any column matched the search query
-              if (found || filter === '') {
-                  tr[i].style.display = "";
-              } else {
-                  tr[i].style.display = "none";
-              }
-          }
-      }
-
+    // Call loadSkills when the page loads
+    loadSkills();
     </script>
+    
   </body>
 </html>

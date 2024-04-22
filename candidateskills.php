@@ -6,7 +6,7 @@ require("server/connection.php");
 
 if(isset($_SESSION["logged_in"])){
     if(isset($_SESSION["firstname"])){
-      $textaccount = strtoupper($_SESSION["firstname"]);
+      $textaccount = $_SESSION["firstname"];
       $skills = $_SESSION["skills"];
       $userid = $_SESSION["userid"];
 
