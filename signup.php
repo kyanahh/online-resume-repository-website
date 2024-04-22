@@ -3,6 +3,8 @@
 require("server/connection.php");
 
 $usertype = 3;
+$gender = "Unknown";
+$civilstatus = "Unknown";
 
 $firstname = $lastname = $email = $birthdate = $password = $confirmpassword = $errorMessage = $successMessage = "";
 
@@ -28,7 +30,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } else {
             // Insert the user data into the database
             $regdate = date("Y-m-d H:i:s");
-            $insertQuery = "INSERT INTO users (firstname, lastname, bday, email, password, usertypeid, regdate) VALUES ('$firstname', '$lastname', '$birthdate', '$email', '$password', '$usertype', '$regdate')";
+            $insertQuery = "INSERT INTO users (firstname, lastname, bday, email, password, usertypeid, regdate, 
+            gender, civilstatus) VALUES ('$firstname', '$lastname', '$birthdate', '$email', '$password', '$usertype', 
+            '$regdate', '$gender', '$civilstatus')";
             $result = $connection->query($insertQuery);
 
             if (!$result) {
