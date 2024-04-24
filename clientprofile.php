@@ -115,7 +115,7 @@ if(isset($_SESSION["logged_in"])){
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Account</a>
             <ul class="dropdown-menu dropdown-menu-dark">
                 <li><a class="dropdown-item" href="clientprofile.php">Profile</a></li>
-                <li><a class="dropdown-item" href="clientresume.php">Candidate Resume</a></li>
+                <li><a class="dropdown-item" href="clientresume.php">Candidate Skills</a></li>
                 <li><a class="dropdown-item" href="clientsettings.php">Settings</a></li>
                 <li><a class="dropdown-item" href="logout.php">Logout</a></li>
                 <li><hr class="dropdown-divider"></li>
@@ -239,13 +239,13 @@ if(isset($_SESSION["logged_in"])){
             </li>
             <!-- Buttons -->
             <li class="d-flex justify-content-center mt-4">
-              <a href="settings.php" class="btn btn-primary fw-bold col-sm-5"
+              <a href="clientsettings.php" class="btn btn-primary fw-bold col-sm-5"
                 >EDIT PROFILE</a
               >
             </li>
             <li class="d-flex justify-content-center mt-2">
               <a
-                href="changepassword.php"
+                href="clientchangepassword.php"
                 class="btn btn-primary fw-bold col-sm-5"
                 >CHANGE PASSWORD</a
               >
