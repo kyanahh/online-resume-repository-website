@@ -104,7 +104,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Account</a>
             <ul class="dropdown-menu dropdown-menu-dark">
                 <li><a class="dropdown-item" href="clientprofile.php">Profile</a></li>
-                <li><a class="dropdown-item" href="clientresume.php">Candidate Resume</a></li>
+                <li><a class="dropdown-item" href="clientresume.php">Candidate Skills</a></li>
                 <li><a class="dropdown-item" href="clientsettings.php">Settings</a></li>
                 <li><a class="dropdown-item" href="logout.php">Logout</a></li>
                 <li><hr class="dropdown-divider"></li>
